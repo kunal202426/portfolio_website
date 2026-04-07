@@ -14,7 +14,6 @@ export const resumeData = {
       degree: 'B.Tech in Computer Science & Engineering',
       specialization: 'Blockchain',
       period: '2022 — Present',
-      cgpa: '7.5',
       location: 'Vellore, Tamil Nadu',
     },
     {

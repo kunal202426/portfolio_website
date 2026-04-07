@@ -164,9 +164,8 @@ export const ContactSection = () => {
                   : 'linear-gradient(145deg, #2A2520, #1A1510)',
                 borderTopLeftRadius: '16px',
                 borderTopRightRadius: '16px',
-                borderLeft: `3px solid ${isDark ? 'rgba(212, 165, 116, 0.2)' : 'rgba(212, 165, 116, 0.3)'}`,
-                borderRight: `3px solid ${isDark ? 'rgba(212, 165, 116, 0.2)' : 'rgba(212, 165, 116, 0.3)'}`,
-                borderTop: `3px solid ${isDark ? 'rgba(212, 165, 116, 0.2)' : 'rgba(212, 165, 116, 0.3)'}`,
+                border: `3px solid ${isDark ? 'rgba(60, 50, 40, 0.5)' : 'rgba(60, 50, 40, 0.6)'}`,
+                borderBottom: 'none',
                 boxShadow: isDark 
                   ? '0 -5px 20px rgba(0, 0, 0, 0.5), inset 0 0 40px rgba(232, 87, 12, 0.05)'
                   : '0 -5px 30px rgba(0, 0, 0, 0.6), inset 0 0 40px rgba(232, 87, 12, 0.08)',
@@ -258,9 +257,8 @@ export const ContactSection = () => {
                 width: '500px',
                 height: '160px',
                 background: isDark 
-                  ? 'linear-gradient(145deg, #2A2520, #1A1510)' 
-                  : 'linear-gradient(145deg, #3A3530, #2A2520)',
-                borderBottom: `3px solid ${isDark ? 'rgba(212, 165, 116, 0.2)' : 'rgba(212, 165, 116, 0.3)'}`,
+                  ? '#1A1510' 
+                  : '#2A2520',
                 borderBottomLeftRadius: '12px',
                 borderBottomRightRadius: '12px',
                 boxShadow: '0 20px 50px rgba(0, 0, 0, 0.7)',
