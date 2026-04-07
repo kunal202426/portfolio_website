@@ -114,3 +114,6 @@ export const useReducedMotion = () => {
 
   return prefersReducedMotion
 }
+
+// Export GSAP hooks
+export * from './useGSAP'

@@ -1,85 +1,130 @@
+import { useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { containerVariants, itemVariants } from '../../lib/animation-variants'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { resumeData } from '../../lib/resume-data'
+import { Briefcase, Calendar, MapPin } from 'lucide-react'
+import { useTheme } from '../providers/ThemeProvider'
+
+gsap.registerPlugin(ScrollTrigger)
 
 export const ExperienceSection = () => {
+  const containerRef = useRef<HTMLElement>(null)
   const experiences = [...resumeData.experience].sort((a, b) => b.year - a.year)
+  const { resolvedTheme } = useTheme()
+  const isDark = resolvedTheme === 'dark'
+
+  useEffect(() => {
+    if (!containerRef.current) return
+
+    const ctx = gsap.context(() => {
+      // Animate timeline line drawing
+      gsap.from('.exp-line', {
+        scaleY: 0,
+        duration: 1.5,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top 60%'
+        }
+      })
+
+      // Stagger cards
+      gsap.from('.exp-card', {
+        y: 60,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.2,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top 60%'
+        }
+      })
+    }, containerRef)
+
+    return () => ctx.revert()
+  }, [])
 
   return (
-    <section id="experience" className="relative w-full py-24 px-6 bg-bg-secondary overflow-hidden">
-      <div className="max-w-4xl mx-auto">
+    <section 
+      ref={containerRef}
+      id="experience" 
+      className="relative w-full py-24 px-6 overflow-hidden transition-colors duration-500"
+      style={{ backgroundColor: isDark ? '#0E0E0B' : '#F5F0E8' }}
+    >
+      {/* Decorative Background */}
+      <div className="absolute top-20 right-10 w-40 h-40 rounded-full opacity-20" style={{ background: 'radial-gradient(circle, #E8570C 0%, transparent 70%)' }} />
+      <div className="absolute bottom-20 left-10 w-60 h-60 rounded-full opacity-10" style={{ background: 'radial-gradient(circle, #D4A574 0%, transparent 70%)' }} />
+
+      <div className="max-w-5xl mx-auto relative z-10">
         {/* Header */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          variants={containerVariants}
-          className="mb-16"
-        >
-          <motion.p
-            variants={itemVariants}
-            className="text-sm text-accent-primary font-mono uppercase tracking-widest mb-4"
-          >
-            // 03 Experience
-          </motion.p>
-          <motion.h2
-            variants={itemVariants}
-            className="text-4xl md:text-5xl font-display font-bold text-text-primary"
-          >
+        <div className="mb-16 text-center">
+          <span className="inline-flex items-center gap-2 text-sm uppercase tracking-[0.2em] font-medium mb-4" style={{ color: '#E8570C' }}>
+            <Briefcase size={16} />
+            Experience
+          </span>
+          <h2 className="font-display text-4xl md:text-5xl font-bold transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
             Career Journey
-          </motion.h2>
-        </motion.div>
+          </h2>
+        </div>
 
         {/* Timeline */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
-          variants={containerVariants}
-          className="relative"
-        >
-          {/* Vertical Line */}
-          <motion.div
-            className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-accent-primary via-accent-glow to-accent-cyan"
-            initial={{ scaleY: 0 }}
-            whileInView={{ scaleY: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1 }}
-            style={{ originY: 0 }}
+        <div className="relative">
+          {/* Center Line */}
+          <div 
+            className="exp-line absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 origin-top"
+            style={{ background: 'linear-gradient(to bottom, #E8570C, #D4A574, #E8570C)' }}
           />
 
           {/* Experience Items */}
           {experiences.map((exp, index) => (
-            <motion.div
+            <div
               key={exp.company}
-              variants={itemVariants}
-              className={`relative mb-12 pl-20 md:pl-0 md:mb-12 ${
-                index % 2 === 0 ? 'md:mr-auto md:pr-12 md:w-1/2' : 'md:ml-auto md:pl-12 md:w-1/2'
+              className={`exp-card relative mb-12 pl-16 md:pl-0 ${
+                index % 2 === 0 ? 'md:mr-auto md:pr-16 md:w-1/2' : 'md:ml-auto md:pl-16 md:w-1/2'
               }`}
             >
               {/* Timeline Dot */}
               <motion.div
-                className="absolute left-0 md:left-1/2 top-0 w-8 h-8 rounded-full bg-bg-primary border-2 border-accent-primary flex items-center justify-center md:-ml-4"
-                whileHover={{ scale: 1.2 }}
-                animate={{ boxShadow: '0 0 20px rgba(108, 99, 255, 0.5)' }}
+                className="absolute left-0 md:left-1/2 top-6 w-8 h-8 rounded-full flex items-center justify-center md:-ml-4"
+                style={{ backgroundColor: '#E8570C' }}
+                whileHover={{ scale: 1.2, boxShadow: '0 0 20px rgba(232, 87, 12, 0.5)' }}
               >
-                <div className="w-2 h-2 rounded-full bg-accent-primary" />
+                <div className="w-2 h-2 rounded-full" style={{ backgroundColor: isDark ? '#0E0E0B' : '#F5F0E8' }} />
               </motion.div>
 
               {/* Content Card */}
               <motion.div
-                className="p-6 rounded-lg bg-bg-card border border-border-subtle hover:border-accent-primary/50 transition-colors"
-                whileHover={{ y: -4 }}
+                className="p-6 rounded-xl shadow-lg transition-colors duration-500"
+                style={{ 
+                  backgroundColor: isDark ? '#1A1510' : '#FFFBF5',
+                  border: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.2)' : 'rgba(212, 165, 116, 0.3)'}`
+                }}
+                whileHover={{ 
+                  y: -4, 
+                  boxShadow: isDark ? '0 20px 40px rgba(0, 0, 0, 0.3)' : '0 20px 40px rgba(26, 18, 8, 0.1)',
+                  borderColor: '#E8570C'
+                }}
               >
-                <div className="flex items-start justify-between mb-3">
+                <div className="flex flex-wrap items-start justify-between gap-2 mb-4">
                   <div>
-                    <h3 className="font-display font-bold text-lg text-text-primary">{exp.company}</h3>
-                    <p className="text-accent-primary font-accent text-sm">{exp.title}</p>
+                    <h3 className="font-display font-bold text-xl transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
+                      {exp.company}
+                    </h3>
+                    <p className="font-medium" style={{ color: '#E8570C' }}>{exp.title}</p>
                   </div>
-                  <span className="text-xs font-mono text-text-secondary whitespace-nowrap ml-4">{exp.period}</span>
+                  <div className="flex flex-col items-end gap-1">
+                    <span className="flex items-center gap-1 text-xs font-medium transition-colors duration-500" style={{ color: isDark ? '#D4C4A8' : '#4A3C2A' }}>
+                      <Calendar size={12} />
+                      {exp.period}
+                    </span>
+                    <span className="flex items-center gap-1 text-xs transition-colors duration-500" style={{ color: isDark ? '#9B8B70' : '#9B8B70' }}>
+                      <MapPin size={12} />
+                      {exp.location}
+                    </span>
+                  </div>
                 </div>
-
-                <p className="text-xs text-text-tertiary mb-4">{exp.location}</p>
 
                 {/* Achievements */}
                 <ul className="space-y-2">
@@ -90,17 +135,18 @@ export const ExperienceSection = () => {
                       whileInView={{ opacity: 1, x: 0 }}
                       transition={{ delay: i * 0.1 }}
                       viewport={{ once: true }}
-                      className="text-sm text-text-secondary flex gap-3 leading-relaxed"
+                      className="text-sm flex gap-3 leading-relaxed transition-colors duration-500"
+                      style={{ color: isDark ? '#D4C4A8' : '#4A3C2A' }}
                     >
-                      <span className="text-accent-primary flex-shrink-0 mt-1">▸</span>
+                      <span className="flex-shrink-0 mt-1" style={{ color: '#E8570C' }}>▸</span>
                       <span>{achievement}</span>
                     </motion.li>
                   ))}
                 </ul>
               </motion.div>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   )

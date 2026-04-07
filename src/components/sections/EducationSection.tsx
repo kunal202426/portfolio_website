@@ -1,62 +1,76 @@
+import { useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { GraduationCap, MapPin, Calendar } from 'lucide-react'
-import { containerVariants, itemVariants } from '../../lib/animation-variants'
 import { resumeData } from '../../lib/resume-data'
+import { useTheme } from '../providers/ThemeProvider'
+
+gsap.registerPlugin(ScrollTrigger)
 
 export const EducationSection = () => {
+  const containerRef = useRef<HTMLElement>(null)
+  const { resolvedTheme } = useTheme()
+  const isDark = resolvedTheme === 'dark'
+
+  useEffect(() => {
+    if (!containerRef.current) return
+
+    const ctx = gsap.context(() => {
+      gsap.from('.edu-card', {
+        x: -60,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.2,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top 60%'
+        }
+      })
+    }, containerRef)
+
+    return () => ctx.revert()
+  }, [])
+
   return (
-    <section id="education" className="relative w-full py-24 px-6 bg-bg-secondary overflow-hidden">
-      <div className="max-w-7xl mx-auto">
+    <section 
+      ref={containerRef}
+      id="education" 
+      className="relative w-full py-24 px-6 overflow-hidden transition-colors duration-500"
+      style={{ backgroundColor: isDark ? '#0E0E0B' : '#FFFBF5' }}
+    >
+      {/* Decorative */}
+      <div className="absolute top-10 right-20 w-32 h-32 rounded-full opacity-20" style={{ background: 'radial-gradient(circle, #D4A574 0%, transparent 70%)' }} />
+
+      <div className="max-w-5xl mx-auto relative z-10">
         {/* Header */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          variants={containerVariants}
-          className="mb-16"
-        >
-          <motion.p
-            variants={itemVariants}
-            className="text-sm text-accent-gold font-mono uppercase tracking-widest mb-4"
-          >
-            // 05 Education
-          </motion.p>
-          <motion.h2
-            variants={itemVariants}
-            className="text-4xl md:text-5xl font-display font-bold text-text-primary mb-4"
-          >
+        <div className="mb-16">
+          <span className="inline-flex items-center gap-2 text-sm uppercase tracking-[0.2em] font-medium mb-4" style={{ color: '#D4A574' }}>
+            <GraduationCap size={16} />
+            Education
+          </span>
+          <h2 className="font-display text-4xl md:text-5xl font-bold transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
             Academic Journey
-          </motion.h2>
-          <motion.p
-            variants={itemVariants}
-            className="text-lg text-text-secondary max-w-2xl"
-          >
-            Building a strong foundation in computer science and software engineering.
-          </motion.p>
-        </motion.div>
+          </h2>
+        </div>
 
         {/* Education Cards */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
-          variants={containerVariants}
-          className="space-y-6"
-        >
+        <div className="space-y-6">
           {resumeData.education.map((edu, index) => (
             <motion.div
               key={index}
-              variants={itemVariants}
-              whileHover={{ scale: 1.02, y: -4 }}
-              className="group relative bg-bg-card border border-border-subtle rounded-xl p-6 md:p-8 hover:border-accent-gold transition-all duration-300"
+              className="edu-card relative p-6 md:p-8 rounded-xl shadow-lg transition-colors duration-500"
+              style={{ 
+                backgroundColor: isDark ? '#1A1510' : '#FFFFFF',
+                border: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.2)' : 'rgba(212, 165, 116, 0.3)'}`
+              }}
+              whileHover={{ scale: 1.02, y: -4, boxShadow: isDark ? '0 20px 40px rgba(0, 0, 0, 0.3)' : '0 20px 40px rgba(26, 18, 8, 0.1)' }}
             >
               {/* Accent Line */}
-              <motion.div
-                className="absolute left-0 top-0 bottom-0 w-1 bg-accent-gold rounded-l-xl"
-                initial={{ scaleY: 0 }}
-                whileInView={{ scaleY: 1 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
+              <div 
+                className="absolute left-0 top-0 bottom-0 w-1 rounded-l-xl"
+                style={{ backgroundColor: '#E8570C' }}
               />
 
               <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 ml-4">
@@ -64,31 +78,32 @@ export const EducationSection = () => {
                 <div className="flex-1">
                   <div className="flex items-start gap-3 mb-3">
                     <motion.div
-                      className="p-2 rounded-lg bg-accent-gold/10 border border-accent-gold/30"
+                      className="p-2 rounded-lg"
+                      style={{ backgroundColor: isDark ? 'rgba(232, 87, 12, 0.15)' : 'rgba(232, 87, 12, 0.1)' }}
                       whileHover={{ scale: 1.1, rotate: 5 }}
                     >
-                      <GraduationCap className="w-5 h-5 text-accent-gold" />
+                      <GraduationCap className="w-5 h-5" style={{ color: '#E8570C' }} />
                     </motion.div>
                     <div className="flex-1">
-                      <h3 className="text-xl font-display font-bold text-text-primary mb-1">
+                      <h3 className="text-xl font-display font-bold mb-1 transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
                         {edu.school}
                       </h3>
-                      <p className="text-base font-accent text-accent-gold mb-2">
+                      <p className="text-base font-medium mb-2" style={{ color: '#E8570C' }}>
                         {edu.degree}
                         {edu.specialization && (
-                          <span className="text-text-secondary"> • {edu.specialization}</span>
+                          <span className="transition-colors duration-500" style={{ color: isDark ? '#D4C4A8' : '#4A3C2A' }}> • {edu.specialization}</span>
                         )}
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap gap-4 text-sm text-text-secondary ml-11">
+                  <div className="flex flex-wrap gap-4 text-sm ml-11 transition-colors duration-500" style={{ color: isDark ? '#D4C4A8' : '#4A3C2A' }}>
                     <div className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-accent-gold/70" />
+                      <Calendar className="w-4 h-4" style={{ color: '#D4A574' }} />
                       <span>{edu.period}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <MapPin className="w-4 h-4 text-accent-gold/70" />
+                      <MapPin className="w-4 h-4" style={{ color: '#D4A574' }} />
                       <span>{edu.location}</span>
                     </div>
                   </div>
@@ -98,35 +113,19 @@ export const EducationSection = () => {
                 <div className="flex flex-col items-end gap-2">
                   {edu.cgpa && (
                     <motion.div
-                      className="px-4 py-2 rounded-lg bg-accent-gold/10 border border-accent-gold/30"
+                      className="px-4 py-2 rounded-lg transition-colors duration-500"
+                      style={{ backgroundColor: isDark ? 'rgba(232, 87, 12, 0.15)' : 'rgba(232, 87, 12, 0.1)' }}
                       whileHover={{ scale: 1.05 }}
                     >
-                      <p className="text-xs font-mono text-text-secondary mb-1">CGPA</p>
-                      <p className="text-2xl font-display font-bold text-accent-gold">{edu.cgpa}</p>
-                    </motion.div>
-                  )}
-                  {edu.percentage && (
-                    <motion.div
-                      className="px-4 py-2 rounded-lg bg-accent-gold/10 border border-accent-gold/30"
-                      whileHover={{ scale: 1.05 }}
-                    >
-                      <p className="text-xs font-mono text-text-secondary mb-1">Score</p>
-                      <p className="text-2xl font-display font-bold text-accent-gold">{edu.percentage}</p>
+                      <p className="text-xs font-mono mb-1" style={{ color: '#9B8B70' }}>CGPA</p>
+                      <p className="text-2xl font-display font-bold" style={{ color: '#E8570C' }}>{edu.cgpa}</p>
                     </motion.div>
                   )}
                 </div>
               </div>
-
-              {/* Hover Glow Effect */}
-              <motion.div
-                className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                style={{
-                  background: 'radial-gradient(circle at center, rgba(245, 197, 66, 0.05), transparent 70%)',
-                }}
-              />
             </motion.div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   )

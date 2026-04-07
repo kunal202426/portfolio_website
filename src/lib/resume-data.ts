@@ -7,7 +7,7 @@ export const resumeData = {
     github: 'https://github.com/kunal202426',
   },
   summary:
-    'Full Stack Developer and Software Engineer with production experience building and shipping scalable systems across web applications, distributed architectures, machine learning pipelines, and blockchain/Web3 platforms. Proficient in React, Node.js, FastAPI, Python, Java, and PostgreSQL. Experienced delivering features in Agile/Scrum environments within high-throughput financial domains, designing ETL pipelines and ML inference systems, and building 3D interactive and real-time web experiences.',
+    'Full Stack Developer with production experience in scalable web apps, distributed systems, ML pipelines, and blockchain platforms. Proficient in React, Node.js, FastAPI, Python, and PostgreSQL.',
   education: [
     {
       school: 'Vellore Institute of Technology',
@@ -21,14 +21,12 @@ export const resumeData = {
       school: 'Turning Point School',
       degree: 'CBSE Class XII',
       period: '2020 — 2022',
-      percentage: '79%',
       location: 'Ajmer, Rajasthan',
     },
     {
       school: 'Mayoor School',
       degree: 'CBSE Class X',
       period: '2018 — 2020',
-      percentage: '90%',
       location: 'Ajmer, Rajasthan',
     },
   ],
@@ -40,32 +38,29 @@ export const resumeData = {
       location: 'Bengaluru, India',
       year: 2026,
       achievements: [
-        'Developing and shipping production-grade full-stack features for the OMNI trading platform using React, Node.js, and RESTful APIs; delivering iteratively within Agile/Scrum sprint cycles.',
-        'Engineered scalable backend microservices and optimized API performance across a distributed financial system, directly improving reliability and reducing response latency.',
-        'Led PostgreSQL database schema optimization and contributed to CI/CD pipeline improvements using Git-based version-controlled workflows and automated deployments.',
-        'Participated in system design discussions covering service decomposition, API contracts, data flow architecture, and fault-tolerant patterns.',
+        'Building production-grade features for OMNI trading platform using React, Node.js, and RESTful APIs in Agile sprints.',
+        'Optimized backend microservices and PostgreSQL schema for improved reliability and reduced latency.',
       ],
     },
     {
-      company: 'Team Levitate Hyperloop (Technical Team)',
-      title: 'Senior Engineer — AI & Software Systems',
+      company: 'Team Levitate Hyperloop',
+      title: 'Senior Engineer — AI & Software',
       period: '2024 — 2025',
       location: 'Vellore, India',
       year: 2024,
       achievements: [
-        'Led end-to-end design, development, and cloud deployment of levitatehyperloop.com — a fully responsive, SEO-optimized website featuring real-time 3D simulations in Three.js and React.',
-        'Architected backend services, embedded system interfaces, and real-time data pipelines within the pod\'s circuit and software architecture; applied OOP design principles throughout the full stack.',
-        'Managed full DevOps lifecycle — deployment, performance optimization, and version control for a globally accessible production system with real-time hardware data integration.',
+        'Led development of levitatehyperloop.com — responsive 3D website with Three.js and React.',
+        'Architected backend services and real-time data pipelines for pod hardware integration.',
       ],
     },
     {
-      company: 'E-Cell (Entrepreneurship Cell)',
+      company: 'E-Cell VIT',
       title: 'Junior Core Member',
       period: '2023 — 2024',
       location: 'Vellore, India',
       year: 2023,
       achievements: [
-        'Co-organized E-Summit and Futurepreneurs events; coordinated cross-functional planning, logistics, and stakeholder engagement across campus-wide entrepreneurship initiatives.',
+        'Co-organized E-Summit and Futurepreneurs events with cross-functional planning.',
       ],
     },
   ],
@@ -86,7 +81,7 @@ export const resumeData = {
       ],
     },
     {
-      title: 'Digital Chaos Lab — Distributed Systems Simulator',
+      title: 'System Design Simulator',
       subtitle: 'Distributed Systems & Chaos Engineering',
       year: '2026',
       period: '2026',

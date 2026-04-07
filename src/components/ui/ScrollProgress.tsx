@@ -4,10 +4,13 @@ export const ScrollProgress = () => {
   const progress = useScrollProgress()
 
   return (
-    <div className="fixed top-0 left-0 h-1 w-full bg-bg-secondary z-40">
+    <div className="fixed top-0 left-0 h-1 w-full z-40" style={{ backgroundColor: 'rgba(26, 18, 8, 0.1)' }}>
       <div
-        className="h-full bg-gradient-to-r from-accent-primary via-accent-glow to-accent-cyan transition-all duration-200"
-        style={{ width: `${progress}%` }}
+        className="h-full transition-all duration-200"
+        style={{ 
+          width: `${progress}%`,
+          background: 'linear-gradient(90deg, #E8570C, #D4A574)'
+        }}
       />
     </div>
   )

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { BrutalButton } from './BrutalButton'
+import { useTheme } from '../providers/ThemeProvider'
 
 interface ProjectCarouselProps {
   projects: Array<{
@@ -17,36 +18,51 @@ interface ProjectCarouselProps {
 
 export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
   const [index, setIndex] = useState(2)
+  const { resolvedTheme } = useTheme()
+  const isDark = resolvedTheme === 'dark'
 
   const next = () => setIndex((prev) => (prev + 1) % projects.length)
   const prev = () => setIndex((prev) => (prev - 1 + projects.length) % projects.length)
 
-  // High contrast metallic theme with clear separation
-  const activeCardBg = 'linear-gradient(145deg, #1e293b, #334155)' // Slate gray - lighter
-  const inactiveCardBg = 'linear-gradient(145deg, #0f172a, #1e293b)' // Dark slate
-  const bgColor = '#0a0e1a' // Very dark background - different from cards
-  const activeBorder = '#1e40af' // Dark blue border
-  const activeGlow = 'rgba(30, 64, 175, 0.5)'
+  // Theme-aware colors - FIXED for light mode
+  const bgColor = isDark ? '#0E0E0B' : '#F5F0E8'
+  const activeCardBg = isDark 
+    ? 'linear-gradient(145deg, #1A1510, #2A221A)' 
+    : 'linear-gradient(145deg, #FFFFFF, #FAF7F2)'
+  const inactiveCardBg = isDark 
+    ? 'linear-gradient(145deg, #0E0E0B, #1A1510)' 
+    : 'linear-gradient(145deg, #F5F0E8, #EDE8E0)'
+  const activeBorder = '#E8570C'
+  const activeGlow = 'rgba(232, 87, 12, 0.4)'
+  
+  // Text colors
+  const titleColor = isDark ? '#F0EBE0' : '#1A1208'
+  const inactiveTitleColor = isDark ? '#C4B49A' : '#4A3C2A'
+  const descColor = isDark ? '#C4B49A' : '#4A3C2A'
+  const inactiveDescColor = isDark ? '#9B8B70' : '#6B5D4A'
+
+  // Grid line color based on theme
+  const gridColor = isDark ? 'rgba(232, 87, 12, 0.06)' : 'rgba(232, 87, 12, 0.08)'
 
   return (
-    <section className="relative overflow-hidden py-24" style={{ background: bgColor }}>
-      {/* Visible animated grid background */}
-      <motion.div
-        animate={{ x: ['0%', '-100%'] }}
-        transition={{ repeat: Infinity, duration: 20, ease: 'linear' }}
-        className="absolute inset-0"
+    <section className="relative overflow-hidden py-24 transition-colors duration-500" style={{ background: bgColor }}>
+      {/* Static grid background - no animation for performance */}
+      <div
+        className="absolute inset-0 pointer-events-none"
         style={{
           backgroundImage:
-            'linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px)',
+            `linear-gradient(${gridColor} 1px, transparent 1px), linear-gradient(90deg, ${gridColor} 1px, transparent 1px)`,
           backgroundSize: '40px 40px',
           zIndex: 0,
-          opacity: 0.5,
         }}
       />
 
       {/* Content */}
       <div className="relative z-10 w-full px-6">
-        <p className="text-xs uppercase tracking-[0.15em] text-text-tertiary mb-20 font-bold text-center">
+        <p 
+          className="text-xs uppercase tracking-[0.15em] mb-20 font-bold text-center" 
+          style={{ color: isDark ? '#9B8B70' : '#6B5D4A' }}
+        >
           FEATURED PROJECTS
         </p>
 
@@ -73,7 +89,7 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
               return (
                 <motion.div
                   key={i}
-                  initial={{ opacity: 0, scale: 0.85 }}
+                  initial={false}
                   animate={{
                     x: xOffset,
                     y: yOffset,
@@ -82,7 +98,7 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
                     zIndex: 10 - Math.abs(offset),
                     opacity: Math.abs(offset) > 2 ? 0 : Math.abs(offset) === 2 ? 0.4 : 1,
                   }}
-                  transition={{ duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
+                  transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
                   onClick={() => {
                     if (offset === -1) prev()
                     if (offset === 1) next()
@@ -107,18 +123,19 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
                     height: 560,
                     borderRadius: 12,
                     background: isCenter ? activeCardBg : inactiveCardBg,
-                    color: '#fff',
+                    color: isDark ? '#F0EBE0' : '#1A1208',
                     padding: '36px 32px 28px 32px',
                     boxShadow: isCenter
-                      ? `0 30px 60px ${activeGlow}, 0 0 0 2px ${activeBorder}, inset 0 1px 0 rgba(255,255,255,0.1)`
-                      : '0 15px 40px rgba(0,0,0,0.5), 0 0 0 2px rgba(255,255,255,0.12)',
+                      ? `0 30px 60px ${activeGlow}, 0 0 0 2px ${activeBorder}`
+                      : isDark 
+                        ? '0 15px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(212,165,116,0.15)'
+                        : '0 15px 40px rgba(0,0,0,0.1), 0 0 0 1px rgba(212,165,116,0.3)',
                     border: 'none',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
                     alignItems: 'center',
                     textAlign: 'center',
-                    willChange: 'transform, opacity',
                     cursor: isAdjacent ? 'pointer' : 'default',
                     transformStyle: 'preserve-3d',
                   }}
@@ -129,11 +146,10 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
                       <span 
                         className="text-xs font-mono uppercase tracking-widest font-bold"
                         style={{ 
-                          opacity: 1,
-                          border: isCenter ? '2px solid rgba(59, 130, 246, 0.7)' : '2px solid rgba(148,163,184,0.3)',
+                          border: isCenter ? '2px solid rgba(232, 87, 12, 0.7)' : `2px solid ${isDark ? 'rgba(212,165,116,0.3)' : 'rgba(212,165,116,0.5)'}`,
                           padding: '5px 12px',
-                          background: isCenter ? 'rgba(30, 64, 175, 0.2)' : 'rgba(15, 23, 42, 0.5)',
-                          color: isCenter ? '#93c5fd' : '#94a3b8',
+                          background: isCenter ? 'rgba(232, 87, 12, 0.15)' : isDark ? 'rgba(26, 21, 16, 0.5)' : 'rgba(212,165,116,0.1)',
+                          color: isCenter ? '#E8570C' : '#D4A574',
                         }}
                       >
                         {project.year}
@@ -144,9 +160,9 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
                       <span 
                         className="text-xs px-4 py-1.5 font-bold uppercase tracking-wider inline-block"
                         style={{
-                          background: isCenter ? 'rgba(30, 58, 138, 0.3)' : 'rgba(148,163,184,0.1)',
-                          color: isCenter ? '#93c5fd' : '#94A3B8',
-                          border: isCenter ? '2px solid rgba(30, 58, 138, 0.5)' : '2px solid rgba(148,163,184,0.15)',
+                          background: isCenter ? 'rgba(232, 87, 12, 0.2)' : isDark ? 'rgba(212,165,116,0.1)' : 'rgba(212,165,116,0.15)',
+                          color: isCenter ? '#E8570C' : '#D4A574',
+                          border: isCenter ? '2px solid rgba(232, 87, 12, 0.4)' : `2px solid ${isDark ? 'rgba(212,165,116,0.15)' : 'rgba(212,165,116,0.3)'}`,
                         }}
                       >
                         {project.subtitle}
@@ -157,7 +173,7 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
                       className="font-display font-bold mb-4 leading-tight px-2"
                       style={{
                         fontSize: isCenter ? '2rem' : '1.75rem',
-                        color: isCenter ? '#fff' : '#E2E8F0',
+                        color: isCenter ? titleColor : inactiveTitleColor,
                       }}
                     >
                       {project.title}
@@ -168,7 +184,7 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
                       style={{
                         fontSize: isCenter ? '0.92rem' : '0.88rem',
                         opacity: isCenter ? 0.9 : 0.7,
-                        color: isCenter ? '#d1d5db' : '#CBD5E1',
+                        color: isCenter ? descColor : inactiveDescColor,
                         flexGrow: 1,
                       }}
                     >
@@ -181,9 +197,9 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
                           key={tag}
                           className="text-xs px-2.5 py-1 font-medium"
                           style={{
-                            background: isCenter ? 'rgba(30, 58, 138, 0.2)' : 'rgba(148,163,184,0.08)',
-                            border: isCenter ? '1px solid rgba(30, 58, 138, 0.4)' : '1px solid rgba(148,163,184,0.12)',
-                            color: isCenter ? '#93c5fd' : '#94A3B8',
+                            background: isCenter ? 'rgba(232, 87, 12, 0.15)' : isDark ? 'rgba(212,165,116,0.08)' : 'rgba(212,165,116,0.15)',
+                            border: isCenter ? '1px solid rgba(232, 87, 12, 0.3)' : `1px solid ${isDark ? 'rgba(212,165,116,0.12)' : 'rgba(212,165,116,0.25)'}`,
+                            color: isCenter ? '#E8570C' : '#D4A574',
                           }}
                         >
                           {tag}
@@ -209,28 +225,38 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
             })}
           </div>
 
-          {/* Navigation arrows - metallic style */}
+          {/* Navigation arrows - warm style */}
           <div className="flex gap-6 justify-center">
             <button
               onClick={prev}
-              className="w-14 h-14 text-white transition-all flex items-center justify-center font-bold text-2xl shadow-xl"
+              className="w-14 h-14 transition-all flex items-center justify-center font-bold text-2xl hover:scale-105"
               aria-label="Previous project"
               style={{ 
-                border: '2px solid rgba(255,255,255,0.2)',
-                background: 'linear-gradient(145deg, #1a1f2e, #0a0d14)',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)',
+                border: '2px solid rgba(232, 87, 12, 0.4)',
+                background: isDark 
+                  ? 'linear-gradient(145deg, #1A1510, #0E0E0B)' 
+                  : 'linear-gradient(145deg, #FFFFFF, #F5F0E8)',
+                boxShadow: isDark 
+                  ? '0 4px 12px rgba(0,0,0,0.5)'
+                  : '0 4px 12px rgba(0,0,0,0.1)',
+                color: '#E8570C',
               }}
             >
               ←
             </button>
             <button
               onClick={next}
-              className="w-14 h-14 text-white transition-all flex items-center justify-center font-bold text-2xl shadow-xl"
+              className="w-14 h-14 transition-all flex items-center justify-center font-bold text-2xl hover:scale-105"
               aria-label="Next project"
               style={{ 
-                border: '2px solid rgba(255,255,255,0.2)',
-                background: 'linear-gradient(145deg, #1a1f2e, #0a0d14)',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)',
+                border: '2px solid rgba(232, 87, 12, 0.4)',
+                background: isDark 
+                  ? 'linear-gradient(145deg, #1A1510, #0E0E0B)' 
+                  : 'linear-gradient(145deg, #FFFFFF, #F5F0E8)',
+                boxShadow: isDark 
+                  ? '0 4px 12px rgba(0,0,0,0.5)'
+                  : '0 4px 12px rgba(0,0,0,0.1)',
+                color: '#E8570C',
               }}
             >
               →
