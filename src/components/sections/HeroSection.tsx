@@ -1,182 +1,193 @@
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { ChevronDown } from 'lucide-react'
-import { MagneticButton } from '../ui/MagneticButton'
-// Disabled for performance: import { HeroScene } from '../canvas'
-import { useParallax, useReducedMotion } from '../../hooks'
-import { staggerContainer, staggerItem } from '../../lib/animation-variants'
+import { useRef, useEffect } from 'react'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { resumeData } from '../../lib/resume-data'
+import { useTheme } from '../providers/ThemeProvider'
+
+gsap.registerPlugin(ScrollTrigger)
 
 /**
- * Individual letter component with spring animation
+ * Cinematic Hero Section with Parallax
+ * Full viewport with name, animated headline, and scroll-driven parallax
  */
-const HeroLetter = ({ letter, delay }: { letter: string; delay: number }) => {
-  const prefersReducedMotion = useReducedMotion()
-
-  return (
-    <motion.span
-      className="gradient-text inline-block"
-      initial={{ opacity: 0, y: 40, rotateZ: -10 }}
-      animate={{ opacity: 1, y: 0, rotateZ: 0 }}
-      transition={{
-        type: prefersReducedMotion ? 'tween' : 'spring',
-        stiffness: 400,
-        damping: 30,
-        delay: prefersReducedMotion ? 0 : delay * 0.15,
-        duration: prefersReducedMotion ? 0.1 : undefined,
-      }}
-    >
-      {letter}
-    </motion.span>
-  )
-}
-
-/**
- * Typewriter text component
- */
-const TypewriterText = ({ text, delay = 0 }: { text: string; delay?: number }) => {
-  const [displayedText, setDisplayedText] = useState('')
-  const prefersReducedMotion = useReducedMotion()
+export const HeroSection = () => {
+  const containerRef = useRef<HTMLElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
+  const { resolvedTheme } = useTheme()
+  const isDark = resolvedTheme === 'dark'
+  
+  // Parallax scroll transforms
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"]
+  })
+  
+  const y = useTransform(scrollYProgress, [0, 1], [0, 200])
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95])
 
   useEffect(() => {
-    if (prefersReducedMotion) {
-      setDisplayedText(text)
-      return
-    }
+    if (!contentRef.current) return
 
-    const startTime = Date.now() + delay * 1000
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({ delay: 0.5 })
 
-    const interval = setInterval(() => {
-      const elapsed = Date.now() - startTime
-      const charIndex = Math.floor(elapsed / 60) // ~60ms per character
+      // Name animation
+      tl.from('.hero-name', {
+        y: 60,
+        opacity: 0,
+        duration: 1,
+        ease: "power3.out"
+      })
+      
+      // Title words stagger
+      .from('.hero-word', {
+        y: 80,
+        opacity: 0,
+        rotationX: 45,
+        duration: 1.2,
+        stagger: 0.12,
+        ease: "power3.out"
+      }, "-=0.5")
+      
+      // Subtitle
+      .from('.hero-subtitle', {
+        y: 30,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power2.out"
+      }, "-=0.4")
 
-      if (charIndex >= text.length) {
-        setDisplayedText(text)
-        clearInterval(interval)
-      } else {
-        setDisplayedText(text.substring(0, charIndex))
-      }
-    }, 50)
+      // Floating elements
+      .from('.hero-float', {
+        scale: 0,
+        opacity: 0,
+        duration: 1,
+        stagger: 0.2,
+        ease: "elastic.out(1, 0.5)"
+      }, "-=0.6")
 
-    return () => clearInterval(interval)
-  }, [text, delay, prefersReducedMotion])
+      // Scroll indicator
+      .from('.hero-scroll', {
+        y: 20,
+        opacity: 0,
+        duration: 0.6,
+        ease: "power2.out"
+      }, "-=0.3")
+
+      // Continuous floating animation for decorative elements
+      gsap.to('.hero-float', {
+        y: -15,
+        duration: 3,
+        repeat: -1,
+        yoyo: true,
+        ease: "power1.inOut",
+        stagger: 0.5
+      })
+
+      // Scroll indicator bounce
+      gsap.to('.hero-scroll', {
+        y: 10,
+        duration: 1.5,
+        repeat: -1,
+        yoyo: true,
+        ease: "power2.inOut"
+      })
+    }, contentRef)
+
+    return () => ctx.revert()
+  }, [])
 
   return (
-    <motion.p
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay, duration: 0.3 }}
-      className="text-2xl md:text-3xl text-text-secondary font-light leading-relaxed"
+    <section 
+      ref={containerRef}
+      id="home" 
+      className="relative w-full h-screen flex items-center justify-center overflow-hidden transition-colors duration-500"
+      style={{ backgroundColor: isDark ? '#0E0E0B' : '#F5F0E8' }}
     >
-      {displayedText}
-      {displayedText !== text && !prefersReducedMotion && (
-        <motion.span
-          animate={{ opacity: [1, 0] }}
-          transition={{ duration: 0.6, repeat: Infinity }}
-          className="inline-block w-1 h-6 ml-1 bg-accent-primary"
+      {/* Animated Background Gradient */}
+      <div className="absolute inset-0">
+        <div 
+          className="absolute inset-0 opacity-60"
+          style={{
+            background: isDark 
+              ? 'radial-gradient(ellipse at 30% 20%, rgba(232, 87, 12, 0.15) 0%, transparent 50%), radial-gradient(ellipse at 70% 80%, rgba(212, 165, 116, 0.1) 0%, transparent 50%)'
+              : 'radial-gradient(ellipse at 30% 20%, rgba(232, 87, 12, 0.08) 0%, transparent 50%), radial-gradient(ellipse at 70% 80%, rgba(212, 165, 116, 0.1) 0%, transparent 50%)'
+          }}
         />
-      )}
-    </motion.p>
-  )
-}
-
-export const HeroSection = () => {
-  const parallaxY = useParallax(0.3)
-  const prefersReducedMotion = useReducedMotion()
-
-  return (
-    <section id="home" className="relative w-full min-h-screen flex items-center justify-center overflow-hidden pt-20">
-      {/* Dark gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-bg-primary via-bg-secondary to-bg-primary" />
+      </div>
       
-      {/* Animated grid pattern */}
-      <motion.div
-        animate={{ x: ['0%', '-50%'] }}
-        transition={{ repeat: Infinity, duration: 30, ease: 'linear' }}
-        className="absolute inset-0 opacity-20"
-        style={{
-          backgroundImage: 'linear-gradient(rgba(99, 102, 241, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(99, 102, 241, 0.3) 1px, transparent 1px)',
-          backgroundSize: '50px 50px',
-        }}
-      />
-      
-      {/* Glow orbs */}
-      <div className="absolute top-20 left-10 w-96 h-96 bg-accent-primary/20 rounded-full blur-3xl" />
-      <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent-cyan/15 rounded-full blur-3xl" />
-      <div
-        className="absolute top-1/2 left-1/2 w-72 h-72 bg-accent-rose/5 rounded-full blur-3xl"
-        style={{ animation: 'float 10s ease-in-out infinite reverse' }}
-      />
+      {/* Floating Decorative Elements */}
+      <div className="hero-float absolute top-[15%] left-[10%] w-20 h-20 rounded-full opacity-20" style={{ background: 'linear-gradient(135deg, #E8570C 0%, #FF6B1A 100%)' }} />
+      <div className="hero-float absolute top-[25%] right-[15%] w-12 h-12 rounded-full opacity-15" style={{ backgroundColor: '#D4A574' }} />
+      <div className="hero-float absolute bottom-[30%] left-[20%] w-8 h-8 rounded-full opacity-10" style={{ backgroundColor: '#E8570C' }} />
+      <div className="hero-float absolute bottom-[20%] right-[10%] w-16 h-16 rounded-full opacity-20" style={{ background: 'linear-gradient(135deg, #D4A574 0%, #E8570C 100%)' }} />
 
-      {/* Content with Parallax */}
-      <motion.div
-        className="relative z-10 max-w-4xl mx-auto px-6 text-center"
-        style={{
-          y: parallaxY,
-        }}
-        initial="hidden"
-        animate="visible"
-        variants={staggerContainer}
+      {/* Main Content with Parallax */}
+      <motion.div 
+        ref={contentRef}
+        className="relative z-10 text-center px-6 max-w-5xl mx-auto"
+        style={{ y, opacity, scale }}
       >
-        {/* Role Tag */}
-        <motion.div
-          variants={staggerItem}
-          className="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full border border-border-subtle bg-bg-card/50 backdrop-blur-sm"
-        >
-          <span className="inline-block w-2 h-2 bg-accent-primary rounded-full animate-pulse" />
-          <span className="text-sm text-text-secondary font-accent">
-            UI/UX Designer & Creative Developer
+        {/* Name - Large Display */}
+        <div className="hero-name mb-6">
+          <span 
+            className="text-sm md:text-base uppercase tracking-[0.3em] font-medium"
+            style={{ color: '#E8570C' }}
+          >
+            Hello, I'm
           </span>
-        </motion.div>
+        </div>
+        
+        <h1 className="hero-name font-display mb-8 leading-[0.9] transition-colors duration-500" style={{ fontSize: 'clamp(3rem, 12vw, 9rem)', color: isDark ? '#F0EBE0' : '#1A1208', fontWeight: 700 }}>
+          {resumeData.personal.name.split(' ').map((word, i) => (
+            <span key={i} className="block">
+              {i === 1 ? <span style={{ color: '#E8570C' }}>{word}</span> : word}
+            </span>
+          ))}
+        </h1>
 
-        {/* Main Heading with Letter Animation */}
-        <motion.div variants={staggerItem} className="mb-6">
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-bold leading-tight mb-4">
-            {['K', 'U', 'N', 'A', 'L'].map((letter, index) => (
-              <HeroLetter key={index} letter={letter} delay={index} />
-            ))}
-          </h1>
-          <motion.div
-            className="h-1 w-24 mx-auto bg-gradient-to-r from-accent-primary to-accent-glow rounded-full"
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ delay: 0.7, duration: 0.6 }}
-          />
-        </motion.div>
+        {/* Role Title */}
+        <div className="overflow-hidden mb-6">
+          <p className="hero-word text-xl md:text-2xl lg:text-3xl font-light transition-colors duration-500" style={{ color: isDark ? '#D4C4A8' : '#4A3C2A' }}>
+            Full-Stack Developer & Creative Engineer
+          </p>
+        </div>
 
-        {/* Subtitle with Typewriter Effect */}
-        <motion.div variants={staggerItem} className="mb-12">
-          <TypewriterText text="Crafting Interfaces That Think & Feel" delay={0.8} />
-        </motion.div>
+        {/* Summary Line */}
+        <p className="hero-subtitle text-base md:text-lg max-w-2xl mx-auto leading-relaxed transition-colors duration-500" style={{ color: isDark ? '#9B8B70' : '#4A3C2A', opacity: 0.8 }}>
+          Building scalable systems, crafting interactive experiences, and shipping production-grade solutions across web, ML, and blockchain.
+        </p>
 
         {/* CTA Buttons */}
-        <motion.div
-          variants={staggerItem}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
-        >
-          <MagneticButton
-            onClick={() =>
-              document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })
-            }
-            variant="primary"
+        <div className="hero-subtitle flex flex-wrap gap-4 justify-center mt-10">
+          <a 
+            href="#projects"
+            className="px-8 py-3 rounded-full font-medium text-white transition-all duration-300 hover:scale-105 hover:shadow-lg"
+            style={{ backgroundColor: '#E8570C' }}
           >
-            View My Work
-          </MagneticButton>
-          <MagneticButton variant="ghost">Download Resume</MagneticButton>
-        </motion.div>
-
-        {/* Scroll Indicator */}
-        <motion.div
-          variants={staggerItem}
-          className="flex flex-col items-center gap-2"
-          animate={{ y: prefersReducedMotion ? 0 : [0, 10, 0] }}
-          transition={{ duration: 2, repeat: prefersReducedMotion ? 0 : Infinity }}
-        >
-          <span className="text-xs text-text-secondary uppercase tracking-widest">
-            Scroll to explore
-          </span>
-          <ChevronDown size={20} className="text-accent-primary" />
-        </motion.div>
+            View Projects
+          </a>
+          <a 
+            href="#contact"
+            className="px-8 py-3 rounded-full font-medium border-2 transition-all duration-300 hover:scale-105"
+            style={{ borderColor: isDark ? '#F0EBE0' : '#1A1208', color: isDark ? '#F0EBE0' : '#1A1208' }}
+          >
+            Get in Touch
+          </a>
+        </div>
       </motion.div>
+
+      {/* Scroll Indicator */}
+      <div className="hero-scroll absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2">
+        <span className="text-xs uppercase tracking-[0.2em] font-medium" style={{ color: isDark ? '#9B8B70' : '#C4B49A' }}>
+          Scroll
+        </span>
+        <div className="w-6 h-10 rounded-full border-2 flex justify-center pt-2" style={{ borderColor: isDark ? '#9B8B70' : '#C4B49A' }}>
+          <div className="w-1.5 h-3 rounded-full" style={{ backgroundColor: '#E8570C' }} />
+        </div>
+      </div>
     </section>
   )
 }

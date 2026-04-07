@@ -5,37 +5,44 @@ export default {
     './index.html',
     './src/**/*.{js,ts,jsx,tsx}',
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
         bg: {
-          primary: '#0A0E27',
-          secondary: '#111827',
-          card: '#1F2937',
-          glass: 'rgba(255, 255, 255, 0.05)',
+          primary: 'var(--bg-primary)',
+          secondary: 'var(--bg-secondary)',
+          card: 'var(--bg-card)',
+          glass: 'var(--bg-glass)',
         },
         accent: {
-          primary: '#6366F1',
-          glow: '#818CF8',
-          gold: '#F59E0B',
-          cyan: '#06B6D4',
-          rose: '#EC4899',
+          primary: 'var(--accent-primary)',
+          glow: 'var(--accent-glow)',
+          gold: 'var(--accent-gold)',
+          cyan: 'var(--accent-cyan)',
+          rose: 'var(--accent-rose)',
         },
         text: {
-          primary: '#F9FAFB',
-          secondary: '#D1D5DB',
-          tertiary: '#9CA3AF',
+          primary: 'var(--text-primary)',
+          secondary: 'var(--text-secondary)',
+          tertiary: 'var(--text-tertiary)',
         },
         border: {
-          subtle: 'rgba(255, 255, 255, 0.1)',
-          glow: 'rgba(99, 102, 241, 0.5)',
+          subtle: 'var(--border-subtle)',
+          glow: 'var(--border-glow)',
         },
       },
       fontFamily: {
-        display: ['"Clash Display"', '"Syne"', 'sans-serif'],
-        sans: ['"DM Sans"', '"Satoshi"', 'sans-serif'],
+        display: ['Fraunces', 'serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
         mono: ['"JetBrains Mono"', '"Fira Code"', 'monospace'],
         accent: ['"Space Grotesk"', 'sans-serif'],
+      },
+      fontSize: {
+        'hero': 'clamp(3.5rem, 9vw, 8rem)',
+        '7xl': '4.5rem',
+        '8xl': '6rem',
+        '9xl': '8rem',
       },
       animation: {
         'float': 'float 6s ease-in-out infinite',
@@ -43,6 +50,7 @@ export default {
         'marquee': 'marquee 30s linear infinite',
         'marquee-reverse': 'marquee 30s linear infinite reverse',
         'spin-slow': 'spin 20s linear infinite',
+        'pulse-slow': 'pulse 3s ease-in-out infinite',
       },
       keyframes: {
         float: {
@@ -50,8 +58,8 @@ export default {
           '50%': { transform: 'translateY(-20px)' },
         },
         glowPulse: {
-          '0%, 100%': { boxShadow: '0 0 20px rgba(108,99,255,0.3)' },
-          '50%': { boxShadow: '0 0 40px rgba(108,99,255,0.7)' },
+          '0%, 100%': { boxShadow: '0 0 20px rgba(232,87,12,0.3)' },
+          '50%': { boxShadow: '0 0 40px rgba(232,87,12,0.7)' },
         },
         marquee: {
           '0%': { transform: 'translateX(0%)' },

@@ -1,169 +1,159 @@
+import { useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Award, CheckCircle2, ExternalLink } from 'lucide-react'
-import { containerVariants, itemVariants } from '../../lib/animation-variants'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { Award, CheckCircle2 } from 'lucide-react'
 import { resumeData } from '../../lib/resume-data'
+import { useTheme } from '../providers/ThemeProvider'
+
+gsap.registerPlugin(ScrollTrigger)
 
 export const CertificationsSection = () => {
+  const containerRef = useRef<HTMLElement>(null)
+  const { resolvedTheme } = useTheme()
+  const isDark = resolvedTheme === 'dark'
+
+  useEffect(() => {
+    if (!containerRef.current) return
+
+    const ctx = gsap.context(() => {
+      gsap.from('.cert-card', {
+        y: 50,
+        opacity: 0,
+        duration: 0.7,
+        stagger: 0.15,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top 60%'
+        }
+      })
+    }, containerRef)
+
+    return () => ctx.revert()
+  }, [])
+
   return (
-    <section id="certifications" className="relative w-full py-24 px-6 bg-bg-primary overflow-hidden">
-      <div className="max-w-7xl mx-auto">
+    <section 
+      ref={containerRef}
+      id="certifications" 
+      className="relative w-full py-24 px-6 overflow-hidden transition-colors duration-500"
+      style={{ backgroundColor: isDark ? '#0E0E0B' : '#F5F0E8' }}
+    >
+      {/* Decorative */}
+      <div className="absolute bottom-10 left-20 w-48 h-48 rounded-full opacity-15" style={{ background: 'radial-gradient(circle, #E8570C 0%, transparent 70%)' }} />
+
+      <div className="max-w-6xl mx-auto relative z-10">
         {/* Header */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          variants={containerVariants}
-          className="mb-16"
-        >
-          <motion.p
-            variants={itemVariants}
-            className="text-sm text-accent-cyan font-mono uppercase tracking-widest mb-4"
-          >
-            // 06 Certifications
-          </motion.p>
-          <motion.h2
-            variants={itemVariants}
-            className="text-4xl md:text-5xl font-display font-bold text-text-primary mb-4"
-          >
+        <div className="mb-16 text-center">
+          <span className="inline-flex items-center gap-2 text-sm uppercase tracking-[0.2em] font-medium mb-4" style={{ color: '#E8570C' }}>
+            <Award size={16} />
+            Certifications
+          </span>
+          <h2 className="font-display text-4xl md:text-5xl font-bold transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
             Professional Credentials
-          </motion.h2>
-          <motion.p
-            variants={itemVariants}
-            className="text-lg text-text-secondary max-w-2xl"
-          >
-            Verified expertise backed by industry-recognized certifications.
-          </motion.p>
-        </motion.div>
+          </h2>
+        </div>
 
         {/* Certifications Grid */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
-          variants={containerVariants}
-          className="grid grid-cols-1 md:grid-cols-2 gap-6"
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
           {resumeData.certifications.map((cert, index) => (
             <motion.div
               key={index}
-              variants={itemVariants}
-              whileHover={{ scale: 1.03, y: -8 }}
-              className="group relative bg-bg-card border border-border-subtle rounded-xl p-6 overflow-hidden hover:border-accent-cyan transition-all duration-300"
+              className="cert-card relative p-6 rounded-xl shadow-md overflow-hidden transition-colors duration-500"
+              style={{ 
+                backgroundColor: isDark ? '#1A1510' : '#FFFFFF',
+                border: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.2)' : 'rgba(212, 165, 116, 0.3)'}`
+              }}
+              whileHover={{ scale: 1.03, y: -8, boxShadow: isDark ? '0 20px 40px rgba(0, 0, 0, 0.3)' : '0 20px 40px rgba(26, 18, 8, 0.1)' }}
             >
-              {/* Background Gradient */}
-              <motion.div
-                className="absolute top-0 right-0 w-32 h-32 opacity-0 group-hover:opacity-10 transition-opacity duration-300"
-                style={{
-                  background: 'radial-gradient(circle, #00E5FF 0%, transparent 70%)',
-                }}
-              />
-
               {/* Badge Icon */}
               <motion.div
-                className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-accent-cyan/10 border border-accent-cyan/30 mb-4"
+                className="inline-flex items-center justify-center w-12 h-12 rounded-lg mb-4"
+                style={{ backgroundColor: isDark ? 'rgba(232, 87, 12, 0.15)' : 'rgba(232, 87, 12, 0.1)' }}
                 whileHover={{ rotate: 360 }}
                 transition={{ duration: 0.6 }}
               >
-                <Award className="w-6 h-6 text-accent-cyan" />
+                <Award className="w-6 h-6" style={{ color: '#E8570C' }} />
               </motion.div>
 
               {/* Content */}
               <div className="relative z-10">
                 <div className="flex items-start justify-between mb-2">
-                  <h3 className="text-lg font-display font-bold text-text-primary pr-4">
+                  <h3 className="text-lg font-display font-bold pr-4 transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
                     {cert.title}
                   </h3>
                   <motion.span
-                    className="flex-shrink-0 px-2 py-1 text-xs font-mono rounded-full bg-accent-cyan/20 text-accent-cyan"
+                    className="flex-shrink-0 px-2 py-1 text-xs font-mono rounded-full"
+                    style={{ backgroundColor: isDark ? 'rgba(232, 87, 12, 0.15)' : 'rgba(232, 87, 12, 0.1)', color: '#E8570C' }}
                     whileHover={{ scale: 1.1 }}
                   >
                     {cert.year}
                   </motion.span>
                 </div>
 
-                <p className="text-sm font-accent text-accent-cyan mb-3">
+                <p className="text-sm font-medium mb-3" style={{ color: '#E8570C' }}>
                   {cert.issuer}
                 </p>
 
-                <p className="text-sm text-text-secondary leading-relaxed mb-4">
+                <p className="text-sm leading-relaxed mb-4 transition-colors duration-500" style={{ color: isDark ? '#D4C4A8' : '#4A3C2A' }}>
                   {cert.description}
                 </p>
 
                 {/* Verification Badge */}
-                <motion.div
-                  className="flex items-center gap-2 text-xs text-text-tertiary"
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  transition={{ delay: index * 0.1 + 0.3 }}
-                >
-                  <CheckCircle2 className="w-4 h-4 text-accent-cyan" />
+                <div className="flex items-center gap-2 text-xs" style={{ color: '#9B8B70' }}>
+                  <CheckCircle2 className="w-4 h-4" style={{ color: '#22C55E' }} />
                   <span>Verified Certification</span>
-                </motion.div>
+                </div>
               </div>
-
-              {/* Hover Shine Effect */}
-              <motion.div
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                style={{
-                  background: 'linear-gradient(135deg, transparent 0%, rgba(0, 229, 255, 0.05) 50%, transparent 100%)',
-                }}
-              />
             </motion.div>
           ))}
-        </motion.div>
+        </div>
 
         {/* Achievements Section */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          variants={containerVariants}
-          className="mt-20"
-        >
-          <motion.h3
-            variants={itemVariants}
-            className="text-2xl font-display font-bold text-text-primary mb-8"
-          >
+        <div>
+          <h3 className="text-2xl font-display font-bold mb-8 text-center transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
             Notable Achievements
-          </motion.h3>
+          </h3>
 
-          <motion.div
-            variants={containerVariants}
-            className="grid grid-cols-1 md:grid-cols-2 gap-6"
-          >
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {resumeData.achievements.map((achievement, index) => (
               <motion.div
                 key={index}
-                variants={itemVariants}
-                whileHover={{ x: 4 }}
-                className="flex gap-4 p-6 bg-bg-card border border-border-subtle rounded-xl hover:border-accent-primary transition-colors"
+                className="cert-card flex gap-4 p-6 rounded-xl shadow-md transition-colors duration-500"
+                style={{ 
+                  backgroundColor: isDark ? '#1A1510' : '#FFFFFF',
+                  border: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.2)' : 'rgba(212, 165, 116, 0.3)'}`
+                }}
+                whileHover={{ x: 4, boxShadow: isDark ? '0 10px 30px rgba(0, 0, 0, 0.3)' : '0 10px 30px rgba(26, 18, 8, 0.1)' }}
               >
                 <motion.div
-                  className="flex-shrink-0 w-10 h-10 rounded-full bg-accent-primary/10 border border-accent-primary/30 flex items-center justify-center"
+                  className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center"
+                  style={{ backgroundColor: isDark ? 'rgba(232, 87, 12, 0.15)' : 'rgba(232, 87, 12, 0.1)' }}
                   whileHover={{ scale: 1.1, rotate: 15 }}
                 >
-                  <Award className="w-5 h-5 text-accent-primary" />
+                  <Award className="w-5 h-5" style={{ color: '#E8570C' }} />
                 </motion.div>
                 <div className="flex-1">
-                  <h4 className="text-base font-display font-bold text-text-primary mb-1">
+                  <h4 className="text-base font-display font-bold mb-1 transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
                     {achievement.title}
                   </h4>
                   {achievement.subtitle && (
-                    <p className="text-sm font-accent text-accent-primary mb-2">
+                    <p className="text-sm font-medium mb-2" style={{ color: '#E8570C' }}>
                       {achievement.subtitle}
                     </p>
                   )}
-                  <p className="text-sm text-text-secondary">
+                  <p className="text-sm transition-colors duration-500" style={{ color: isDark ? '#D4C4A8' : '#4A3C2A' }}>
                     {achievement.description}
                   </p>
-                  <span className="inline-block mt-2 text-xs font-mono text-text-tertiary">
+                  <span className="inline-block mt-2 text-xs font-mono" style={{ color: '#9B8B70' }}>
                     {achievement.year}
                   </span>
                 </div>
               </motion.div>
             ))}
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       </div>
     </section>
   )

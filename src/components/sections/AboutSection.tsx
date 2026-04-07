@@ -1,7 +1,17 @@
+import { useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { containerVariants, itemVariants } from '../../lib/animation-variants'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { User } from 'lucide-react'
+import { useTheme } from '../providers/ThemeProvider'
+
+gsap.registerPlugin(ScrollTrigger)
 
 export const AboutSection = () => {
+  const containerRef = useRef<HTMLElement>(null)
+  const { resolvedTheme } = useTheme()
+  const isDark = resolvedTheme === 'dark'
+
   const stats = [
     { label: 'Years Coding', value: '5+' },
     { label: 'Projects Built', value: '20+' },
@@ -15,82 +25,128 @@ export const AboutSection = () => {
     'Full Stack Expertise',
   ]
 
+  useEffect(() => {
+    if (!containerRef.current) return
+
+    const ctx = gsap.context(() => {
+      gsap.from('.about-content', {
+        y: 60,
+        opacity: 0,
+        duration: 1,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top 60%'
+        }
+      })
+
+      gsap.from('.about-visual', {
+        scale: 0.9,
+        opacity: 0,
+        duration: 1,
+        delay: 0.3,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top 60%'
+        }
+      })
+
+      gsap.from('.stat-item', {
+        y: 30,
+        opacity: 0,
+        duration: 0.6,
+        stagger: 0.1,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: '.stats-container',
+          start: 'top 80%'
+        }
+      })
+    }, containerRef)
+
+    return () => ctx.revert()
+  }, [])
+
   return (
-    <section id="about" className="relative w-full py-24 px-6 bg-bg-primary overflow-hidden">
-      <div className="max-w-7xl mx-auto">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          variants={containerVariants}
-          className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center"
-        >
+    <section 
+      ref={containerRef}
+      id="about" 
+      className="relative w-full py-24 px-6 overflow-hidden transition-colors duration-500"
+      style={{ backgroundColor: isDark ? '#0E0E0B' : '#F5F0E8' }}
+    >
+      {/* Decorative */}
+      <div className="absolute top-20 left-10 w-40 h-40 rounded-full opacity-20" style={{ background: 'radial-gradient(circle, #E8570C 0%, transparent 70%)' }} />
+
+      <div className="max-w-6xl mx-auto relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           {/* Left Column */}
-          <div>
+          <div className="about-content">
             {/* Section Tag */}
-            <motion.p
-              variants={itemVariants}
-              className="text-sm text-accent-primary font-mono uppercase tracking-widest mb-4"
-            >
-              // 01 About
-            </motion.p>
+            <span className="inline-flex items-center gap-2 text-sm uppercase tracking-[0.2em] font-medium mb-4" style={{ color: '#E8570C' }}>
+              <User size={16} />
+              About Me
+            </span>
 
             {/* Heading */}
-            <motion.h2
-              variants={itemVariants}
-              className="text-4xl md:text-5xl font-display font-bold text-text-primary mb-6 leading-tight"
-            >
-              I design experiences, not just interfaces.
-            </motion.h2>
+            <h2 className="text-4xl md:text-5xl font-display font-bold mb-6 leading-tight transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
+              I design experiences,
+              <br />
+              <span style={{ color: '#E8570C' }}>not just interfaces.</span>
+            </h2>
 
             {/* Bio */}
-            <motion.div variants={itemVariants} className="space-y-4 mb-8">
-              <p className="text-text-secondary text-lg leading-relaxed">
+            <div className="space-y-4 mb-8">
+              <p className="text-lg leading-relaxed transition-colors duration-500" style={{ color: isDark ? '#D4C4A8' : '#4A3C2A' }}>
                 I'm a full-stack developer and designer obsessed with creating digital experiences that feel
                 alive. From real-time 3D simulations to distributed system architectures, I think beyond the
                 surface.
               </p>
-              <p className="text-text-secondary text-lg leading-relaxed">
+              <p className="text-lg leading-relaxed transition-colors duration-500" style={{ color: isDark ? '#D4C4A8' : '#4A3C2A' }}>
                 Currently exploring ML systems, blockchain platforms, and the intersection of beautiful design
                 with bulletproof engineering. I believe the best products live at the edge of art and science.
               </p>
-            </motion.div>
+            </div>
 
             {/* Stats */}
-            <motion.div
-              variants={containerVariants}
-              className="grid grid-cols-3 gap-4 mb-8 py-8 border-y border-border-subtle"
+            <div 
+              className="stats-container grid grid-cols-3 gap-4 mb-8 py-8"
+              style={{ borderTop: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.2)' : 'rgba(212, 165, 116, 0.4)'}`, borderBottom: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.2)' : 'rgba(212, 165, 116, 0.4)'}` }}
             >
               {stats.map((stat) => (
-                <motion.div key={stat.label} variants={itemVariants} className="text-center">
-                  <div className="text-3xl font-bold text-accent-primary mb-2">{stat.value}</div>
-                  <div className="text-xs text-text-secondary uppercase tracking-widest">{stat.label}</div>
-                </motion.div>
+                <div key={stat.label} className="stat-item text-center">
+                  <div className="text-3xl font-bold mb-2" style={{ color: '#E8570C' }}>{stat.value}</div>
+                  <div className="text-xs uppercase tracking-widest transition-colors duration-500" style={{ color: isDark ? '#9B8B70' : '#9B8B70' }}>{stat.label}</div>
+                </div>
               ))}
-            </motion.div>
+            </div>
 
             {/* Achievement Pills */}
-            <motion.div
-              variants={containerVariants}
-              className="flex flex-wrap gap-3"
-            >
+            <div className="flex flex-wrap gap-3">
               {achievements.map((achievement) => (
                 <motion.span
                   key={achievement}
-                  variants={itemVariants}
-                  className="px-3 py-1 rounded-full bg-accent-primary/10 border border-accent-primary/30 text-sm text-accent-glow font-accent"
-                  whileHover={{ scale: 1.05, borderColor: '#9D97FF' }}
+                  className="px-4 py-2 rounded-full text-sm font-medium"
+                  style={{ 
+                    backgroundColor: isDark ? 'rgba(232, 87, 12, 0.15)' : 'rgba(232, 87, 12, 0.1)',
+                    border: '1px solid rgba(232, 87, 12, 0.3)',
+                    color: '#E8570C'
+                  }}
+                  whileHover={{ scale: 1.05, backgroundColor: isDark ? 'rgba(232, 87, 12, 0.25)' : 'rgba(232, 87, 12, 0.2)' }}
                 >
                   {achievement}
                 </motion.span>
               ))}
-            </motion.div>
+            </div>
           </div>
 
           {/* Right Column - Abstract Visual */}
-          <motion.div
-            variants={itemVariants}
-            className="h-full min-h-96 rounded-xl relative overflow-hidden bg-gradient-to-br from-bg-card to-bg-secondary p-8 flex items-center justify-center"
+          <div 
+            className="about-visual h-full min-h-96 rounded-2xl relative overflow-hidden p-8 flex items-center justify-center shadow-xl transition-colors duration-500"
+            style={{ 
+              background: isDark ? 'linear-gradient(145deg, #1A1510, #0E0E0B)' : 'linear-gradient(145deg, #FFFBF5, #F5F0E8)',
+              border: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.2)' : 'rgba(212, 165, 116, 0.3)'}`
+            }}
           >
             {/* Geometric Pattern */}
             <svg className="w-full h-full" viewBox="0 0 300 300">
@@ -100,7 +156,7 @@ export const AboutSection = () => {
                 cy="150"
                 r="140"
                 fill="none"
-                stroke="url(#grad1)"
+                stroke="url(#gradWarm1)"
                 strokeWidth="1"
                 opacity="0.3"
                 animate={{ rotate: 360 }}
@@ -113,7 +169,7 @@ export const AboutSection = () => {
                 cy="150"
                 r="100"
                 fill="none"
-                stroke="url(#grad2)"
+                stroke="url(#gradWarm2)"
                 strokeWidth="1"
                 opacity="0.5"
                 animate={{ rotate: -360 }}
@@ -121,37 +177,37 @@ export const AboutSection = () => {
               />
 
               {/* Inner Circle */}
-              <circle cx="150" cy="150" r="60" fill="none" stroke="#6C63FF" strokeWidth="2" opacity="0.7" />
+              <circle cx="150" cy="150" r="60" fill="none" stroke="#E8570C" strokeWidth="2" opacity="0.7" />
 
               {/* Center Glow */}
               <motion.circle
                 cx="150"
                 cy="150"
                 r="30"
-                fill="#6C63FF"
-                opacity="0.2"
+                fill="#E8570C"
+                opacity="0.15"
                 animate={{ scale: [1, 1.2, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
               />
 
               {/* K Letter */}
-              <text x="150" y="160" textAnchor="middle" fontSize="48" fontWeight="bold" fill="#6C63FF" opacity="0.5">
+              <text x="150" y="160" textAnchor="middle" fontSize="48" fontWeight="bold" fill="#E8570C" opacity="0.6">
                 K
               </text>
 
               <defs>
-                <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#6C63FF" />
-                  <stop offset="100%" stopColor="#00E5FF" />
+                <linearGradient id="gradWarm1" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#E8570C" />
+                  <stop offset="100%" stopColor="#D4A574" />
                 </linearGradient>
-                <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#00E5FF" />
-                  <stop offset="100%" stopColor="#FF3CAC" />
+                <linearGradient id="gradWarm2" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#D4A574" />
+                  <stop offset="100%" stopColor="#E8570C" />
                 </linearGradient>
               </defs>
             </svg>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       </div>
     </section>
   )
