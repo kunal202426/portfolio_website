@@ -3,8 +3,8 @@ import { motion } from 'framer-motion'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { GraduationCap, MapPin, Calendar } from 'lucide-react'
-import { resumeData } from '../../lib/resume-data'
-import { useTheme } from '../providers/ThemeProvider'
+import { resumeData } from '../../../lib/resume-data'
+import { useTheme } from '../../providers/ThemeProvider'
 
 gsap.registerPlugin(ScrollTrigger)
 

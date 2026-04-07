@@ -91,7 +91,7 @@ export const resumeData = {
       featured: true,
       category: 'dev',
       liveUrl: 'https://system-design-simulator-weld.vercel.app/',
-      githubUrl: '#',
+      githubUrl: 'https://github.com/kunal202426',
       achievements: [
         'Built a full-stack distributed systems simulator using React (ReactFlow), FastAPI, and WebSockets.',
         'Modeled failure scenarios via M/M/1 queueing theory, chaos engineering, and probabilistic fault injection (node crashes, latency spikes, traffic surges).',
@@ -109,7 +109,7 @@ export const resumeData = {
       featured: true,
       category: 'ml',
       liveUrl: 'https://ysil.vercel.app/',
-      githubUrl: '#',
+      githubUrl: 'https://github.com/kunal202426',
       achievements: [
         'Architected a hybrid ML ensemble — LSTM + LightGBM with FinBERT NLP sentiment analysis and technical indicators.',
         'Built automated ETL and feature engineering pipelines with model retraining workflows.',
@@ -157,7 +157,7 @@ export const resumeData = {
       featured: true,
       category: 'design',
       liveUrl: 'https://www.levitatehyperloop.com/',
-      githubUrl: '#',
+      githubUrl: 'https://github.com/kunal202426',
       achievements: [
         'Designed and deployed a 3D interactive, fully responsive website in Three.js and React.',
         'Optimized rendering and performance for global accessibility with real-time hardware data integration.',

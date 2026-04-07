@@ -1,6 +1,6 @@
-import { ProjectCarousel } from '../ui/ProjectCarousel'
-import { resumeData } from '../../lib/resume-data'
-import { useTheme } from '../providers/ThemeProvider'
+import { ProjectCarousel } from '../ProjectCarousel'
+import { resumeData } from '../../../lib/resume-data'
+import { useTheme } from '../../providers/ThemeProvider'
 
 export const ProjectsSection = () => {
   const { resolvedTheme } = useTheme()

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { Eye, Download, FileText, ExternalLink } from 'lucide-react'
-import { useTheme } from '../providers/ThemeProvider'
+import { useTheme } from '../../providers/ThemeProvider'
 
 const RESUME_PATH = '/Resume_general.pdf'
 

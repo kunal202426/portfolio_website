@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { User } from 'lucide-react'
-import { useTheme } from '../providers/ThemeProvider'
+import { useTheme } from '../../providers/ThemeProvider'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -21,8 +21,8 @@ export const AboutSection = () => {
   const achievements = [
     'Global Hyperloop Winner',
     'Flipkart GRiD Semi-Finalist',
-    'Blockchain Certified',
-    'Full Stack Expertise',
+    'Data Analytics Certified',
+    'ML & Full Stack Expert',
   ]
 
   useEffect(() => {
@@ -90,21 +90,20 @@ export const AboutSection = () => {
 
             {/* Heading */}
             <h2 className="text-4xl md:text-5xl font-display font-bold mb-6 leading-tight transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
-              I design experiences,
+              I build systems,
               <br />
-              <span style={{ color: '#E8570C' }}>not just interfaces.</span>
+              <span style={{ color: '#E8570C' }}>not just applications.</span>
             </h2>
 
             {/* Bio */}
             <div className="space-y-4 mb-8">
               <p className="text-lg leading-relaxed transition-colors duration-500" style={{ color: isDark ? '#D4C4A8' : '#4A3C2A' }}>
-                I'm a full-stack developer and designer obsessed with creating digital experiences that feel
-                alive. From real-time 3D simulations to distributed system architectures, I think beyond the
-                surface.
+                I'm a full-stack developer and ML engineer focused on building scalable systems that solve real problems. 
+                From distributed architectures to deep learning pipelines, I work across the entire stack.
               </p>
               <p className="text-lg leading-relaxed transition-colors duration-500" style={{ color: isDark ? '#D4C4A8' : '#4A3C2A' }}>
-                Currently exploring ML systems, blockchain platforms, and the intersection of beautiful design
-                with bulletproof engineering. I believe the best products live at the edge of art and science.
+                Currently working with production React apps, FastAPI backends, ML model deployment, and data analytics.
+                I believe in writing clean code, building robust systems, and shipping features that matter.
               </p>
             </div>
 
@@ -140,7 +139,7 @@ export const AboutSection = () => {
             </div>
           </div>
 
-          {/* Right Column - Abstract Visual */}
+          {/* Right Column - 3D Book with Radiating Animation */}
           <div 
             className="about-visual h-full min-h-96 rounded-2xl relative overflow-hidden p-8 flex items-center justify-center shadow-xl transition-colors duration-500"
             style={{ 
@@ -148,8 +147,8 @@ export const AboutSection = () => {
               border: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.2)' : 'rgba(212, 165, 116, 0.3)'}`
             }}
           >
-            {/* Geometric Pattern */}
-            <svg className="w-full h-full" viewBox="0 0 300 300">
+            {/* Radiating Circles Background */}
+            <svg className="absolute w-full h-full" viewBox="0 0 300 300">
               {/* Outer Circle */}
               <motion.circle
                 cx="150"
@@ -190,11 +189,6 @@ export const AboutSection = () => {
                 transition={{ duration: 2, repeat: Infinity }}
               />
 
-              {/* K Letter */}
-              <text x="150" y="160" textAnchor="middle" fontSize="48" fontWeight="bold" fill="#E8570C" opacity="0.6">
-                K
-              </text>
-
               <defs>
                 <linearGradient id="gradWarm1" x1="0%" y1="0%" x2="100%" y2="100%">
                   <stop offset="0%" stopColor="#E8570C" />
@@ -206,6 +200,104 @@ export const AboutSection = () => {
                 </linearGradient>
               </defs>
             </svg>
+
+            {/* 3D Book on Table - Top-Down Angle */}
+            <div className="relative z-10" style={{ perspective: '800px', perspectiveOrigin: '50% 30%' }}>
+              <motion.div
+                className="relative"
+                style={{
+                  width: '200px',
+                  height: '280px',
+                  transformStyle: 'preserve-3d',
+                  transform: 'rotateX(25deg) rotateZ(-5deg)',
+                }}
+                animate={{ 
+                  rotateZ: [-5, -3, -5],
+                  y: [0, -5, 0]
+                }}
+                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+              >
+                {/* Book Cover */}
+                <div
+                  className="absolute inset-0 rounded-lg"
+                  style={{
+                    background: isDark 
+                      ? 'linear-gradient(145deg, #E8570C, #C74809)' 
+                      : 'linear-gradient(145deg, #E8570C, #FF6B1A)',
+                    border: `2px solid ${isDark ? 'rgba(232, 87, 12, 0.5)' : 'rgba(232, 87, 12, 0.4)'}`,
+                    boxShadow: isDark 
+                      ? '0 20px 40px rgba(0, 0, 0, 0.7), 0 10px 20px rgba(232, 87, 12, 0.3)'
+                      : '0 20px 50px rgba(0, 0, 0, 0.25), 0 10px 25px rgba(232, 87, 12, 0.4)',
+                    transformStyle: 'preserve-3d',
+                    transform: 'translateZ(8px)'
+                  }}
+                >
+                  {/* Book Icon */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" opacity="0.8">
+                      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                    </svg>
+                  </div>
+
+                  {/* Book Shine */}
+                  <div 
+                    className="absolute top-0 left-0 right-0 h-1/3 rounded-t-lg"
+                    style={{
+                      background: 'linear-gradient(to bottom, rgba(255,255,255,0.3), transparent)',
+                    }}
+                  />
+                </div>
+
+                {/* Book Spine (Left Edge) */}
+                <div
+                  className="absolute top-0 left-0 bottom-0 w-3 rounded-l-lg"
+                  style={{
+                    background: isDark ? 'linear-gradient(to right, #9B3506, #C74809)' : 'linear-gradient(to right, #C74809, #E8570C)',
+                    transformStyle: 'preserve-3d',
+                    transformOrigin: 'left',
+                    transform: 'rotateY(-90deg) translateZ(-5px)',
+                    boxShadow: 'inset -2px 0 4px rgba(0,0,0,0.5)'
+                  }}
+                />
+
+                {/* Book Pages (Right Edge) */}
+                <div
+                  className="absolute top-1 right-0 bottom-1 w-2"
+                  style={{
+                    background: isDark ? 'linear-gradient(to left, #F0EBE0, #D4C4A8)' : 'linear-gradient(to left, #FFFBF5, #F0EBE0)',
+                    transformStyle: 'preserve-3d',
+                    transformOrigin: 'right',
+                    transform: 'rotateY(90deg) translateZ(-5px)',
+                    boxShadow: 'inset 2px 0 4px rgba(0,0,0,0.3)'
+                  }}
+                />
+
+                {/* Book Bottom (Thickness) */}
+                <div
+                  className="absolute bottom-0 left-0 right-0 h-3 rounded-b-lg"
+                  style={{
+                    background: isDark ? '#9B3506' : '#C74809',
+                    transformStyle: 'preserve-3d',
+                    transformOrigin: 'bottom',
+                    transform: 'rotateX(90deg) translateZ(-5px)',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.6)'
+                  }}
+                />
+              </motion.div>
+
+              {/* Table Shadow */}
+              <div
+                className="absolute bottom-0 left-1/2 transform -translate-x-1/2"
+                style={{
+                  width: '250px',
+                  height: '80px',
+                  background: 'radial-gradient(ellipse, rgba(0,0,0,0.3), transparent 70%)',
+                  filter: 'blur(15px)',
+                  transform: 'translateY(140px) rotateX(90deg)',
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>
