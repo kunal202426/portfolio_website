@@ -17,7 +17,9 @@ export const ThemeTogglerButton = ({
 }: ThemeTogglerButtonProps) => {
   const { theme, setTheme, resolvedTheme } = useTheme()
 
-  const cycleTheme = () => {
+  const cycleTheme = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
     const currentIndex = modes.indexOf(theme as 'light' | 'dark' | 'system')
     const nextIndex = (currentIndex + 1) % modes.length
     setTheme(modes[nextIndex])

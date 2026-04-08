@@ -10,24 +10,37 @@ gsap.registerPlugin(ScrollTrigger)
 
 export const ExperienceSection = () => {
   const containerRef = useRef<HTMLElement>(null)
+  const svgRef = useRef<SVGSVGElement>(null)
   const experiences = [...resumeData.experience].sort((a, b) => b.year - a.year)
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme === 'dark'
 
   useEffect(() => {
-    if (!containerRef.current) return
+    if (!containerRef.current || !svgRef.current) return
 
     const ctx = gsap.context(() => {
-      // Animate timeline line drawing
-      gsap.from('.exp-line', {
-        scaleY: 0,
-        duration: 1.5,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: 'top 60%'
-        }
-      })
+      // Get the path element
+      const pathElement = svgRef.current?.querySelector('.timeline-path')
+      if (pathElement) {
+        // Calculate path length
+        const pathLength = (pathElement as SVGPathElement).getTotalLength()
+
+        // Set initial dash properties
+        pathElement.setAttribute('stroke-dasharray', String(pathLength))
+        pathElement.setAttribute('stroke-dashoffset', String(pathLength))
+
+        // Animate the path drawing on scroll
+        gsap.to('.timeline-path', {
+          strokeDashoffset: 0,
+          duration: 1,
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: 'top 40%',
+            end: 'bottom 60%',
+            scrub: 1,
+          }
+        })
+      }
 
       // Stagger cards
       gsap.from('.exp-card', {
@@ -71,11 +84,31 @@ export const ExperienceSection = () => {
 
         {/* Timeline */}
         <div className="relative">
-          {/* Center Line */}
-          <div 
-            className="exp-line absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 origin-top"
-            style={{ background: 'linear-gradient(to bottom, #E8570C, #D4A574, #E8570C)' }}
-          />
+          {/* Wavy Timeline Path SVG */}
+          <svg
+            ref={svgRef}
+            className="absolute left-4 md:left-1/2 top-0 bottom-0 w-8 pointer-events-none overflow-visible"
+            style={{
+              transform: 'translateX(-50%)',
+              height: '100%',
+              minHeight: '600px'
+            }}
+          >
+            {/* Smooth curved serpentine path */}
+            <path
+              className="timeline-path"
+              d={`M 16 0 C 16 60, 0 60, 0 120 C 0 180, 16 180, 16 240 C 16 300, 0 300, 0 360 C 0 420, 16 420, 16 480 C 16 540, 0 540, 0 600 C 0 660, 16 660, 16 720 C 16 780, 0 780, 0 840 C 0 900, 16 900, 16 960 C 16 1020, 0 1020, 0 1080`}
+              stroke={isDark ? 'white' : 'black'}
+              strokeWidth="3"
+              fill="none"
+              strokeLinecap="round"
+              style={{
+                filter: isDark
+                  ? 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.3))'
+                  : 'drop-shadow(0 0 8px rgba(0, 0, 0, 0.2))'
+              }}
+            />
+          </svg>
 
           {/* Experience Items */}
           {experiences.map((exp, index) => (
@@ -87,7 +120,7 @@ export const ExperienceSection = () => {
             >
               {/* Timeline Dot */}
               <motion.div
-                className="absolute left-0 md:left-1/2 top-6 w-8 h-8 rounded-full flex items-center justify-center md:-ml-4"
+                className="absolute left-0 md:left-1/2 top-6 w-8 h-8 rounded-full flex items-center justify-center md:-ml-4 pointer-events-none z-0"
                 style={{ backgroundColor: '#E8570C' }}
                 whileHover={{ scale: 1.2, boxShadow: '0 0 20px rgba(232, 87, 12, 0.5)' }}
               >
@@ -96,13 +129,13 @@ export const ExperienceSection = () => {
 
               {/* Content Card */}
               <motion.div
-                className="p-6 rounded-xl shadow-lg transition-colors duration-500"
-                style={{ 
+                className="p-6 rounded-xl shadow-lg transition-colors duration-500 relative z-10"
+                style={{
                   backgroundColor: isDark ? '#1A1510' : '#FFFBF5',
                   border: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.2)' : 'rgba(212, 165, 116, 0.3)'}`
                 }}
-                whileHover={{ 
-                  y: -4, 
+                whileHover={{
+                  y: -4,
                   boxShadow: isDark ? '0 20px 40px rgba(0, 0, 0, 0.3)' : '0 20px 40px rgba(26, 18, 8, 0.1)',
                   borderColor: '#E8570C'
                 }}

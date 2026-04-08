@@ -40,14 +40,8 @@ export const ThemeProvider = ({ children, defaultTheme = 'light' }: ThemeProvide
     return defaultTheme
   })
 
-  // Initialize resolvedTheme based on the actual theme value
-  const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>(() => {
-    if (typeof window !== 'undefined') {
-      const savedTheme = (localStorage.getItem('theme') as Theme) || defaultTheme
-      return getInitialResolvedTheme(savedTheme)
-    }
-    return 'light'
-  })
+  // Compute resolvedTheme based on current theme
+  const resolvedTheme: 'light' | 'dark' = getInitialResolvedTheme(theme)
 
   useEffect(() => {
     const root = window.document.documentElement
@@ -65,7 +59,6 @@ export const ThemeProvider = ({ children, defaultTheme = 'light' }: ThemeProvide
     }
 
     root.classList.add(resolved)
-    setResolvedTheme(resolved)
     localStorage.setItem('theme', theme)
   }, [theme])
 
