@@ -86,7 +86,18 @@ export const EducationSection = () => {
                     </motion.div>
                     <div className="flex-1">
                       <h3 className="text-xl font-display font-bold mb-1 transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
-                        {edu.school}
+                        {edu.url ? (
+                          <a
+                            href={edu.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:opacity-70 underline underline-offset-2 transition-opacity"
+                          >
+                            {edu.school}
+                          </a>
+                        ) : (
+                          edu.school
+                        )}
                       </h3>
                       <p className="text-base font-medium mb-2" style={{ color: '#E8570C' }}>
                         {edu.degree}

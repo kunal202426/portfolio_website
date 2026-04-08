@@ -13,16 +13,9 @@ export const AboutSection = () => {
   const isDark = resolvedTheme === 'dark'
 
   const stats = [
-    { label: 'Years Coding', value: '5+' },
-    { label: 'Projects Built', value: '20+' },
+    { label: 'Years Coding', value: '3+' },
+    { label: 'Projects Built', value: '15+' },
     { label: 'Teams Led', value: '3' },
-  ]
-
-  const achievements = [
-    'Global Hyperloop Winner',
-    'Flipkart GRiD Semi-Finalist',
-    'Data Analytics Certified',
-    'ML & Full Stack Expert',
   ]
 
   useEffect(() => {
@@ -120,22 +113,23 @@ export const AboutSection = () => {
               ))}
             </div>
 
-            {/* Achievement Pills */}
-            <div className="flex flex-wrap gap-3">
-              {achievements.map((achievement) => (
-                <motion.span
-                  key={achievement}
-                  className="px-4 py-2 rounded-full text-sm font-medium"
-                  style={{ 
-                    backgroundColor: isDark ? 'rgba(232, 87, 12, 0.15)' : 'rgba(232, 87, 12, 0.1)',
-                    border: '1px solid rgba(232, 87, 12, 0.3)',
-                    color: '#E8570C'
-                  }}
-                  whileHover={{ scale: 1.05, backgroundColor: isDark ? 'rgba(232, 87, 12, 0.25)' : 'rgba(232, 87, 12, 0.2)' }}
-                >
-                  {achievement}
-                </motion.span>
-              ))}
+
+            {/* CTA Button */}
+            <div className="flex gap-4 pt-4">
+              <a
+                href="#projects"
+                className="px-8 py-3 rounded-lg font-medium text-white transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                style={{ backgroundColor: '#E8570C' }}
+              >
+                View My Work
+              </a>
+              <a
+                href="#contact"
+                className="px-8 py-3 rounded-lg font-medium border-2 transition-all duration-300 hover:scale-105"
+                style={{ borderColor: isDark ? '#F0EBE0' : '#1A1208', color: isDark ? '#F0EBE0' : '#1A1208' }}
+              >
+                Let's Talk
+              </a>
             </div>
           </div>
 

@@ -13,29 +13,32 @@ export const resumeData = {
       school: 'Vellore Institute of Technology',
       degree: 'B.Tech in Computer Science & Engineering',
       specialization: 'Blockchain',
-      period: '2022 — Present',
+      period: '2022 - Present',
       location: 'Vellore, Tamil Nadu',
+      url: 'https://vit.ac.in/',
     },
     {
       school: 'Turning Point School',
       degree: 'CBSE Class XII',
-      period: '2020 — 2022',
+      period: '2020 - 2022',
       location: 'Ajmer, Rajasthan',
     },
     {
       school: 'Mayoor School',
       degree: 'CBSE Class X',
-      period: '2018 — 2020',
+      period: '2018 - 2020',
       location: 'Ajmer, Rajasthan',
+      url: 'https://mayoorschool.org/',
     },
   ],
   experience: [
     {
       company: 'YES Securities (YES Bank)',
       title: 'Full Stack Developer Intern',
-      period: 'Jan 2026 — Jun 2026',
+      period: 'Jan 2026 - Jun 2026',
       location: 'Bengaluru, India',
       year: 2026,
+      logo: '/yes-securities.png',
       achievements: [
         'Building production-grade features for OMNI trading platform using React, Node.js, and RESTful APIs in Agile sprints.',
         'Optimized backend microservices and PostgreSQL schema for improved reliability and reduced latency.',
@@ -43,21 +46,23 @@ export const resumeData = {
     },
     {
       company: 'Team Levitate Hyperloop',
-      title: 'Senior Engineer — AI & Software',
-      period: '2024 — 2025',
+      title: 'Senior Engineer - AI & Software',
+      period: '2024 - 2025',
       location: 'Vellore, India',
       year: 2024,
+      logo: '/hyperloop-logo.png',
       achievements: [
-        'Led development of levitatehyperloop.com — responsive 3D website with Three.js and React.',
+        'Led development of levitatehyperloop.com - responsive 3D website with Three.js and React.',
         'Architected backend services and real-time data pipelines for pod hardware integration.',
       ],
     },
     {
       company: 'E-Cell VIT',
       title: 'Junior Core Member',
-      period: '2023 — 2024',
+      period: '2023 - 2024',
       location: 'Vellore, India',
       year: 2023,
+      logo: '/ecell-logo.png',
       achievements: [
         'Co-organized E-Summit and Futurepreneurs events with cross-functional planning.',
       ],
@@ -68,7 +73,7 @@ export const resumeData = {
       title: 'Real-Time Eye-Tracking Inference System',
       subtitle: 'Computer Vision & ML',
       year: '2026',
-      period: '2026 — Present',
+      period: '2026 - Present',
       description: 'Building a real-time gaze estimation system using computer vision and deep learning with Kalman smoothing and temporal voting ensemble.',
       tags: ['Python', 'Computer Vision', 'Deep Learning', 'Kalman Filtering', 'ML'],
       color: '#FF3CAC',
@@ -111,7 +116,7 @@ export const resumeData = {
       liveUrl: 'https://ysil.vercel.app/',
       githubUrl: 'https://github.com/kunal202426',
       achievements: [
-        'Architected a hybrid ML ensemble — LSTM + LightGBM with FinBERT NLP sentiment analysis and technical indicators.',
+        'Architected a hybrid ML ensemble - LSTM + LightGBM with FinBERT NLP sentiment analysis and technical indicators.',
         'Built automated ETL and feature engineering pipelines with model retraining workflows.',
         'Delivered end-to-end as a live web app at ysil.vercel.app with React framework and real-time data visualization.',
       ],
@@ -149,7 +154,7 @@ export const resumeData = {
       ],
     },
     {
-      title: 'Official Website — Team Levitate Hyperloop',
+      title: 'Official Website - Team Levitate Hyperloop',
       subtitle: '3D Web & Full Stack',
       year: '2024',
       period: '2024',
@@ -216,24 +221,26 @@ export const resumeData = {
   },
   achievements: [
     {
-      title: 'Winner — Global Hyperloop Competition',
+      title: 'Winner - Global Hyperloop Competition',
       subtitle: "Asia's First Hyperloop Competition, IIT Madras",
       year: 2025,
-      description: 'Secured six awards across engineering, design, and technical presentation — representing VIT Vellore.',
+      description: 'Secured six awards across engineering, design, and technical presentation - representing VIT Vellore.',
+      url: 'https://www.ghciitm.com/',
     },
     {
-      title: 'National Semi-Finalist — Flipkart GRiD 7.0',
+      title: 'National Semi-Finalist - Flipkart GRiD 7.0',
       year: 2025,
       description: 'Advanced to national semi-finals in a highly competitive real-world software engineering challenge.',
+      url: 'https://www.flipkartcareers.com/flipkart/grid',
     },
   ],
   certifications: [
     {
-      title: 'Data Analytics – Skill Up',
+      title: 'Data Analytics - Skill Up',
       issuer: 'GeeksforGeeks',
       year: 2026,
       description:
-        '9-week program, 98% (874/895 modules) — Python, NumPy, Pandas, EDA, SQL, Power BI, Tableau, Excel, Web Scraping; capstone projects in end-to-end data analysis and web scraping integration.',
+        '9-week program, 98% (874/895 modules) - Python, NumPy, Pandas, EDA, SQL, Power BI, Tableau, Excel, Web Scraping; capstone projects in end-to-end data analysis and web scraping integration.',
     },
     {
       title: 'Blockchain Developer Certification',

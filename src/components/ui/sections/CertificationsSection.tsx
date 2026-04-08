@@ -118,10 +118,13 @@ export const CertificationsSection = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {resumeData.achievements.map((achievement, index) => (
-              <motion.div
+              <motion.a
                 key={index}
-                className="cert-card flex gap-4 p-6 rounded-xl shadow-md transition-colors duration-500"
-                style={{ 
+                href={achievement.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="cert-card flex gap-4 p-6 rounded-xl shadow-md transition-colors duration-500 cursor-pointer"
+                style={{
                   backgroundColor: isDark ? '#1A1510' : '#FFFFFF',
                   border: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.2)' : 'rgba(212, 165, 116, 0.3)'}`
                 }}
@@ -150,7 +153,7 @@ export const CertificationsSection = () => {
                     {achievement.year}
                   </span>
                 </div>
-              </motion.div>
+              </motion.a>
             ))}
           </div>
         </div>

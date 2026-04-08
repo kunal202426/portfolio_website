@@ -1,16 +1,19 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Eye, Download, FileText, ExternalLink } from 'lucide-react'
 import { useTheme } from '../../providers/ThemeProvider'
+import { ResumeModal } from '../ResumeModal'
 
 const RESUME_PATH = '/Resume_general.pdf'
 
 export const ResumeSection = () => {
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme === 'dark'
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
-  // Open PDF in new tab - most reliable method
+  // Open PDF modal
   const openResume = () => {
-    window.open(RESUME_PATH, '_blank')
+    setIsModalOpen(true)
   }
 
   return (
@@ -148,6 +151,9 @@ export const ResumeSection = () => {
           </div>
         </motion.div>
       </div>
+
+      {/* Resume Modal */}
+      <ResumeModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </section>
   )
 }

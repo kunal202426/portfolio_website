@@ -108,11 +108,27 @@ export const ExperienceSection = () => {
                 }}
               >
                 <div className="flex flex-wrap items-start justify-between gap-2 mb-4">
-                  <div>
-                    <h3 className="font-display font-bold text-xl transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
-                      {exp.company}
-                    </h3>
-                    <p className="font-medium" style={{ color: '#E8570C' }}>{exp.title}</p>
+                  <div className="flex gap-3 items-start flex-1">
+                    {exp.logo && (
+                      <div
+                        className="w-14 h-14 rounded-lg flex-shrink-0 flex items-center justify-center p-2"
+                        style={{
+                          backgroundColor: '#2A2420'
+                        }}
+                      >
+                        <img
+                          src={exp.logo}
+                          alt={exp.company}
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
+                    )}
+                    <div>
+                      <h3 className="font-display font-bold text-xl transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
+                        {exp.company}
+                      </h3>
+                      <p className="font-medium" style={{ color: '#E8570C' }}>{exp.title}</p>
+                    </div>
                   </div>
                   <div className="flex flex-col items-end gap-1">
                     <span className="flex items-center gap-1 text-xs font-medium transition-colors duration-500" style={{ color: isDark ? '#D4C4A8' : '#4A3C2A' }}>

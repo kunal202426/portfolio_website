@@ -40,13 +40,14 @@ export const HeroSection = () => {
     if (!contentRef.current) return
 
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ delay: 0.5 })
+      const tl = gsap.timeline({ delay: 0.8 })
 
+      // Hero name slides in as a solid block from left
       tl.from('.hero-name', {
-        y: 60,
+        x: -150,
         opacity: 0,
-        duration: 1,
-        ease: "power3.out"
+        duration: 1.4,
+        ease: "power4.out"
       })
       .from('.hero-word', {
         y: 80,
@@ -54,7 +55,7 @@ export const HeroSection = () => {
         duration: 1.2,
         stagger: 0.12,
         ease: "power3.out"
-      }, "-=0.5")
+      }, "-=0.3")
       .from('.hero-subtitle', {
         y: 30,
         opacity: 0,
@@ -142,9 +143,11 @@ export const HeroSection = () => {
           <div className="text-center max-w-5xl mx-auto">
             <h1 className="hero-name font-display mb-8 leading-[0.9]" style={{ fontSize: 'clamp(3rem, 12vw, 9rem)', color: '#F0EBE0', fontWeight: 700 }}>
               {resumeData.personal.name.split(' ').map((word, i) => (
-                <span key={i} className="block">
-                  {i === 1 ? <span style={{ color: '#E8570C' }}>{word}</span> : word}
-                </span>
+                <div key={i} className="block overflow-hidden">
+                  <span className="name-word block">
+                    {i === 1 ? <span style={{ color: '#E8570C' }}>{word}</span> : word}
+                  </span>
+                </div>
               ))}
             </h1>
 
@@ -155,7 +158,7 @@ export const HeroSection = () => {
             </div>
 
             <p className="hero-subtitle text-base md:text-lg max-w-2xl mx-auto leading-relaxed" style={{ color: '#9B8B70' }}>
-              Building scalable systems, training ML models, and analyzing data to drive insights — from backend APIs to production AI.
+              Building scalable systems, training ML models, and analyzing data to drive insights - from backend APIs to production AI.
             </p>
           </div>
         </motion.div>

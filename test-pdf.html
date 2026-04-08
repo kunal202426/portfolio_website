@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PDF Test</title>
+</head>
+<body>
+    <h1>PDF File Test</h1>
+    <div id="results"></div>
+    
+    <script>
+        async function testPDF() {
+            const results = document.getElementById('results')
+            
+            try {
+                console.log('Testing PDF file accessibility...')
+                const response = await fetch('/Resume_general.pdf')
+                
+                results.innerHTML += `<p>Status: ${response.status} ${response.statusText}</p>`
+                results.innerHTML += `<p>Content-Type: ${response.headers.get('content-type')}</p>`
+                results.innerHTML += `<p>Content-Length: ${response.headers.get('content-length')}</p>`
+                
+                if (response.ok) {
+                    const arrayBuffer = await response.arrayBuffer()
+                    const bytes = new Uint8Array(arrayBuffer.slice(0, 10))
+                    const header = String.fromCharCode(...bytes.slice(0, 4))
+                    
+                    results.innerHTML += `<p>File size: ${arrayBuffer.byteLength} bytes</p>`
+                    results.innerHTML += `<p>Header: "${header}"</p>`
+                    results.innerHTML += `<p>First 10 bytes: ${Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join(' ')}</p>`
+                    
+                    if (header === '%PDF') {
+                        results.innerHTML += `<p style="color: green;">✅ Valid PDF header</p>`
+                    } else {
+                        results.innerHTML += `<p style="color: red;">❌ Invalid PDF header</p>`
+                    }
+                } else {
+                    results.innerHTML += `<p style="color: red;">❌ Failed to fetch PDF</p>`
+                }
+            } catch (error) {
+                results.innerHTML += `<p style="color: red;">Error: ${error.message}</p>`
+                console.error('PDF test error:', error)
+            }
+        }
+        
+        testPDF()
+    </script>
+</body>
+</html>
