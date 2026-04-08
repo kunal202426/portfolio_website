@@ -1,10 +1,18 @@
-import { useEffect } from 'react'
+import { useEffect, createContext, useContext } from 'react'
 import Lenis from 'lenis'
 
+const LenisContext = createContext<Lenis | null>(null)
+
+export const useLenis = () => {
+  return useContext(LenisContext)
+}
+
 export const LenisProvider = ({ children }: { children: React.ReactNode }) => {
+  let lenis: Lenis | null = null
+
   useEffect(() => {
     // Initialize Lenis smooth scrolling
-    const lenis = new Lenis({
+    lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
@@ -12,9 +20,13 @@ export const LenisProvider = ({ children }: { children: React.ReactNode }) => {
       touchMultiplier: 2,
     })
 
+    // Expose Lenis instance globally for navigation
+    // @ts-ignore
+    window.lenis = lenis
+
     // Request animation frame loop
     function raf(time: number) {
-      lenis.raf(time)
+      lenis?.raf(time)
       requestAnimationFrame(raf)
     }
 
@@ -22,9 +34,17 @@ export const LenisProvider = ({ children }: { children: React.ReactNode }) => {
 
     // Cleanup
     return () => {
-      lenis.destroy()
+      if (lenis) {
+        lenis.destroy()
+        // @ts-ignore
+        window.lenis = null
+      }
     }
   }, [])
 
-  return <>{children}</>
+  return (
+    <LenisContext.Provider value={lenis}>
+      {children}
+    </LenisContext.Provider>
+  )
 }

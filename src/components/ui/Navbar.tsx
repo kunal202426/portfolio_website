@@ -44,12 +44,49 @@ export const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  const handleMobileNavClick = (href: string, event: React.MouseEvent | React.TouchEvent) => {
+    event.preventDefault()
+    event.stopPropagation()
+    console.log('Mobile navigation clicked:', href)
+    handleNavClick(href)
+  }
+
   const handleNavClick = (href: string) => {
-    const target = document.querySelector(href)
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth' })
-    }
+    console.log('Navigation clicked:', href)
+    
+    // Close mobile menu immediately for better UX
     setIsMobileMenuOpen(false)
+    
+    // Simple, reliable navigation without dependencies
+    setTimeout(() => {
+      const target = document.querySelector(href)
+      console.log('Target element found:', target)
+      
+      if (target) {
+        console.log('Scrolling to target:', href)
+        
+        // Get element position relative to document
+        const elementTop = target.getBoundingClientRect().top + window.pageYOffset - 80
+        
+        // Use simple scroll - this should always work
+        window.scrollTo({
+          top: elementTop,
+          behavior: 'smooth'
+        })
+        
+        // Fallback for older browsers
+        setTimeout(() => {
+          if (Math.abs(window.pageYOffset - elementTop) > 50) {
+            console.log('Fallback scroll for:', href)
+            window.scrollTo(0, elementTop)
+          }
+        }, 1000)
+      } else {
+        console.warn('Target element not found for:', href)
+        // Last resort - try direct hash navigation
+        window.location.hash = href
+      }
+    }, 100) // Small delay for mobile menu close animation
   }
 
   return (
@@ -67,15 +104,15 @@ export const Navbar = () => {
       >
         <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
           {/* Logo */}
-          <motion.a
-            href="#home"
+          <motion.button
+            onClick={() => handleNavClick('#home')}
             className="text-2xl font-display font-bold"
             style={{ color: '#E8570C' }}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
           >
             Kunal Mathur
-          </motion.a>
+          </motion.button>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
@@ -111,7 +148,7 @@ export const Navbar = () => {
               direction="vertical"
               modes={['light', 'dark', 'system']}
             />
-            <MagneticButton variant="ghost">Hire Me</MagneticButton>
+            <MagneticButton variant="ghost" onClick={() => handleNavClick('#contact')}>Hire Me</MagneticButton>
           </div>
 
           {/* Mobile: Theme Toggle & Menu Button */}
@@ -151,12 +188,18 @@ export const Navbar = () => {
           {navItems.map((item, i) => (
             <motion.button
               key={item.label}
-              onClick={() => handleNavClick(item.href)}
+              onClick={(e) => handleMobileNavClick(item.href, e)}
+              onTouchStart={(e) => handleMobileNavClick(item.href, e)}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: i * 0.1 }}
-              className="text-left transition-colors"
-              style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}
+              className="text-left transition-colors py-3 px-4 rounded-lg hover:bg-opacity-10 active:scale-95 cursor-pointer select-none"
+              style={{ 
+                color: isDark ? '#F0EBE0' : '#1A1208',
+                backgroundColor: 'transparent',
+                touchAction: 'manipulation' // Prevents double-tap zoom on mobile
+              }}
+              whileTap={{ scale: 0.95, backgroundColor: 'rgba(232, 87, 12, 0.1)' }}
             >
               {item.label}
             </motion.button>
@@ -168,7 +211,7 @@ export const Navbar = () => {
             className="pt-4"
             style={{ borderTop: '1px solid rgba(212, 165, 116, 0.3)' }}
           >
-            <MagneticButton variant="primary" className="w-full">
+            <MagneticButton variant="primary" className="w-full" onClick={() => handleNavClick('#contact')}>
               Hire Me
             </MagneticButton>
           </motion.div>
