@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { BrutalButton } from './BrutalButton'
 import { useTheme } from '../providers/ThemeProvider'
@@ -20,6 +20,66 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
   const [index, setIndex] = useState(2)
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme === 'dark'
+
+  // Responsive dimensions
+  const [dimensions, setDimensions] = useState({
+    cardWidth: 420,
+    cardHeight: 560,
+    xOffset: 440,
+    yOffset: 30,
+    containerHeight: 580,
+    marginLeft: -210,
+    marginTop: -280,
+    padding: '36px 32px 28px 32px'
+  })
+
+  useEffect(() => {
+    const updateDimensions = () => {
+      const width = window.innerWidth
+      
+      if (width >= 1024) {
+        // Desktop
+        setDimensions({
+          cardWidth: 420,
+          cardHeight: 560,
+          xOffset: 440,
+          yOffset: 30,
+          containerHeight: 580,
+          marginLeft: -210,
+          marginTop: -280,
+          padding: '36px 32px 28px 32px'
+        })
+      } else if (width >= 768) {
+        // Tablet
+        setDimensions({
+          cardWidth: 320,
+          cardHeight: 480,
+          xOffset: 340,
+          yOffset: 25,
+          containerHeight: 500,
+          marginLeft: -160,
+          marginTop: -240,
+          padding: '28px 24px 20px 24px'
+        })
+      } else {
+        // Mobile
+        setDimensions({
+          cardWidth: 280,
+          cardHeight: 420,
+          xOffset: 300,
+          yOffset: 20,
+          containerHeight: 440,
+          marginLeft: -140,
+          marginTop: -210,
+          padding: '20px 16px 16px 16px'
+        })
+      }
+    }
+
+    updateDimensions()
+    window.addEventListener('resize', updateDimensions)
+    return () => window.removeEventListener('resize', updateDimensions)
+  }, [])
 
   const next = () => setIndex((prev) => (prev + 1) % projects.length)
   const prev = () => setIndex((prev) => (prev - 1 + projects.length) % projects.length)
@@ -45,7 +105,7 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
   const gridColor = isDark ? 'rgba(232, 87, 12, 0.06)' : 'rgba(232, 87, 12, 0.08)'
 
   return (
-    <section className="relative overflow-hidden py-24 transition-colors duration-500" style={{ background: bgColor }}>
+    <section className="relative overflow-hidden py-12 md:py-24 transition-colors duration-500" style={{ background: bgColor }}>
       {/* Static grid background - no animation for performance */}
       <div
         className="absolute inset-0 pointer-events-none"
@@ -58,9 +118,9 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
       />
 
       {/* Content */}
-      <div className="relative z-10 w-full px-6">
+      <div className="relative z-10 w-full px-3 md:px-6">
         <p 
-          className="text-xs uppercase tracking-[0.15em] mb-20 font-bold text-center" 
+          className="text-xs uppercase tracking-[0.15em] mb-12 md:mb-20 font-bold text-center" 
           style={{ color: isDark ? '#9B8B70' : '#6B5D4A' }}
         >
           FEATURED PROJECTS
@@ -69,10 +129,10 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
         {/* Carousel container - perfectly centered */}
         <div className="flex flex-col items-center justify-center w-full">
           <div
-            className="relative w-full flex items-center justify-center mb-16"
+            className="relative w-full flex items-center justify-center mb-8 md:mb-16"
             style={{
               perspective: 2000,
-              height: 580,
+              height: dimensions.containerHeight,
               maxWidth: '100%',
             }}
           >
@@ -81,8 +141,8 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
               const isCenter = offset === 0
               const isAdjacent = Math.abs(offset) === 1
 
-              const xOffset = offset * 440
-              const yOffset = Math.abs(offset) * 30
+              const xOffset = offset * dimensions.xOffset
+              const yOffset = Math.abs(offset) * dimensions.yOffset
               const rotation = offset * -8
               const scale = isCenter ? 1 : Math.abs(offset) === 1 ? 0.85 : 0.7
 
@@ -117,14 +177,14 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
                     position: 'absolute',
                     left: '50%',
                     top: '50%',
-                    marginLeft: '-210px',
-                    marginTop: '-280px',
-                    width: 420,
-                    height: 560,
+                    marginLeft: dimensions.marginLeft,
+                    marginTop: dimensions.marginTop,
+                    width: dimensions.cardWidth,
+                    height: dimensions.cardHeight,
                     borderRadius: 12,
                     background: isCenter ? activeCardBg : inactiveCardBg,
                     color: isDark ? '#F0EBE0' : '#1A1208',
-                    padding: '36px 32px 28px 32px',
+                    padding: dimensions.padding,
                     boxShadow: isCenter
                       ? `0 30px 60px ${activeGlow}, 0 0 0 2px ${activeBorder}`
                       : isDark 
@@ -172,7 +232,9 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
                     <h3 
                       className="font-display font-bold mb-4 leading-tight px-2"
                       style={{
-                        fontSize: isCenter ? '2rem' : '1.75rem',
+                        fontSize: isCenter 
+                          ? (dimensions.cardWidth <= 280 ? '1.5rem' : dimensions.cardWidth <= 320 ? '1.75rem' : '2rem')
+                          : (dimensions.cardWidth <= 280 ? '1.25rem' : dimensions.cardWidth <= 320 ? '1.5rem' : '1.75rem'),
                         color: isCenter ? titleColor : inactiveTitleColor,
                       }}
                     >
@@ -182,7 +244,9 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
                     <p 
                       className="leading-relaxed mb-4 px-2"
                       style={{
-                        fontSize: isCenter ? '0.92rem' : '0.88rem',
+                        fontSize: isCenter 
+                          ? (dimensions.cardWidth <= 280 ? '0.8rem' : dimensions.cardWidth <= 320 ? '0.85rem' : '0.92rem')
+                          : (dimensions.cardWidth <= 280 ? '0.75rem' : dimensions.cardWidth <= 320 ? '0.8rem' : '0.88rem'),
                         opacity: isCenter ? 0.9 : 0.7,
                         color: isCenter ? descColor : inactiveDescColor,
                         flexGrow: 1,
@@ -192,11 +256,13 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
                     </p>
 
                     <div className="flex flex-wrap gap-2 justify-center px-2 mb-4">
-                      {project.tags.slice(0, 4).map((tag) => (
+                      {project.tags.slice(0, dimensions.cardWidth <= 280 ? 2 : dimensions.cardWidth <= 320 ? 3 : 4).map((tag) => (
                         <span
                           key={tag}
                           className="text-xs px-2.5 py-1 font-medium"
                           style={{
+                            fontSize: dimensions.cardWidth <= 280 ? '0.7rem' : '0.75rem',
+                            padding: dimensions.cardWidth <= 280 ? '4px 8px' : '4px 10px',
                             background: isCenter ? 'rgba(232, 87, 12, 0.15)' : isDark ? 'rgba(212,165,116,0.08)' : 'rgba(212,165,116,0.15)',
                             border: isCenter ? '1px solid rgba(232, 87, 12, 0.3)' : `1px solid ${isDark ? 'rgba(212,165,116,0.12)' : 'rgba(212,165,116,0.25)'}`,
                             color: isCenter ? '#E8570C' : '#D4A574',
@@ -225,13 +291,16 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
             })}
           </div>
 
-          {/* Navigation arrows - warm style */}
-          <div className="flex gap-6 justify-center">
+          {/* Navigation arrows - responsive size */}
+          <div className="flex justify-center" style={{ gap: dimensions.cardWidth <= 280 ? '16px' : '24px' }}>
             <button
               onClick={prev}
-              className="w-14 h-14 transition-all flex items-center justify-center font-bold text-2xl hover:scale-105"
+              className="transition-all flex items-center justify-center font-bold hover:scale-105"
               aria-label="Previous project"
               style={{ 
+                width: dimensions.cardWidth <= 280 ? '48px' : '56px',
+                height: dimensions.cardWidth <= 280 ? '48px' : '56px',
+                fontSize: dimensions.cardWidth <= 280 ? '18px' : '24px',
                 border: '2px solid rgba(232, 87, 12, 0.4)',
                 background: isDark 
                   ? 'linear-gradient(145deg, #1A1510, #0E0E0B)' 
@@ -246,9 +315,12 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
             </button>
             <button
               onClick={next}
-              className="w-14 h-14 transition-all flex items-center justify-center font-bold text-2xl hover:scale-105"
+              className="transition-all flex items-center justify-center font-bold hover:scale-105"
               aria-label="Next project"
               style={{ 
+                width: dimensions.cardWidth <= 280 ? '48px' : '56px',
+                height: dimensions.cardWidth <= 280 ? '48px' : '56px',
+                fontSize: dimensions.cardWidth <= 280 ? '18px' : '24px',
                 border: '2px solid rgba(232, 87, 12, 0.4)',
                 background: isDark 
                   ? 'linear-gradient(145deg, #1A1510, #0E0E0B)' 
