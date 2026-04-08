@@ -74,6 +74,7 @@ export const resumeData = {
       color: '#FF3CAC',
       featured: false,
       category: 'ml',
+      githubUrl: 'https://github.com/kunal202426',
       achievements: [
         'Implemented Kalman smoothing, temporal voting ensemble, and calibration improvements for robust inference without model retraining.',
         'Conducting webcam domain adaptation research to bridge the gap between training data and real-world USB webcam deployment.',
@@ -125,6 +126,7 @@ export const resumeData = {
       color: '#9D97FF',
       featured: false,
       category: 'blockchain',
+      githubUrl: 'https://github.com/kunal202426',
       achievements: [
         'Built a DApp for tamper-proof subsidy allocation using Ethereum smart contracts (Solidity) and Web3.js.',
         'Implemented React + MetaMask frontend with on-chain redemption logic and event-driven audit trails.',
@@ -140,6 +142,7 @@ export const resumeData = {
       color: '#6C63FF',
       featured: false,
       category: 'dev',
+      githubUrl: 'https://github.com/kunal202426',
       achievements: [
         'Built an ETL pipeline using web scraping to aggregate, clean, and normalize job listings.',
         'Implemented a weighted scoring model ranking opportunities by skill match, experience, and domain relevance.',

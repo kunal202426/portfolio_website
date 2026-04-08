@@ -280,10 +280,18 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
                       tone={isCenter ? 'on-dark' : 'default'}
                       onClick={(e) => {
                         e.stopPropagation()
+                        console.log('Project clicked:', project.title)
+                        console.log('Live URL:', project.liveUrl)
+                        console.log('GitHub URL:', project.githubUrl)
+                        
                         // Prioritize live URL, fallback to GitHub URL
                         const targetUrl = project.liveUrl || project.githubUrl
+                        console.log('Target URL:', targetUrl)
+                        
                         if (targetUrl) {
                           window.open(targetUrl, '_blank')
+                        } else {
+                          console.warn('No URL available for project:', project.title)
                         }
                       }}
                     >
