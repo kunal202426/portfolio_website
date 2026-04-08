@@ -280,10 +280,14 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
                       tone={isCenter ? 'on-dark' : 'default'}
                       onClick={(e) => {
                         e.stopPropagation()
-                        if (project.liveUrl) window.open(project.liveUrl, '_blank')
+                        // Prioritize live URL, fallback to GitHub URL
+                        const targetUrl = project.liveUrl || project.githubUrl
+                        if (targetUrl) {
+                          window.open(targetUrl, '_blank')
+                        }
                       }}
                     >
-                      Explore
+                      {project.liveUrl ? 'View Live' : project.githubUrl ? 'View Code' : 'Explore'}
                     </BrutalButton>
                   </div>
                 </motion.div>
