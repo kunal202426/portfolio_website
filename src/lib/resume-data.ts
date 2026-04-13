@@ -104,6 +104,23 @@ export const resumeData = {
       ],
     },
     {
+      title: 'CityFlow',
+      subtitle: 'Real-Time 3D City Logistics Simulation',
+      year: '2026',
+      period: '2026',
+      description: 'Built a real-time 3D city logistics simulator with dynamic vehicle routing, surge pricing, weather simulation, live analytics dashboard, and an interactive onboarding tour using React, Three.js, and Zustand.',
+      tags: ['React', 'TypeScript', 'Three.js', 'React Three Fiber', 'Zustand', 'Recharts'],
+      color: '#E8570C',
+      featured: true,
+      category: 'dev',
+      liveUrl: 'https://sim-city-alpha.vercel.app/',
+      achievements: [
+        'Engineered a real-time 3D city logistics simulation with dynamic fleets, zoned demand regions, and environmental effects in the browser.',
+        'Implemented granular Zustand store subscriptions and React performance optimizations to maintain smooth, responsive simulation and analytics updates.',
+        'Built live Recharts analytics for congestion, wait time, utilization, and revenue, alongside an interactive onboarding tour system for parameter guidance.',
+      ],
+    },
+    {
       title: 'Hybrid Stock Price Prediction System',
       subtitle: 'ML & Finance Tech',
       year: '2026',
