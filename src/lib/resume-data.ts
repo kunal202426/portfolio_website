@@ -108,7 +108,7 @@ export const resumeData = {
       subtitle: 'Real-Time Data Simulation & KPI Dashboard',
       year: '2026',
       period: '2026',
-      description: 'Built a real-time urban mobility analytics platform simulating multi-variable logistics data streams for fleet performance, demand forecasting, surge pricing, and congestion tracking through live and historical KPI dashboards.',
+      description: 'Built a real-time urban mobility analytics platform with simulated demand, congestion, and surge-pricing KPIs in live dashboards.',
       tags: ['Python', 'React', 'TypeScript', 'Recharts', 'Zustand', 'Three.js'],
       color: '#E8570C',
       featured: true,

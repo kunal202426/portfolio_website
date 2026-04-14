@@ -198,6 +198,7 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
                     textAlign: 'center',
                     cursor: isAdjacent ? 'pointer' : 'default',
                     transformStyle: 'preserve-3d',
+                    overflow: 'hidden',
                   }}
                 >
                   {/* Top section */}
@@ -223,6 +224,10 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
                           background: isCenter ? 'rgba(232, 87, 12, 0.2)' : isDark ? 'rgba(212,165,116,0.1)' : 'rgba(212,165,116,0.15)',
                           color: isCenter ? '#E8570C' : '#D4A574',
                           border: isCenter ? '2px solid rgba(232, 87, 12, 0.4)' : `2px solid ${isDark ? 'rgba(212,165,116,0.15)' : 'rgba(212,165,116,0.3)'}`,
+                          maxWidth: '100%',
+                          whiteSpace: 'normal',
+                          wordBreak: 'break-word',
+                          lineHeight: 1.25,
                         }}
                       >
                         {project.subtitle}
@@ -233,9 +238,15 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
                       className="font-display font-bold mb-4 leading-tight px-2"
                       style={{
                         fontSize: isCenter 
-                          ? (dimensions.cardWidth <= 280 ? '1.5rem' : dimensions.cardWidth <= 320 ? '1.75rem' : '2rem')
+                          ? (dimensions.cardWidth <= 280 ? '1.25rem' : dimensions.cardWidth <= 320 ? '1.5rem' : '2rem')
                           : (dimensions.cardWidth <= 280 ? '1.25rem' : dimensions.cardWidth <= 320 ? '1.5rem' : '1.75rem'),
                         color: isCenter ? titleColor : inactiveTitleColor,
+                        wordBreak: 'break-word',
+                        overflowWrap: 'anywhere',
+                        display: '-webkit-box',
+                        WebkitBoxOrient: 'vertical',
+                        WebkitLineClamp: dimensions.cardWidth <= 280 ? 3 : 2,
+                        overflow: 'hidden',
                       }}
                     >
                       {project.title}
@@ -250,6 +261,12 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
                         opacity: isCenter ? 0.9 : 0.7,
                         color: isCenter ? descColor : inactiveDescColor,
                         flexGrow: 1,
+                        display: '-webkit-box',
+                        WebkitBoxOrient: 'vertical',
+                        WebkitLineClamp: isCenter
+                          ? (dimensions.cardWidth <= 280 ? 5 : dimensions.cardWidth <= 320 ? 6 : 7)
+                          : (dimensions.cardWidth <= 280 ? 4 : dimensions.cardWidth <= 320 ? 5 : 6),
+                        overflow: 'hidden',
                       }}
                     >
                       {project.description}
