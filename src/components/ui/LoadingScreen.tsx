@@ -21,6 +21,8 @@ export const LoadingScreen = ({ onLoadComplete }: LoadingScreenProps) => {
 
   if (isComplete) return null
 
+  
+
   return (
     <motion.div
       exit={{

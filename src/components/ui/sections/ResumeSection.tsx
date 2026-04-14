@@ -11,7 +11,7 @@ export const ResumeSection = () => {
   const isDark = resolvedTheme === 'dark'
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  // Open PDF modal
+  
   const openResume = () => {
     setIsModalOpen(true)
   }
