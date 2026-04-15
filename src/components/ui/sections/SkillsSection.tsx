@@ -18,7 +18,14 @@ const tools = [
 
 export const SkillsSection = () => {
   return (
-    <section id="skills" className="relative w-full py-24 px-6 bg-bg-primary overflow-hidden">
+    <section
+      id="skills"
+      className="relative w-full py-24 px-6 bg-bg-primary overflow-hidden"
+      style={{
+        contentVisibility: 'auto',
+        containIntrinsicSize: '1400px',
+      }}
+    >
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div

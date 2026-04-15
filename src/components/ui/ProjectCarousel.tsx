@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { memo, useEffect, useState } from 'react'
 import { BrutalButton } from './BrutalButton'
 import { useTheme } from '../providers/ThemeProvider'
 
@@ -16,70 +15,109 @@ interface ProjectCarouselProps {
   }>
 }
 
-export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
-  const [index, setIndex] = useState(2)
+type CarouselDimensions = {
+  cardWidth: number
+  cardHeight: number
+  xOffset: number
+  yOffset: number
+  containerHeight: number
+  marginLeft: number
+  marginTop: number
+  padding: string
+}
+
+const DESKTOP_DIMENSIONS: CarouselDimensions = {
+  cardWidth: 420,
+  cardHeight: 560,
+  xOffset: 440,
+  yOffset: 30,
+  containerHeight: 580,
+  marginLeft: -210,
+  marginTop: -280,
+  padding: '36px 32px 28px 32px',
+}
+
+const TABLET_DIMENSIONS: CarouselDimensions = {
+  cardWidth: 320,
+  cardHeight: 480,
+  xOffset: 340,
+  yOffset: 25,
+  containerHeight: 500,
+  marginLeft: -160,
+  marginTop: -240,
+  padding: '28px 24px 20px 24px',
+}
+
+const MOBILE_DIMENSIONS: CarouselDimensions = {
+  cardWidth: 280,
+  cardHeight: 420,
+  xOffset: 300,
+  yOffset: 20,
+  containerHeight: 440,
+  marginLeft: -140,
+  marginTop: -210,
+  padding: '20px 16px 16px 16px',
+}
+
+const getDimensionsForWidth = (width: number): CarouselDimensions => {
+  if (width >= 1024) return DESKTOP_DIMENSIONS
+  if (width >= 768) return TABLET_DIMENSIONS
+  return MOBILE_DIMENSIONS
+}
+
+const hasSameDimensions = (prev: CarouselDimensions, next: CarouselDimensions) => (
+  prev.cardWidth === next.cardWidth &&
+  prev.cardHeight === next.cardHeight &&
+  prev.xOffset === next.xOffset &&
+  prev.yOffset === next.yOffset
+)
+
+export const ProjectCarousel = memo(function ProjectCarousel({ projects }: ProjectCarouselProps) {
+  const [index, setIndex] = useState(Math.min(2, Math.max(projects.length - 1, 0)))
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme === 'dark'
 
-  // Responsive dimensions
-  const [dimensions, setDimensions] = useState({
-    cardWidth: 420,
-    cardHeight: 560,
-    xOffset: 440,
-    yOffset: 30,
-    containerHeight: 580,
-    marginLeft: -210,
-    marginTop: -280,
-    padding: '36px 32px 28px 32px'
-  })
+  const [dimensions, setDimensions] = useState<CarouselDimensions>(() =>
+    getDimensionsForWidth(typeof window === 'undefined' ? 1280 : window.innerWidth)
+  )
 
   useEffect(() => {
+    let resizeFrame = 0
+
     const updateDimensions = () => {
-      const width = window.innerWidth
-      
-      if (width >= 1024) {
-        // Desktop
-        setDimensions({
-          cardWidth: 420,
-          cardHeight: 560,
-          xOffset: 440,
-          yOffset: 30,
-          containerHeight: 580,
-          marginLeft: -210,
-          marginTop: -280,
-          padding: '36px 32px 28px 32px'
-        })
-      } else if (width >= 768) {
-        // Tablet
-        setDimensions({
-          cardWidth: 320,
-          cardHeight: 480,
-          xOffset: 340,
-          yOffset: 25,
-          containerHeight: 500,
-          marginLeft: -160,
-          marginTop: -240,
-          padding: '28px 24px 20px 24px'
-        })
-      } else {
-        // Mobile
-        setDimensions({
-          cardWidth: 280,
-          cardHeight: 420,
-          xOffset: 300,
-          yOffset: 20,
-          containerHeight: 440,
-          marginLeft: -140,
-          marginTop: -210,
-          padding: '20px 16px 16px 16px'
-        })
-      }
+      const next = getDimensionsForWidth(window.innerWidth)
+      setDimensions((prev) => (hasSameDimensions(prev, next) ? prev : next))
     }
 
     updateDimensions()
-    window.addEventListener('resize', updateDimensions)
-    return () => window.removeEventListener('resize', updateDimensions)
+
+    const onResize = () => {
+      if (resizeFrame) return
+      resizeFrame = window.requestAnimationFrame(() => {
+        resizeFrame = 0
+        updateDimensions()
+      })
+    }
+
+    window.addEventListener('resize', onResize)
+    return () => {
+      window.removeEventListener('resize', onResize)
+      if (resizeFrame) {
+        window.cancelAnimationFrame(resizeFrame)
+      }
+    }
   }, [])
+
+  useEffect(() => {
+    if (projects.length === 0) {
+      setIndex(0)
+      return
+    }
+
+    setIndex((prev) => (prev >= projects.length ? projects.length - 1 : prev))
+  }, [projects.length])
+
+  if (projects.length === 0) return null
 
   const next = () => setIndex((prev) => (prev + 1) % projects.length)
   const prev = () => setIndex((prev) => (prev - 1 + projects.length) % projects.length)
@@ -139,30 +177,22 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
           >
             {projects.map((project, i) => {
               const offset = i - index
-              if (Math.abs(offset) > 2) return null
+              const maxVisibleOffset = dimensions.cardWidth <= 320 ? 1 : 2
+              if (Math.abs(offset) > maxVisibleOffset) return null
 
               const isCenter = offset === 0
               const isAdjacent = Math.abs(offset) === 1
-              const isEdge = Math.abs(offset) === 2
+              const isEdge = maxVisibleOffset === 2 && Math.abs(offset) === 2
 
               const xOffset = offset * dimensions.xOffset
               const yOffset = Math.abs(offset) * dimensions.yOffset
-              const rotation = isCompactMotion ? 0 : offset * -8
+              const rotation = isCompactMotion ? 0 : offset * -6
               const scale = isCenter ? 1 : Math.abs(offset) === 1 ? (isCompactMotion ? 0.9 : 0.85) : (isCompactMotion ? 0.82 : 0.7)
+              const transform = `translate3d(${xOffset}px, ${yOffset}px, 0) scale(${scale})${isCompactMotion ? '' : ` rotateY(${rotation}deg)`}`
 
               return (
-                <motion.div
+                <div
                   key={i}
-                  initial={false}
-                  animate={{
-                    x: xOffset,
-                    y: yOffset,
-                    scale: scale,
-                    rotateY: rotation,
-                    zIndex: 10 - Math.abs(offset),
-                    opacity: isEdge ? 0.45 : 1,
-                  }}
-                  transition={{ duration: isCompactMotion ? 0.26 : 0.35, ease: [0.25, 0.1, 0.25, 1] }}
                   onClick={() => {
                     if (offset === -1) prev()
                     if (offset === 1) next()
@@ -183,6 +213,10 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
                     top: '50%',
                     marginLeft: dimensions.marginLeft,
                     marginTop: dimensions.marginTop,
+                    transform,
+                    transition: `transform ${isCompactMotion ? '260ms' : '340ms'} cubic-bezier(0.25, 0.1, 0.25, 1), opacity ${isCompactMotion ? '260ms' : '340ms'} cubic-bezier(0.25, 0.1, 0.25, 1)`,
+                    zIndex: 10 - Math.abs(offset),
+                    opacity: isEdge ? 0.45 : 1,
                     width: dimensions.cardWidth,
                     height: dimensions.cardHeight,
                     borderRadius: 12,
@@ -209,6 +243,7 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
                     cursor: isAdjacent ? 'pointer' : 'default',
                     transformStyle: isCompactMotion ? 'flat' : 'preserve-3d',
                     overflow: 'hidden',
+                    backfaceVisibility: 'hidden',
                     willChange: 'transform, opacity',
                   }}
                 >
@@ -318,7 +353,7 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
                       {project.liveUrl ? 'View Live' : project.githubUrl ? 'View Code' : 'Explore'}
                     </BrutalButton>
                   </div>
-                </motion.div>
+                </div>
               )
             })}
           </div>
@@ -370,4 +405,6 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
       </div>
     </section>
   )
-}
+})
+
+ProjectCarousel.displayName = 'ProjectCarousel'

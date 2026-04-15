@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -11,7 +11,7 @@ gsap.registerPlugin(ScrollTrigger)
 export const ExperienceSection = () => {
   const containerRef = useRef<HTMLElement>(null)
   const svgRef = useRef<SVGSVGElement>(null)
-  const experiences = [...resumeData.experience].sort((a, b) => b.year - a.year)
+  const experiences = useMemo(() => [...resumeData.experience].sort((a, b) => b.year - a.year), [])
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme === 'dark'
 
@@ -64,7 +64,11 @@ export const ExperienceSection = () => {
       ref={containerRef}
       id="experience" 
       className="relative w-full py-24 px-6 overflow-hidden transition-colors duration-500"
-      style={{ backgroundColor: isDark ? '#0E0E0B' : '#F5F0E8' }}
+      style={{
+        backgroundColor: isDark ? '#0E0E0B' : '#F5F0E8',
+        contentVisibility: 'auto',
+        containIntrinsicSize: '1600px',
+      }}
     >
       {/* Decorative Background */}
       <div className="absolute top-20 right-10 w-40 h-40 rounded-full opacity-20" style={{ background: 'radial-gradient(circle, #E8570C 0%, transparent 70%)' }} />
@@ -132,7 +136,9 @@ export const ExperienceSection = () => {
                 className="p-6 rounded-xl shadow-lg transition-colors duration-500 relative z-10"
                 style={{
                   backgroundColor: isDark ? '#1A1510' : '#FFFBF5',
-                  border: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.2)' : 'rgba(212, 165, 116, 0.3)'}`
+                  border: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.2)' : 'rgba(212, 165, 116, 0.3)'}`,
+                  contentVisibility: 'auto',
+                  containIntrinsicSize: '300px',
                 }}
                 whileHover={{
                   y: -4,
@@ -153,6 +159,8 @@ export const ExperienceSection = () => {
                           src={exp.logo}
                           alt={exp.company}
                           className="w-full h-full object-contain"
+                          loading="lazy"
+                          decoding="async"
                         />
                       </div>
                     )}
