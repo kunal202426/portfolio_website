@@ -11,36 +11,60 @@ gsap.registerPlugin(ScrollTrigger)
 export const ExperienceSection = () => {
   const containerRef = useRef<HTMLElement>(null)
   const svgRef = useRef<SVGSVGElement>(null)
+  const pathRef = useRef<SVGPathElement>(null)
   const experiences = useMemo(() => [...resumeData.experience].sort((a, b) => b.year - a.year), [])
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme === 'dark'
 
   useEffect(() => {
-    if (!containerRef.current || !svgRef.current) return
+    const section = containerRef.current
+    const svgElement = svgRef.current
+    const pathElement = pathRef.current
+    if (!section || !svgElement || !pathElement) return
+
+    const setPathDash = () => {
+      const pathLength = pathElement.getTotalLength()
+      pathElement.setAttribute('stroke-dasharray', String(pathLength))
+      pathElement.setAttribute('stroke-dashoffset', String(pathLength))
+    }
+
+    const refreshScroll = () => ScrollTrigger.refresh()
+
+    const imageElements = Array.from(section.querySelectorAll('img'))
+    const imageLoadHandler = () => refreshScroll()
+
+    imageElements.forEach((img) => {
+      if (!img.complete) {
+        img.addEventListener('load', imageLoadHandler, { once: true })
+        img.addEventListener('error', imageLoadHandler, { once: true })
+      }
+    })
+
+    let resizeObserver: ResizeObserver | null = null
+    if ('ResizeObserver' in window) {
+      resizeObserver = new ResizeObserver(() => {
+        refreshScroll()
+      })
+      resizeObserver.observe(section)
+    }
+
+    window.addEventListener('load', refreshScroll)
 
     const ctx = gsap.context(() => {
-      // Get the path element
-      const pathElement = svgRef.current?.querySelector('.timeline-path')
-      if (pathElement) {
-        // Calculate path length
-        const pathLength = (pathElement as SVGPathElement).getTotalLength()
+      setPathDash()
 
-        // Set initial dash properties
-        pathElement.setAttribute('stroke-dasharray', String(pathLength))
-        pathElement.setAttribute('stroke-dashoffset', String(pathLength))
-
-        // Animate the path drawing on scroll
-        gsap.to('.timeline-path', {
-          strokeDashoffset: 0,
-          duration: 1,
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: 'top 40%',
-            end: 'bottom 60%',
-            scrub: 1,
-          }
-        })
-      }
+      gsap.to(pathElement, {
+        strokeDashoffset: 0,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 70%',
+          end: 'bottom 15%',
+          scrub: 0.8,
+          invalidateOnRefresh: true,
+          onRefresh: setPathDash,
+        },
+      })
 
       // Stagger cards
       gsap.from('.exp-card', {
@@ -50,13 +74,17 @@ export const ExperienceSection = () => {
         stagger: 0.2,
         ease: 'power3.out',
         scrollTrigger: {
-          trigger: containerRef.current,
+          trigger: section,
           start: 'top 60%'
         }
       })
-    }, containerRef)
+    }, section)
 
-    return () => ctx.revert()
+    return () => {
+      window.removeEventListener('load', refreshScroll)
+      if (resizeObserver) resizeObserver.disconnect()
+      ctx.revert()
+    }
   }, [])
 
   return (
@@ -66,8 +94,6 @@ export const ExperienceSection = () => {
       className="relative w-full py-24 px-6 overflow-hidden transition-colors duration-500"
       style={{
         backgroundColor: isDark ? '#0E0E0B' : '#F5F0E8',
-        contentVisibility: 'auto',
-        containIntrinsicSize: '1600px',
       }}
     >
       {/* Decorative Background */}
@@ -92,14 +118,16 @@ export const ExperienceSection = () => {
           <svg
             ref={svgRef}
             className="absolute left-4 md:left-1/2 top-0 bottom-0 w-8 pointer-events-none overflow-visible"
+            viewBox="0 0 32 1080"
+            preserveAspectRatio="none"
             style={{
               transform: 'translateX(-50%)',
               height: '100%',
-              minHeight: '600px'
             }}
           >
             {/* Smooth curved serpentine path */}
             <path
+              ref={pathRef}
               className="timeline-path"
               d={`M 16 0 C 16 60, 0 60, 0 120 C 0 180, 16 180, 16 240 C 16 300, 0 300, 0 360 C 0 420, 16 420, 16 480 C 16 540, 0 540, 0 600 C 0 660, 16 660, 16 720 C 16 780, 0 780, 0 840 C 0 900, 16 900, 16 960 C 16 1020, 0 1020, 0 1080`}
               stroke={isDark ? 'white' : 'black'}
@@ -107,6 +135,7 @@ export const ExperienceSection = () => {
               fill="none"
               strokeLinecap="round"
               style={{
+                willChange: 'stroke-dashoffset',
                 filter: isDark
                   ? 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.3))'
                   : 'drop-shadow(0 0 8px rgba(0, 0, 0, 0.2))'
@@ -137,8 +166,6 @@ export const ExperienceSection = () => {
                 style={{
                   backgroundColor: isDark ? '#1A1510' : '#FFFBF5',
                   border: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.2)' : 'rgba(212, 165, 116, 0.3)'}`,
-                  contentVisibility: 'auto',
-                  containIntrinsicSize: '300px',
                 }}
                 whileHover={{
                   y: -4,
