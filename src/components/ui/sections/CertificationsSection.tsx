@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Award, Calendar, CheckCircle2, ChevronDown, ExternalLink } from 'lucide-react'
 import { resumeData } from '../../../lib/resume-data'
 import { useTheme } from '../../providers/ThemeProvider'
+import { Awards } from '../award'
 
 interface CredentialCardData {
   id: string
@@ -250,7 +251,7 @@ export const CertificationsSection = () => {
 
   return (
     <section
-      id="certifications" 
+      id="certifications"
       className="relative w-full py-24 px-6 overflow-hidden transition-colors duration-500"
       style={{ backgroundColor: isDark ? '#0E0E0B' : '#F5F0E8' }}
     >
@@ -269,12 +270,58 @@ export const CertificationsSection = () => {
           </h2>
         </div>
 
-        <div className="space-y-4 mb-14">
-          {credentialItems.map((item, index) => (
-            <CredentialCard key={item.id} item={item} index={index} isDark={isDark} />
-          ))}
+        {/* Certificates using Awards Component */}
+        <div className="mb-20">
+          <h3 className="text-2xl font-display font-bold mb-8 text-center transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
+            Certifications
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 place-items-center">
+            {resumeData.certifications.map((cert, index) => (
+              <motion.div
+                key={`cert-${index}`}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ y: -8, scale: 1.02 }}
+                className="w-full cursor-pointer"
+              >
+                <div
+                  className="rounded-xl p-4 transition-all duration-300 backdrop-blur-sm"
+                  style={{
+                    backgroundColor: isDark ? 'rgba(26, 21, 16, 0.8)' : 'rgba(255, 255, 255, 0.95)',
+                    border: `2px solid ${isDark ? 'rgba(212, 165, 116, 0.4)' : 'rgba(232, 87, 12, 0.5)'}`,
+                    boxShadow: isDark
+                      ? '0 8px 24px rgba(0, 0, 0, 0.3)'
+                      : '0 8px 24px rgba(232, 87, 12, 0.15)',
+                  }}
+                >
+                  <Awards
+                    variant="certificate"
+                    title={cert.title}
+                    subtitle={`${cert.description}`}
+                    recipient={cert.issuer}
+                    date={String(cert.year)}
+                  />
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
 
+        {/* Credentials Section */}
+        <div className="mb-14">
+          <h3 className="text-2xl font-display font-bold mb-8 text-center transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
+            Verified Credentials
+          </h3>
+          <div className="space-y-4">
+            {credentialItems.map((item, index) => (
+              <CredentialCard key={item.id} item={item} index={index} isDark={isDark} />
+            ))}
+          </div>
+        </div>
+
+        {/* Achievements Section */}
         <div>
           <h3 className="text-2xl font-display font-bold mb-8 text-center transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
             Notable Achievements
