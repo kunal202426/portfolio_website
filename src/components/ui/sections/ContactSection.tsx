@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState, type MouseEvent } from 'react'
 import { motion } from 'framer-motion'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -15,6 +15,7 @@ export const ContactSection = () => {
   const containerRef = useRef<HTMLElement>(null)
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme === 'dark'
+  const [laptopTilt, setLaptopTilt] = useState({ x: 0, y: 0 })
   
   // Responsive laptop dimensions
   const [laptopSize, setLaptopSize] = useState({
@@ -87,17 +88,6 @@ export const ContactSection = () => {
     if (!containerRef.current) return
 
     const ctx = gsap.context(() => {
-      gsap.from('.laptop-container', {
-        y: 60,
-        opacity: 0,
-        duration: 1,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: 'top 70%'
-        }
-      })
-
       gsap.from('.contact-heading', {
         y: 40,
         opacity: 0,
@@ -112,6 +102,17 @@ export const ContactSection = () => {
 
     return () => ctx.revert()
   }, [])
+
+  const handleLaptopMove = (event: MouseEvent<HTMLDivElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect()
+    const pointerX = (event.clientX - rect.left) / rect.width - 0.5
+    const pointerY = (event.clientY - rect.top) / rect.height - 0.5
+    setLaptopTilt({ x: -pointerY * 8, y: pointerX * 10 })
+  }
+
+  const resetLaptopTilt = () => {
+    setLaptopTilt({ x: 0, y: 0 })
+  }
 
   return (
     <section 
@@ -207,7 +208,17 @@ export const ContactSection = () => {
           </div>
 
           {/* 3D Laptop - Right Side */}
-          <div className="laptop-container flex justify-center items-center order-first md:order-last" style={{ perspective: '2000px', perspectiveOrigin: '50% 50%' }}>
+          <motion.div
+            className="laptop-container flex justify-center items-center order-first md:order-last"
+            style={{ perspective: '2000px', perspectiveOrigin: '50% 50%' }}
+            onMouseMove={handleLaptopMove}
+            onMouseLeave={resetLaptopTilt}
+            initial={{ opacity: 0, y: 42, scale: 0.94 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true, amount: 0.3 }}
+            animate={{ rotateX: laptopTilt.x, rotateY: laptopTilt.y }}
+            transition={{ type: 'spring', stiffness: 135, damping: 16, mass: 0.7 }}
+          >
           <motion.div
             className="relative"
             style={{
@@ -417,7 +428,7 @@ export const ContactSection = () => {
               />
             </div>
           </motion.div>
-        </div>
+        </motion.div>
         </div>
 
         {/* Footer */}

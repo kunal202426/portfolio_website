@@ -1,9 +1,10 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState, type MouseEvent } from 'react'
 import { motion } from 'framer-motion'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { User } from 'lucide-react'
 import { useTheme } from '../../providers/ThemeProvider'
+import { KeycapButton } from '../KeycapButton'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -11,6 +12,7 @@ export const AboutSection = () => {
   const containerRef = useRef<HTMLElement>(null)
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme === 'dark'
+  const [bookTilt, setBookTilt] = useState({ x: 0, y: 0 })
 
   const stats = [
     { label: 'Years Coding', value: '3+' },
@@ -60,6 +62,17 @@ export const AboutSection = () => {
 
     return () => ctx.revert()
   }, [])
+
+  const handleBookMove = (event: MouseEvent<HTMLDivElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect()
+    const pointerX = (event.clientX - rect.left) / rect.width - 0.5
+    const pointerY = (event.clientY - rect.top) / rect.height - 0.5
+    setBookTilt({ x: -pointerY * 10, y: pointerX * 12 })
+  }
+
+  const resetBookTilt = () => {
+    setBookTilt({ x: 0, y: 0 })
+  }
 
   return (
     <section 
@@ -115,21 +128,9 @@ export const AboutSection = () => {
 
 
             {/* CTA Button */}
-            <div className="flex gap-4 pt-4">
-              <a
-                href="#projects"
-                className="px-8 py-3 rounded-lg font-medium text-white transition-all duration-300 hover:scale-105 hover:shadow-lg"
-                style={{ backgroundColor: '#E8570C' }}
-              >
-                View My Work
-              </a>
-              <a
-                href="#contact"
-                className="px-8 py-3 rounded-lg font-medium border-2 transition-all duration-300 hover:scale-105"
-                style={{ borderColor: isDark ? '#F0EBE0' : '#1A1208', color: isDark ? '#F0EBE0' : '#1A1208' }}
-              >
-                Let's Talk
-              </a>
+            <div className="flex flex-wrap gap-5 pt-4">
+              <KeycapButton href="#projects" label="View My Work" icon="→" tone="orange" size="wide" />
+              <KeycapButton href="#contact" label="Let's Talk" icon="✉" tone="cream" size="wide" />
             </div>
           </div>
 
@@ -140,6 +141,8 @@ export const AboutSection = () => {
               background: isDark ? 'linear-gradient(145deg, #1A1510, #0E0E0B)' : 'linear-gradient(145deg, #FFFBF5, #F5F0E8)',
               border: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.2)' : 'rgba(212, 165, 116, 0.3)'}`
             }}
+            onMouseMove={handleBookMove}
+            onMouseLeave={resetBookTilt}
           >
             {/* Radiating Circles Background */}
             <svg className="absolute w-full h-full" viewBox="0 0 300 300">
@@ -196,7 +199,15 @@ export const AboutSection = () => {
             </svg>
 
             {/* 3D Book on Table - Top-Down Angle */}
-            <div className="relative z-10" style={{ perspective: '800px', perspectiveOrigin: '50% 30%' }}>
+            <motion.div
+              className="relative z-10"
+              style={{ perspective: '800px', perspectiveOrigin: '50% 30%' }}
+              initial={{ opacity: 0, scale: 0.9, y: 24 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.35 }}
+              animate={{ rotateX: bookTilt.x, rotateY: bookTilt.y }}
+              transition={{ type: 'spring', stiffness: 150, damping: 18, mass: 0.6 }}
+            >
               <motion.div
                 className="relative"
                 style={{
@@ -291,7 +302,7 @@ export const AboutSection = () => {
                   transform: 'translateY(140px) rotateX(90deg)',
                 }}
               />
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>

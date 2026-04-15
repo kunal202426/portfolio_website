@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useState, type MouseEvent } from 'react'
 import { motion } from 'framer-motion'
 import { Eye, Download, FileText, ExternalLink } from 'lucide-react'
 import { useTheme } from '../../providers/ThemeProvider'
 import { ResumeModal } from '../ResumeModal'
+import { KeycapButton } from '../KeycapButton'
 
 const RESUME_PATH = '/Resume_general.pdf'
 
@@ -10,10 +11,22 @@ export const ResumeSection = () => {
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme === 'dark'
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [phoneTilt, setPhoneTilt] = useState({ x: 0, y: 0 })
 
   
   const openResume = () => {
     setIsModalOpen(true)
+  }
+
+  const handlePhoneMove = (event: MouseEvent<HTMLDivElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect()
+    const pointerX = (event.clientX - rect.left) / rect.width - 0.5
+    const pointerY = (event.clientY - rect.top) / rect.height - 0.5
+    setPhoneTilt({ x: -pointerY * 9, y: pointerX * 10 })
+  }
+
+  const resetPhoneTilt = () => {
+    setPhoneTilt({ x: 0, y: 0 })
   }
 
   return (
@@ -50,14 +63,21 @@ export const ResumeSection = () => {
           <div 
             className="relative cursor-pointer group"
             onClick={openResume}
+            onMouseMove={handlePhoneMove}
+            onMouseLeave={resetPhoneTilt}
           >
             {/* Phone Frame */}
-            <div 
+            <motion.div 
               className="relative w-[280px] md:w-[320px] rounded-[3rem] p-3 shadow-2xl transition-transform duration-500 group-hover:scale-105"
               style={{ 
                 backgroundColor: isDark ? '#0E0E0B' : '#1A1208',
                 boxShadow: isDark ? '0 50px 100px -20px rgba(0, 0, 0, 0.6)' : '0 50px 100px -20px rgba(26, 18, 8, 0.4)'
               }}
+              initial={{ opacity: 0, y: 28, scale: 0.93 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, amount: 0.35 }}
+              animate={{ rotateX: phoneTilt.x, rotateY: phoneTilt.y }}
+              transition={{ type: 'spring', stiffness: 150, damping: 18, mass: 0.65 }}
             >
               {/* Notch */}
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-7 rounded-b-2xl" style={{ backgroundColor: isDark ? '#0E0E0B' : '#1A1208' }} />
@@ -106,7 +126,7 @@ export const ResumeSection = () => {
 
               {/* Home Indicator */}
               <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-1 rounded-full" style={{ backgroundColor: isDark ? '#F0EBE0' : '#4A3C2A' }} />
-            </div>
+            </motion.div>
 
             {/* Reflection */}
             <div 
@@ -124,29 +144,23 @@ export const ResumeSection = () => {
               Click the phone or use the buttons below to view my complete resume. You can also download a copy for your records.
             </p>
             
-            <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
-              <motion.button
+            <div className="flex flex-wrap gap-5 justify-center lg:justify-start">
+              <KeycapButton
                 onClick={openResume}
-                className="flex items-center gap-2 px-6 py-3 rounded-full font-medium text-white transition-all"
-                style={{ backgroundColor: '#E8570C' }}
-                whileHover={{ scale: 1.05, boxShadow: '0 10px 30px rgba(232, 87, 12, 0.3)' }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Eye size={18} />
-                View Resume
-              </motion.button>
-              
-              <motion.a
+                label="View Resume"
+                icon={<Eye size={18} />}
+                tone="orange"
+                size="wide"
+              />
+
+              <KeycapButton
                 href={RESUME_PATH}
                 download
-                className="flex items-center gap-2 px-6 py-3 rounded-full font-medium border-2 transition-all"
-                style={{ borderColor: isDark ? '#F0EBE0' : '#1A1208', color: isDark ? '#F0EBE0' : '#1A1208' }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Download size={18} />
-                Download PDF
-              </motion.a>
+                label="Download PDF"
+                icon={<Download size={18} />}
+                tone="blue"
+                size="wide"
+              />
             </div>
           </div>
         </motion.div>

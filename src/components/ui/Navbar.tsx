@@ -1,70 +1,144 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
-import { MagneticButton } from './MagneticButton'
-import { ThemeTogglerButton } from './ThemeTogglerButton'
+import { ThemeSwitch } from './ThemeSwitch'
+import { LimelightNav } from './LimelightNav'
 import { useTheme } from '../providers/ThemeProvider'
 
 const navItems = [
   { label: 'About', href: '#about' },
   { label: 'Projects', href: '#projects' },
-  { label: 'Experience', href: '#experience' },
   { label: 'Skills', href: '#skills' },
+  { label: 'Experience', href: '#experience' },
   { label: 'Resume', href: '#resume' },
   { label: 'Contact', href: '#contact' },
 ]
 
+const navSectionIds = navItems.map((item) => item.href.slice(1))
+
 export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [activeSection, setActiveSection] = useState('home')
+  const [activeSection, setActiveSection] = useState(navSectionIds[0])
+  const [activeNavIndex, setActiveNavIndex] = useState(0)
+  const scrollLockSectionRef = useRef<string | null>(null)
+  const scrollLockUntilRef = useRef(0)
   const { resolvedTheme } = useTheme()
 
   const isDark = resolvedTheme === 'dark'
+  const limelightItems = useMemo(
+    () =>
+      navItems.map((item) => ({
+        id: item.label.toLowerCase(),
+        label: item.label,
+      })),
+    []
+  )
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 80)
+    const sections = navSectionIds
+    let frameId = 0
 
-      // Update active section based on scroll
-      const sections = ['home', 'about', 'projects', 'experience', 'skills', 'resume', 'education', 'certifications', 'contact']
+    const getSectionFromScroll = () => {
+      const anchorY = 110
+      let bestSection = sections[0]
+      let bestTop = Number.NEGATIVE_INFINITY
+      let nearestUpcomingSection = sections[0]
+      let nearestUpcomingTop = Number.POSITIVE_INFINITY
+
       for (const section of sections) {
         const element = document.getElementById(section)
-        if (element) {
-          const rect = element.getBoundingClientRect()
-          if (rect.top <= 100 && rect.bottom >= 100) {
-            setActiveSection(section)
-            break
-          }
+        if (!element) continue
+
+        const top = element.getBoundingClientRect().top
+
+        if (top <= anchorY && top > bestTop) {
+          bestTop = top
+          bestSection = section
+        }
+
+        if (top > anchorY && top < nearestUpcomingTop) {
+          nearestUpcomingTop = top
+          nearestUpcomingSection = section
         }
       }
+
+      return bestTop === Number.NEGATIVE_INFINITY ? nearestUpcomingSection : bestSection
     }
 
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    const updateOnScroll = () => {
+      frameId = 0
+      const scrolled = window.scrollY > 80
+      setIsScrolled((prev) => (prev === scrolled ? prev : scrolled))
+
+      const lockedSection = scrollLockSectionRef.current
+      if (lockedSection) {
+        const now = Date.now()
+        const lockedEl = document.getElementById(lockedSection)
+        const distanceToTarget = lockedEl ? Math.abs(lockedEl.getBoundingClientRect().top - 80) : Number.POSITIVE_INFINITY
+
+        if (now < scrollLockUntilRef.current && distanceToTarget > 24) {
+          setActiveSection((prev) => (prev === lockedSection ? prev : lockedSection))
+          return
+        }
+
+        scrollLockSectionRef.current = null
+      }
+
+      const nextSection = getSectionFromScroll()
+
+      setActiveSection((prev) => (prev === nextSection ? prev : nextSection))
+    }
+
+    const handleScroll = () => {
+      if (frameId) return
+      frameId = window.requestAnimationFrame(updateOnScroll)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    updateOnScroll()
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      if (frameId) {
+        window.cancelAnimationFrame(frameId)
+      }
+    }
   }, [])
+
+  useEffect(() => {
+    const sectionIndex = navSectionIds.indexOf(activeSection)
+    if (sectionIndex >= 0) {
+      setActiveNavIndex((prev) => (prev === sectionIndex ? prev : sectionIndex))
+    }
+  }, [activeSection])
 
   const handleMobileNavClick = (href: string, event: React.MouseEvent | React.TouchEvent) => {
     event.preventDefault()
     event.stopPropagation()
-    console.log('Mobile navigation clicked:', href)
     handleNavClick(href)
   }
 
   const handleNavClick = (href: string) => {
-    console.log('Navigation clicked:', href)
-    
+    const targetSection = href.replace('#', '')
+    const targetIndex = navSectionIds.indexOf(targetSection)
+
+    // Update active state immediately so limelight does not jump back before scroll observer catches up.
+    if (targetSection && targetIndex >= 0) {
+      scrollLockSectionRef.current = targetSection
+      scrollLockUntilRef.current = Date.now() + 1700
+      setActiveSection((prev) => (prev === targetSection ? prev : targetSection))
+      setActiveNavIndex((prev) => (prev === targetIndex ? prev : targetIndex))
+    }
+
     // Close mobile menu immediately for better UX
+    const shouldDelayScroll = isMobileMenuOpen
     setIsMobileMenuOpen(false)
-    
-    // Simple, reliable navigation without dependencies
-    setTimeout(() => {
+
+    const runScroll = () => {
       const target = document.querySelector(href)
-      console.log('Target element found:', target)
-      
+
       if (target) {
-        console.log('Scrolling to target:', href)
-        
         // Get element position relative to document
         const elementTop = target.getBoundingClientRect().top + window.pageYOffset - 80
         
@@ -77,16 +151,21 @@ export const Navbar = () => {
         // Fallback for older browsers
         setTimeout(() => {
           if (Math.abs(window.pageYOffset - elementTop) > 50) {
-            console.log('Fallback scroll for:', href)
             window.scrollTo(0, elementTop)
           }
         }, 1000)
       } else {
-        console.warn('Target element not found for:', href)
         // Last resort - try direct hash navigation
         window.location.hash = href
       }
-    }, 100) // Small delay for mobile menu close animation
+    }
+
+    if (shouldDelayScroll) {
+      setTimeout(runScroll, 100)
+      return
+    }
+
+    runScroll()
   }
 
   return (
@@ -115,50 +194,26 @@ export const Navbar = () => {
           </motion.button>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
-            {navItems.map((item) => (
-              <motion.button
-                key={item.label}
-                onClick={() => handleNavClick(item.href)}
-                className="relative text-sm font-medium transition-colors"
-                style={{
-                  color: activeSection === item.href.slice(1) 
-                    ? '#E8570C' 
-                    : (isDark ? '#D4C4A8' : '#4A3C2A'),
-                }}
-                whileHover={{ y: -2, color: '#E8570C' }}
-              >
-                {item.label}
-                {activeSection === item.href.slice(1) && (
-                  <motion.div
-                    className="absolute -bottom-4 left-0 right-0 h-0.5"
-                    style={{ backgroundColor: '#E8570C' }}
-                    layoutId="underline"
-                  />
-                )}
-              </motion.button>
-            ))}
+          <div className="hidden md:flex items-center">
+            <LimelightNav
+              items={limelightItems}
+              activeIndex={activeNavIndex}
+              onTabChange={(index) => {
+                const item = navItems[index]
+                if (item) handleNavClick(item.href)
+              }}
+              isDark={isDark}
+            />
           </div>
 
-          {/* Right side - Theme Toggle & CTA Button */}
-          <div className="hidden md:flex items-center gap-4">
-            <ThemeTogglerButton 
-              variant="ghost" 
-              size="md" 
-              direction="vertical"
-              modes={['light', 'dark', 'system']}
-            />
-            <MagneticButton variant="ghost" onClick={() => handleNavClick('#contact')}>Hire Me</MagneticButton>
+          {/* Right side - Theme Switch */}
+          <div className="hidden md:flex items-center">
+            <ThemeSwitch />
           </div>
 
           {/* Mobile: Theme Toggle & Menu Button */}
           <div className="md:hidden flex items-center gap-3">
-            <ThemeTogglerButton 
-              variant="ghost" 
-              size="sm" 
-              direction="vertical"
-              modes={['light', 'dark', 'system']}
-            />
+            <ThemeSwitch />
             <motion.button
               style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -204,17 +259,6 @@ export const Navbar = () => {
               {item.label}
             </motion.button>
           ))}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: navItems.length * 0.1 }}
-            className="pt-4"
-            style={{ borderTop: '1px solid rgba(212, 165, 116, 0.3)' }}
-          >
-            <MagneticButton variant="primary" className="w-full" onClick={() => handleNavClick('#contact')}>
-              Hire Me
-            </MagneticButton>
-          </motion.div>
         </div>
       </motion.div>
     </>

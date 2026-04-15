@@ -94,6 +94,7 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
     : 'linear-gradient(145deg, #F5F0E8, #EDE8E0)'
   const activeBorder = '#E8570C'
   const activeGlow = 'rgba(232, 87, 12, 0.4)'
+  const isCompactMotion = dimensions.cardWidth <= 320
   
   // Text colors
   const titleColor = isDark ? '#F0EBE0' : '#1A1208'
@@ -131,20 +132,23 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
           <div
             className="relative w-full flex items-center justify-center mb-8 md:mb-16"
             style={{
-              perspective: 2000,
+              perspective: isCompactMotion ? 1200 : 2000,
               height: dimensions.containerHeight,
               maxWidth: '100%',
             }}
           >
             {projects.map((project, i) => {
               const offset = i - index
+              if (Math.abs(offset) > 2) return null
+
               const isCenter = offset === 0
               const isAdjacent = Math.abs(offset) === 1
+              const isEdge = Math.abs(offset) === 2
 
               const xOffset = offset * dimensions.xOffset
               const yOffset = Math.abs(offset) * dimensions.yOffset
-              const rotation = offset * -8
-              const scale = isCenter ? 1 : Math.abs(offset) === 1 ? 0.85 : 0.7
+              const rotation = isCompactMotion ? 0 : offset * -8
+              const scale = isCenter ? 1 : Math.abs(offset) === 1 ? (isCompactMotion ? 0.9 : 0.85) : (isCompactMotion ? 0.82 : 0.7)
 
               return (
                 <motion.div
@@ -156,9 +160,9 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
                     scale: scale,
                     rotateY: rotation,
                     zIndex: 10 - Math.abs(offset),
-                    opacity: Math.abs(offset) > 2 ? 0 : Math.abs(offset) === 2 ? 0.4 : 1,
+                    opacity: isEdge ? 0.45 : 1,
                   }}
-                  transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
+                  transition={{ duration: isCompactMotion ? 0.26 : 0.35, ease: [0.25, 0.1, 0.25, 1] }}
                   onClick={() => {
                     if (offset === -1) prev()
                     if (offset === 1) next()
@@ -186,10 +190,16 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
                     color: isDark ? '#F0EBE0' : '#1A1208',
                     padding: dimensions.padding,
                     boxShadow: isCenter
-                      ? `0 30px 60px ${activeGlow}, 0 0 0 2px ${activeBorder}`
+                      ? isCompactMotion
+                        ? `0 18px 34px ${activeGlow}, 0 0 0 1px ${activeBorder}`
+                        : `0 30px 60px ${activeGlow}, 0 0 0 2px ${activeBorder}`
                       : isDark 
-                        ? '0 15px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(212,165,116,0.15)'
-                        : '0 15px 40px rgba(0,0,0,0.1), 0 0 0 1px rgba(212,165,116,0.3)',
+                        ? (isCompactMotion
+                          ? '0 10px 24px rgba(0,0,0,0.36), 0 0 0 1px rgba(212,165,116,0.15)'
+                          : '0 15px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(212,165,116,0.15)')
+                        : (isCompactMotion
+                          ? '0 10px 24px rgba(0,0,0,0.08), 0 0 0 1px rgba(212,165,116,0.3)'
+                          : '0 15px 40px rgba(0,0,0,0.1), 0 0 0 1px rgba(212,165,116,0.3)'),
                     border: 'none',
                     display: 'flex',
                     flexDirection: 'column',
@@ -197,8 +207,9 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
                     alignItems: 'center',
                     textAlign: 'center',
                     cursor: isAdjacent ? 'pointer' : 'default',
-                    transformStyle: 'preserve-3d',
+                    transformStyle: isCompactMotion ? 'flat' : 'preserve-3d',
                     overflow: 'hidden',
+                    willChange: 'transform, opacity',
                   }}
                 >
                   {/* Top section */}
@@ -297,18 +308,10 @@ export const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
                       tone={isCenter ? 'on-dark' : 'default'}
                       onClick={(e) => {
                         e.stopPropagation()
-                        console.log('Project clicked:', project.title)
-                        console.log('Live URL:', project.liveUrl)
-                        console.log('GitHub URL:', project.githubUrl)
-                        
-                        // Prioritize live URL, fallback to GitHub URL
                         const targetUrl = project.liveUrl || project.githubUrl
-                        console.log('Target URL:', targetUrl)
-                        
+
                         if (targetUrl) {
-                          window.open(targetUrl, '_blank')
-                        } else {
-                          console.warn('No URL available for project:', project.title)
+                          window.open(targetUrl, '_blank', 'noopener,noreferrer')
                         }
                       }}
                     >
