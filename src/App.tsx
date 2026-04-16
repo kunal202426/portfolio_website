@@ -51,7 +51,7 @@ function AppContent() {
 
   return (
     <div 
-      className="w-full overflow-hidden transition-colors duration-500" 
+      className="w-full overflow-x-hidden transition-colors duration-500" 
       style={{ 
         backgroundColor: isDark ? '#0E0E0B' : '#F5F0E8', 
         color: isDark ? '#F0EBE0' : '#1A1208' 

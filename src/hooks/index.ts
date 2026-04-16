@@ -4,15 +4,39 @@ export const useScrollProgress = () => {
   const [progress, setProgress] = useState(0)
 
   useEffect(() => {
-    const handleScroll = () => {
+    let rafId: number | null = null
+    let lastProgress = -1
+
+    const updateProgress = () => {
+      rafId = null
       const scrollHeight = document.documentElement.scrollHeight - window.innerHeight
       const scrolled = window.scrollY
-      const progress = scrollHeight > 0 ? (scrolled / scrollHeight) * 100 : 0
-      setProgress(progress)
+      const nextProgress = scrollHeight > 0 ? (scrolled / scrollHeight) * 100 : 0
+
+      // Skip tiny updates to avoid excessive rerenders on fast scroll.
+      if (Math.abs(nextProgress - lastProgress) >= 0.1) {
+        lastProgress = nextProgress
+        setProgress(nextProgress)
+      }
     }
 
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    const handleScroll = () => {
+      if (rafId === null) {
+        rafId = requestAnimationFrame(updateProgress)
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('resize', handleScroll)
+    handleScroll()
+
+    return () => {
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId)
+      }
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', handleScroll)
+    }
   }, [])
 
   return progress

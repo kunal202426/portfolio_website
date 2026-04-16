@@ -1,5 +1,5 @@
 import { useRef, useEffect } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useSpring, useTransform } from 'framer-motion'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { resumeData } from '../../../lib/resume-data'
@@ -27,15 +27,22 @@ export const HeroSection = () => {
     target: containerRef,
     offset: ["start start", "end start"]
   })
+
+  // Smooth raw scroll progress to reduce micro-jitter on heavy hero layers.
+  const smoothScrollYProgress = useSpring(scrollYProgress, {
+    stiffness: 90,
+    damping: 24,
+    mass: 0.28,
+  })
   
   // Text moves downward faster so the parallax read is stronger.
-  const textY = useTransform(scrollYProgress, [0, 0.22], [0, 300])
-  const textOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0])
+  const textY = useTransform(smoothScrollYProgress, [0, 0.34], [0, 300])
+  const textOpacity = useTransform(smoothScrollYProgress, [0, 0.34], [1, 0])
   
   // Keep front mountain anchored to avoid exposing a bottom frame gap.
-  const backY = useTransform(scrollYProgress, [0, 0.6], [0, -140])
-  const middleY = useTransform(scrollYProgress, [0, 0.6], [0, -60])
-  const frontY = useTransform(scrollYProgress, [0, 1], [0, 0])
+  const backY = useTransform(smoothScrollYProgress, [0, 0.85], [0, -140])
+  const middleY = useTransform(smoothScrollYProgress, [0, 0.85], [0, -60])
+  const frontY = useTransform(smoothScrollYProgress, [0, 1], [0, 0])
 
   useEffect(() => {
     if (!contentRef.current) return
@@ -109,6 +116,7 @@ export const HeroSection = () => {
           style={{ 
             bottom: '-34%',
             y: backY,
+            willChange: 'transform',
             zIndex: 1,
             objectFit: 'cover',
             objectPosition: 'bottom',
@@ -124,6 +132,7 @@ export const HeroSection = () => {
           style={{ 
             bottom: '-20%',
             y: middleY, 
+            willChange: 'transform',
             zIndex: 2,
             objectFit: 'cover',
             objectPosition: 'bottom',
@@ -138,6 +147,7 @@ export const HeroSection = () => {
           style={{ 
             y: textY, 
             opacity: textOpacity,
+            willChange: 'transform, opacity',
             zIndex: 3,
             paddingBottom: '12rem'
           }}
@@ -172,6 +182,7 @@ export const HeroSection = () => {
           className="absolute bottom-0 left-0 w-full h-auto pointer-events-none"
           style={{ 
             y: frontY, 
+            willChange: 'transform',
             zIndex: 4,
             objectFit: 'cover',
             objectPosition: 'bottom',
