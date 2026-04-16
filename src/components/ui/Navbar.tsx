@@ -23,6 +23,7 @@ export const Navbar = () => {
   const [activeNavIndex, setActiveNavIndex] = useState(0)
   const scrollLockSectionRef = useRef<string | null>(null)
   const scrollLockUntilRef = useRef(0)
+  const sectionRatioRef = useRef<Record<string, number>>({})
   const { resolvedTheme } = useTheme()
 
   const isDark = resolvedTheme === 'dark'
@@ -36,58 +37,12 @@ export const Navbar = () => {
   )
 
   useEffect(() => {
-    const sections = navSectionIds
     let frameId = 0
-
-    const getSectionFromScroll = () => {
-      const anchorY = 110
-      let bestSection = sections[0]
-      let bestTop = Number.NEGATIVE_INFINITY
-      let nearestUpcomingSection = sections[0]
-      let nearestUpcomingTop = Number.POSITIVE_INFINITY
-
-      for (const section of sections) {
-        const element = document.getElementById(section)
-        if (!element) continue
-
-        const top = element.getBoundingClientRect().top
-
-        if (top <= anchorY && top > bestTop) {
-          bestTop = top
-          bestSection = section
-        }
-
-        if (top > anchorY && top < nearestUpcomingTop) {
-          nearestUpcomingTop = top
-          nearestUpcomingSection = section
-        }
-      }
-
-      return bestTop === Number.NEGATIVE_INFINITY ? nearestUpcomingSection : bestSection
-    }
 
     const updateOnScroll = () => {
       frameId = 0
       const scrolled = window.scrollY > 80
       setIsScrolled((prev) => (prev === scrolled ? prev : scrolled))
-
-      const lockedSection = scrollLockSectionRef.current
-      if (lockedSection) {
-        const now = Date.now()
-        const lockedEl = document.getElementById(lockedSection)
-        const distanceToTarget = lockedEl ? Math.abs(lockedEl.getBoundingClientRect().top - 80) : Number.POSITIVE_INFINITY
-
-        if (now < scrollLockUntilRef.current && distanceToTarget > 24) {
-          setActiveSection((prev) => (prev === lockedSection ? prev : lockedSection))
-          return
-        }
-
-        scrollLockSectionRef.current = null
-      }
-
-      const nextSection = getSectionFromScroll()
-
-      setActiveSection((prev) => (prev === nextSection ? prev : nextSection))
     }
 
     const handleScroll = () => {
@@ -103,6 +58,80 @@ export const Navbar = () => {
       if (frameId) {
         window.cancelAnimationFrame(frameId)
       }
+    }
+  }, [])
+
+  useEffect(() => {
+    const sectionElements = navSectionIds
+      .map((id) => document.getElementById(id))
+      .filter((element): element is HTMLElement => Boolean(element))
+
+    if (sectionElements.length === 0) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const id = (entry.target as HTMLElement).id
+          sectionRatioRef.current[id] = entry.isIntersecting ? entry.intersectionRatio : 0
+        })
+
+        if (scrollLockSectionRef.current && Date.now() < scrollLockUntilRef.current) {
+          return
+        }
+
+        if (scrollLockSectionRef.current && Date.now() >= scrollLockUntilRef.current) {
+          scrollLockSectionRef.current = null
+        }
+
+        let nextSection = navSectionIds[0]
+        let bestRatio = 0
+
+        for (const id of navSectionIds) {
+          const ratio = sectionRatioRef.current[id] ?? 0
+          if (ratio > bestRatio) {
+            bestRatio = ratio
+            nextSection = id
+          }
+        }
+
+        if (bestRatio === 0) {
+          const anchorY = 110
+          let bestTop = Number.NEGATIVE_INFINITY
+          let nearestUpcomingSection = navSectionIds[0]
+          let nearestUpcomingTop = Number.POSITIVE_INFINITY
+
+          sectionElements.forEach((element) => {
+            const top = element.getBoundingClientRect().top
+
+            if (top <= anchorY && top > bestTop) {
+              bestTop = top
+              nextSection = element.id
+            }
+
+            if (top > anchorY && top < nearestUpcomingTop) {
+              nearestUpcomingTop = top
+              nearestUpcomingSection = element.id
+            }
+          })
+
+          if (bestTop === Number.NEGATIVE_INFINITY) {
+            nextSection = nearestUpcomingSection
+          }
+        }
+
+        setActiveSection((prev) => (prev === nextSection ? prev : nextSection))
+      },
+      {
+        root: null,
+        rootMargin: '-18% 0px -58% 0px',
+        threshold: [0, 0.08, 0.16, 0.25, 0.4, 0.6, 0.8, 1],
+      }
+    )
+
+    sectionElements.forEach((element) => observer.observe(element))
+
+    return () => {
+      observer.disconnect()
     }
   }, [])
 
@@ -173,12 +202,14 @@ export const Navbar = () => {
       <motion.nav
         className="fixed top-0 left-0 right-0 z-40 transition-all duration-300"
         style={{
-          backdropFilter: 'blur(20px)',
+          backdropFilter: isScrolled ? 'blur(10px)' : 'blur(6px)',
+          WebkitBackdropFilter: isScrolled ? 'blur(10px)' : 'blur(6px)',
           backgroundColor: isScrolled 
             ? (isDark ? 'rgba(14, 14, 11, 0.95)' : 'rgba(245, 240, 232, 0.95)')
             : (isDark ? 'rgba(14, 14, 11, 0.85)' : 'rgba(245, 240, 232, 0.85)'),
           borderBottom: isScrolled ? '1px solid rgba(232, 87, 12, 0.15)' : '1px solid transparent',
           height: isScrolled ? '56px' : '72px',
+          willChange: 'transform',
         }}
       >
         <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">

@@ -232,10 +232,7 @@ export function Awards({
           borderStyle: 'dashed',
         }}
       >
-        <div className={cn(
-          "z-10 rounded-sm border p-6 px-8 text-center",
-          "backdrop-blur-xs"
-        )}
+        <div className="z-10 rounded-sm border p-6 px-8 text-center"
         style={{
           backgroundColor: 'rgba(255, 255, 255, 0.98)',
           borderColor: 'rgba(232, 87, 12, 0.3)',

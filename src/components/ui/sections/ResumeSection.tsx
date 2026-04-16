@@ -1,17 +1,20 @@
-import { useState, type MouseEvent } from 'react'
-import { motion } from 'framer-motion'
+import { Suspense, lazy, useState, type MouseEvent } from 'react'
+import { motion, useMotionValue, useSpring } from 'framer-motion'
 import { Eye, Download, FileText, ExternalLink } from 'lucide-react'
 import { useTheme } from '../../providers/ThemeProvider'
-import { ResumeModal } from '../ResumeModal'
 import { KeycapButton } from '../KeycapButton'
 
 const RESUME_PATH = '/Resume_general.pdf'
+const LazyResumeModal = lazy(() => import('../ResumeModal').then((module) => ({ default: module.ResumeModal })))
 
 export const ResumeSection = () => {
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme === 'dark'
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [phoneTilt, setPhoneTilt] = useState({ x: 0, y: 0 })
+  const tiltX = useMotionValue(0)
+  const tiltY = useMotionValue(0)
+  const smoothTiltX = useSpring(tiltX, { stiffness: 220, damping: 24, mass: 0.45 })
+  const smoothTiltY = useSpring(tiltY, { stiffness: 220, damping: 24, mass: 0.45 })
 
   
   const openResume = () => {
@@ -22,11 +25,13 @@ export const ResumeSection = () => {
     const rect = event.currentTarget.getBoundingClientRect()
     const pointerX = (event.clientX - rect.left) / rect.width - 0.5
     const pointerY = (event.clientY - rect.top) / rect.height - 0.5
-    setPhoneTilt({ x: -pointerY * 9, y: pointerX * 10 })
+    tiltX.set(-pointerY * 9)
+    tiltY.set(pointerX * 10)
   }
 
   const resetPhoneTilt = () => {
-    setPhoneTilt({ x: 0, y: 0 })
+    tiltX.set(0)
+    tiltY.set(0)
   }
 
   return (
@@ -71,13 +76,13 @@ export const ResumeSection = () => {
               className="relative w-[280px] md:w-[320px] rounded-[3rem] p-3 shadow-2xl transition-transform duration-500 group-hover:scale-105"
               style={{ 
                 backgroundColor: isDark ? '#0E0E0B' : '#1A1208',
-                boxShadow: isDark ? '0 50px 100px -20px rgba(0, 0, 0, 0.6)' : '0 50px 100px -20px rgba(26, 18, 8, 0.4)'
+                boxShadow: isDark ? '0 50px 100px -20px rgba(0, 0, 0, 0.6)' : '0 50px 100px -20px rgba(26, 18, 8, 0.4)',
+                rotateX: smoothTiltX,
+                rotateY: smoothTiltY,
               }}
               initial={{ opacity: 0, y: 28, scale: 0.93 }}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, amount: 0.35 }}
-              animate={{ rotateX: phoneTilt.x, rotateY: phoneTilt.y }}
-              transition={{ type: 'spring', stiffness: 150, damping: 18, mass: 0.65 }}
             >
               {/* Notch */}
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-7 rounded-b-2xl" style={{ backgroundColor: isDark ? '#0E0E0B' : '#1A1208' }} />
@@ -167,7 +172,11 @@ export const ResumeSection = () => {
       </div>
 
       {/* Resume Modal */}
-      <ResumeModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      {isModalOpen ? (
+        <Suspense fallback={null}>
+          <LazyResumeModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+        </Suspense>
+      ) : null}
     </section>
   )
 }

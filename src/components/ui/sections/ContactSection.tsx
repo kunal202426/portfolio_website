@@ -1,11 +1,62 @@
 import { useRef, useEffect, useState, type MouseEvent } from 'react'
-import { motion } from 'framer-motion'
+import { motion, useMotionValue, useSpring } from 'framer-motion'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { resumeData } from '../../../lib/resume-data'
 import { useTheme } from '../../providers/ThemeProvider'
+import { InteractiveRobotSpline } from '../interactive-3d-robot'
 
 gsap.registerPlugin(ScrollTrigger)
+
+const ROBOT_SCENE_URL = 'https://prod.spline.design/PyzDhpQ9E5f1E3MT/scene.splinecode'
+
+const getLaptopSize = (width: number) => {
+  if (width >= 1024) {
+    return {
+      width: 500,
+      height: 320,
+      keyboardHeight: 160,
+      iconSize: 32,
+      iconBoxSize: 32,
+      gap: 20,
+      padding: 16,
+    }
+  }
+
+  if (width >= 768) {
+    return {
+      width: 400,
+      height: 256,
+      keyboardHeight: 128,
+      iconSize: 28,
+      iconBoxSize: 28,
+      gap: 16,
+      padding: 12,
+    }
+  }
+
+  if (width >= 640) {
+    return {
+      width: 320,
+      height: 204,
+      keyboardHeight: 102,
+      iconSize: 24,
+      iconBoxSize: 24,
+      gap: 12,
+      padding: 10,
+    }
+  }
+
+  return {
+    width: 280,
+    height: 179,
+    keyboardHeight: 90,
+    iconSize: 20,
+    iconBoxSize: 20,
+    gap: 8,
+    padding: 8,
+  }
+}
 
 /**
  * 3D Laptop Contact Section
@@ -15,73 +66,41 @@ export const ContactSection = () => {
   const containerRef = useRef<HTMLElement>(null)
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme === 'dark'
-  const [laptopTilt, setLaptopTilt] = useState({ x: 0, y: 0 })
+  const tiltX = useMotionValue(0)
+  const tiltY = useMotionValue(0)
+  const smoothTiltX = useSpring(tiltX, { stiffness: 220, damping: 24, mass: 0.4 })
+  const smoothTiltY = useSpring(tiltY, { stiffness: 220, damping: 24, mass: 0.4 })
+  const [showRobotPanel, setShowRobotPanel] = useState(() => (typeof window !== 'undefined' ? window.innerWidth >= 768 : true))
   
   // Responsive laptop dimensions
-  const [laptopSize, setLaptopSize] = useState({
-    width: 500,
-    height: 320,
-    keyboardHeight: 160,
-    iconSize: 32,
-    iconBoxSize: 32,
-    gap: 20,
-    padding: 16
-  })
+  const [laptopSize, setLaptopSize] = useState(() => getLaptopSize(typeof window !== 'undefined' ? window.innerWidth : 1024))
 
   useEffect(() => {
     const updateLaptopSize = () => {
       const width = window.innerWidth
-      
-      if (width >= 1024) {
-        // Desktop - keep original size
-        setLaptopSize({
-          width: 500,
-          height: 320,
-          keyboardHeight: 160,
-          iconSize: 32,
-          iconBoxSize: 32,
-          gap: 20,
-          padding: 16
-        })
-      } else if (width >= 768) {
-        // Tablet
-        setLaptopSize({
-          width: 400,
-          height: 256,
-          keyboardHeight: 128,
-          iconSize: 28,
-          iconBoxSize: 28,
-          gap: 16,
-          padding: 12
-        })
-      } else if (width >= 640) {
-        // Small tablet
-        setLaptopSize({
-          width: 320,
-          height: 204,
-          keyboardHeight: 102,
-          iconSize: 24,
-          iconBoxSize: 24,
-          gap: 12,
-          padding: 10
-        })
-      } else {
-        // Mobile
-        setLaptopSize({
-          width: 280,
-          height: 179,
-          keyboardHeight: 90,
-          iconSize: 20,
-          iconBoxSize: 20,
-          gap: 8,
-          padding: 8
-        })
+      const nextShowRobotPanel = width >= 768
+      const nextLaptopSize = getLaptopSize(width)
+
+      setShowRobotPanel((prev) => (prev === nextShowRobotPanel ? prev : nextShowRobotPanel))
+      setLaptopSize((prev) => (prev.width === nextLaptopSize.width ? prev : nextLaptopSize))
+    }
+
+    let resizeRaf: number | null = null
+    const handleResize = () => {
+      if (resizeRaf !== null) {
+        cancelAnimationFrame(resizeRaf)
       }
+      resizeRaf = requestAnimationFrame(updateLaptopSize)
     }
 
     updateLaptopSize()
-    window.addEventListener('resize', updateLaptopSize)
-    return () => window.removeEventListener('resize', updateLaptopSize)
+    window.addEventListener('resize', handleResize)
+    return () => {
+      window.removeEventListener('resize', handleResize)
+      if (resizeRaf !== null) {
+        cancelAnimationFrame(resizeRaf)
+      }
+    }
   }, [])
 
   useEffect(() => {
@@ -107,11 +126,13 @@ export const ContactSection = () => {
     const rect = event.currentTarget.getBoundingClientRect()
     const pointerX = (event.clientX - rect.left) / rect.width - 0.5
     const pointerY = (event.clientY - rect.top) / rect.height - 0.5
-    setLaptopTilt({ x: -pointerY * 8, y: pointerX * 10 })
+    tiltX.set(-pointerY * 8)
+    tiltY.set(pointerX * 10)
   }
 
   const resetLaptopTilt = () => {
-    setLaptopTilt({ x: 0, y: 0 })
+    tiltX.set(0)
+    tiltY.set(0)
   }
 
   return (
@@ -143,81 +164,35 @@ export const ContactSection = () => {
           </div>
         </div>
 
-        {/* Content Grid */}
-        <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center mb-20">
-          {/* Contact Info - Left Side */}
-          <div className="space-y-6 md:space-y-8 text-center md:text-left">
-            <div>
-              <h3 className="font-display text-xl md:text-2xl font-bold mb-4 md:mb-6" style={{ color: '#F5F0E8' }}>
-                Contact Information
-              </h3>
-              
-              <div className="space-y-6">
-                {/* Email */}
-                <motion.a
-                  href={`mailto:${resumeData.personal.email}`}
-                  className="flex items-center gap-4 p-4 rounded-xl transition-all group"
-                  style={{ backgroundColor: 'rgba(245, 240, 232, 0.05)' }}
-                  whileHover={{ x: 8, backgroundColor: 'rgba(232, 87, 12, 0.1)' }}
-                >
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#E8570C' }}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5F0E8" strokeWidth="2">
-                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                      <polyline points="22,6 12,13 2,6" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-sm" style={{ color: '#9B8B70' }}>Email</p>
-                    <p className="font-medium" style={{ color: '#F5F0E8' }}>{resumeData.personal.email}</p>
-                  </div>
-                </motion.a>
-
-                {/* Phone */}
-                <motion.a
-                  href={`tel:${resumeData.personal.phone}`}
-                  className="flex items-center gap-4 p-4 rounded-xl transition-all group"
-                  style={{ backgroundColor: 'rgba(245, 240, 232, 0.05)' }}
-                  whileHover={{ x: 8, backgroundColor: 'rgba(232, 87, 12, 0.1)' }}
-                >
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#D4A574' }}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A1208" strokeWidth="2">
-                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-sm" style={{ color: '#9B8B70' }}>Phone</p>
-                    <p className="font-medium" style={{ color: '#F5F0E8' }}>{resumeData.personal.phone}</p>
-                  </div>
-                </motion.a>
-
-                {/* Location */}
-                <div className="flex items-center gap-4 p-4 rounded-xl" style={{ backgroundColor: 'rgba(245, 240, 232, 0.05)' }}>
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(245, 240, 232, 0.1)' }}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5F0E8" strokeWidth="2">
-                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                      <circle cx="12" cy="10" r="3" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-sm" style={{ color: '#9B8B70' }}>Location</p>
-                    <p className="font-medium" style={{ color: '#F5F0E8' }}>India</p>
-                  </div>
-                </div>
+        {/* Laptop Row with left-side animation slot */}
+        <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center mb-12 md:mb-14">
+          {showRobotPanel && (
+            <div className="min-h-[340px] lg:min-h-[420px]">
+              <div
+                className="relative h-full min-h-[340px] lg:min-h-[420px] rounded-2xl overflow-hidden border will-change-transform"
+                style={{
+                  borderColor: isDark ? 'rgba(212, 165, 116, 0.22)' : 'rgba(212, 165, 116, 0.32)',
+                  background: isDark ? 'linear-gradient(145deg, #19140F, #0E0E0B)' : 'linear-gradient(145deg, #2A2520, #1A1208)',
+                }}
+              >
+                <InteractiveRobotSpline scene={ROBOT_SCENE_URL} className="absolute inset-0 z-0 transform-gpu" />
+                <div
+                  className="absolute inset-0 z-10 pointer-events-none"
+                  style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.28) 100%)' }}
+                />
               </div>
             </div>
-          </div>
+          )}
 
           {/* 3D Laptop - Right Side */}
           <motion.div
-            className="laptop-container flex justify-center items-center order-first md:order-last"
-            style={{ perspective: '2000px', perspectiveOrigin: '50% 50%' }}
+            className="laptop-container flex justify-center md:justify-end items-center"
+            style={{ perspective: '2000px', perspectiveOrigin: '50% 50%', rotateX: smoothTiltX, rotateY: smoothTiltY }}
             onMouseMove={handleLaptopMove}
             onMouseLeave={resetLaptopTilt}
             initial={{ opacity: 0, y: 42, scale: 0.94 }}
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
             viewport={{ once: true, amount: 0.3 }}
-            animate={{ rotateX: laptopTilt.x, rotateY: laptopTilt.y }}
-            transition={{ type: 'spring', stiffness: 135, damping: 16, mass: 0.7 }}
           >
           <motion.div
             className="relative"
@@ -429,6 +404,63 @@ export const ContactSection = () => {
             </div>
           </motion.div>
         </motion.div>
+        </div>
+
+        {/* Contact Info - Below Laptop */}
+        <div className="max-w-3xl mx-auto mb-16 md:mb-20">
+          <h3 className="font-display text-xl md:text-2xl font-bold mb-5 md:mb-7 text-center" style={{ color: '#F5F0E8' }}>
+            Contact Information
+          </h3>
+
+          <div className="grid sm:grid-cols-2 gap-4 md:gap-5">
+            <motion.a
+              href={`mailto:${resumeData.personal.email}`}
+              className="flex items-center gap-4 p-4 rounded-xl transition-all group"
+              style={{ backgroundColor: 'rgba(245, 240, 232, 0.05)' }}
+              whileHover={{ y: -4, backgroundColor: 'rgba(232, 87, 12, 0.1)' }}
+            >
+              <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#E8570C' }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5F0E8" strokeWidth="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                  <polyline points="22,6 12,13 2,6" />
+                </svg>
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm" style={{ color: '#9B8B70' }}>Email</p>
+                <p className="font-medium break-all" style={{ color: '#F5F0E8' }}>{resumeData.personal.email}</p>
+              </div>
+            </motion.a>
+
+            <motion.a
+              href={`tel:${resumeData.personal.phone}`}
+              className="flex items-center gap-4 p-4 rounded-xl transition-all group"
+              style={{ backgroundColor: 'rgba(245, 240, 232, 0.05)' }}
+              whileHover={{ y: -4, backgroundColor: 'rgba(232, 87, 12, 0.1)' }}
+            >
+              <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#D4A574' }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A1208" strokeWidth="2">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-sm" style={{ color: '#9B8B70' }}>Phone</p>
+                <p className="font-medium" style={{ color: '#F5F0E8' }}>{resumeData.personal.phone}</p>
+              </div>
+            </motion.a>
+
+            <div className="sm:col-span-2 flex items-center gap-4 p-4 rounded-xl" style={{ backgroundColor: 'rgba(245, 240, 232, 0.05)' }}>
+              <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(245, 240, 232, 0.1)' }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5F0E8" strokeWidth="2">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-sm" style={{ color: '#9B8B70' }}>Location</p>
+                <p className="font-medium" style={{ color: '#F5F0E8' }}>India</p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Footer */}

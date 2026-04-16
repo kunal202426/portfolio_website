@@ -1,3 +1,6 @@
 export { Awards } from './award'
 export type { AwardsComponentProps } from './award'
-export { default as HeroScrollAnimation } from './hero-scroll-animation'
+export { Gravity, MatterBody } from './gravity'
+export type { GravityRef } from './gravity'
+export { InteractiveRobotSpline } from './interactive-3d-robot'
+export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from './card'

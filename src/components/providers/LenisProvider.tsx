@@ -20,15 +20,16 @@ export const useLenis = () => {
 export const LenisProvider = ({ children }: { children: ReactNode }) => {
   const lenisRef = useRef<Lenis | null>(null)
   const rafIdRef = useRef<number | null>(null)
+  const scrollTriggerRafRef = useRef<number | null>(null)
   const [lenisInstance, setLenisInstance] = useState<Lenis | null>(null)
 
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 0.9,
+      duration: 0.82,
       easing: (t) => 1 - Math.pow(1 - t, 4),
       smoothWheel: true,
       smoothTouch: false,
-      wheelMultiplier: 0.95,
+      wheelMultiplier: 0.9,
       touchMultiplier: 1.2,
     })
     lenisRef.current = lenis
@@ -37,7 +38,12 @@ export const LenisProvider = ({ children }: { children: ReactNode }) => {
     window.lenis = lenis
 
     const onLenisScroll = () => {
-      ScrollTrigger.update()
+      if (scrollTriggerRafRef.current !== null) return
+
+      scrollTriggerRafRef.current = requestAnimationFrame(() => {
+        scrollTriggerRafRef.current = null
+        ScrollTrigger.update()
+      })
     }
     lenis.on('scroll', onLenisScroll)
 
@@ -50,6 +56,9 @@ export const LenisProvider = ({ children }: { children: ReactNode }) => {
 
     return () => {
       lenis.off('scroll', onLenisScroll)
+      if (scrollTriggerRafRef.current !== null) {
+        cancelAnimationFrame(scrollTriggerRafRef.current)
+      }
       if (rafIdRef.current !== null) {
         cancelAnimationFrame(rafIdRef.current)
       }

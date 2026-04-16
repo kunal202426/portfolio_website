@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight, Download, Loader2 } from 'lucide-react'
 import { Document, Page, pdfjs } from 'react-pdf'
@@ -24,47 +24,6 @@ export const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
   const [pdfFile, setPdfFile] = useState<string | Blob>(resumePdfUrl)
   const [fitMode, setFitMode] = useState<'width' | 'height' | 'custom'>('width')
 
-  // Debug PDF.js configuration and file accessibility
-  useEffect(() => {
-    console.log('PDF.js version:', pdfjs.version)
-    console.log('PDF.js worker source:', pdfjs.GlobalWorkerOptions.workerSrc)
-    
-    // Test if PDF file is accessible and check headers
-    fetch('/Resume_general.pdf')
-      .then(response => {
-        console.log('PDF file fetch response:', response.status, response.statusText)
-        console.log('Content-Type:', response.headers.get('content-type'))
-        console.log('Content-Length:', response.headers.get('content-length'))
-        console.log('Response headers:', [...response.headers.entries()])
-        
-        if (response.ok) {
-          console.log('✅ PDF file is accessible')
-          return response.arrayBuffer()
-        } else {
-          console.error('❌ PDF file not accessible:', response.status)
-          throw new Error(`HTTP ${response.status}`)
-        }
-      })
-      .then(arrayBuffer => {
-        console.log('PDF file size:', arrayBuffer.byteLength, 'bytes')
-        console.log('First few bytes:', new Uint8Array(arrayBuffer.slice(0, 10)))
-        
-        // Check if it starts with PDF header
-        const header = new Uint8Array(arrayBuffer.slice(0, 4))
-        const headerString = String.fromCharCode(...header)
-        console.log('PDF header:', headerString)
-        
-        if (headerString === '%PDF') {
-          console.log('✅ Valid PDF header found')
-        } else {
-          console.error('❌ Invalid PDF header:', headerString)
-        }
-      })
-      .catch(error => {
-        console.error('❌ Error fetching PDF file:', error)
-      })
-  }, [])
-
   // Handle keyboard navigation
   useEffect(() => {
     if (!isOpen) return
@@ -80,35 +39,25 @@ export const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
   }, [isOpen, onClose, totalPages])
 
   const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
-    console.log('PDF loaded successfully:', numPages, 'pages')
     setTotalPages(numPages)
     setIsLoading(false)
   }
 
-  const onDocumentLoadError = (error: Error) => {
-    console.error('Error loading PDF:', error)
-    console.error('Error message:', error.message)
-    console.error('Error stack:', error.stack)
-    console.error('PDF worker src:', pdfjs.GlobalWorkerOptions.workerSrc)
-    console.error('PDF.js version:', pdfjs.version)
+  const onDocumentLoadError = () => {
     setIsLoading(false)
     
     // Try loading via fetch as fallback if direct URL fails
     if (typeof pdfFile === 'string') {
-      console.log('🔄 Trying fetch fallback...')
       fetch(resumePdfUrl)
         .then(response => {
           if (!response.ok) throw new Error(`HTTP ${response.status}`)
           return response.blob()
         })
         .then(blob => {
-          console.log('✅ Loaded PDF via fetch, blob size:', blob.size, 'bytes')
           setPdfFile(blob)
           setIsLoading(true) // Reset loading to try again with blob
         })
-        .catch(fetchError => {
-          console.error('❌ Fetch fallback also failed:', fetchError)
-        })
+        .catch(() => {})
     }
   }
 

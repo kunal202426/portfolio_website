@@ -117,6 +117,8 @@ export const HeroSection = () => {
             bottom: '-34%',
             y: backY,
             willChange: 'transform',
+            transform: 'translateZ(0)',
+            backfaceVisibility: 'hidden',
             zIndex: 1,
             objectFit: 'cover',
             objectPosition: 'bottom',
@@ -133,6 +135,8 @@ export const HeroSection = () => {
             bottom: '-20%',
             y: middleY, 
             willChange: 'transform',
+            transform: 'translateZ(0)',
+            backfaceVisibility: 'hidden',
             zIndex: 2,
             objectFit: 'cover',
             objectPosition: 'bottom',
@@ -148,6 +152,8 @@ export const HeroSection = () => {
             y: textY, 
             opacity: textOpacity,
             willChange: 'transform, opacity',
+            transform: 'translateZ(0)',
+            backfaceVisibility: 'hidden',
             zIndex: 3,
             paddingBottom: '12rem'
           }}
@@ -183,6 +189,8 @@ export const HeroSection = () => {
           style={{ 
             y: frontY, 
             willChange: 'transform',
+            transform: 'translateZ(0)',
+            backfaceVisibility: 'hidden',
             zIndex: 4,
             objectFit: 'cover',
             objectPosition: 'bottom',

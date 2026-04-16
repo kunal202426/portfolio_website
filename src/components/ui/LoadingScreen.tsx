@@ -10,13 +10,43 @@ export const LoadingScreen = ({ onLoadComplete }: LoadingScreenProps) => {
   const [isComplete, setIsComplete] = useState(false)
 
   useEffect(() => {
-    // Show loader for 3.5 seconds (cinematic loading experience)
-    const timer = setTimeout(() => {
-      setIsComplete(true)
-      setTimeout(onLoadComplete, 400)
-    }, 3500)
+    const startedAt = performance.now()
+    const minimumVisibleMs = 650
+    const fallbackMaxWaitMs = 1600
 
-    return () => clearTimeout(timer)
+    let done = false
+    let completeTimer: number | null = null
+    let fallbackTimer: number | null = null
+
+    const complete = () => {
+      if (done) return
+      done = true
+
+      const elapsed = performance.now() - startedAt
+      const remaining = Math.max(0, minimumVisibleMs - elapsed)
+
+      completeTimer = window.setTimeout(() => {
+        setIsComplete(true)
+        window.setTimeout(onLoadComplete, 180)
+      }, remaining)
+    }
+
+    if (document.readyState === 'complete') {
+      complete()
+    } else {
+      window.addEventListener('load', complete, { once: true })
+      fallbackTimer = window.setTimeout(complete, fallbackMaxWaitMs)
+    }
+
+    return () => {
+      window.removeEventListener('load', complete)
+      if (completeTimer !== null) {
+        clearTimeout(completeTimer)
+      }
+      if (fallbackTimer !== null) {
+        clearTimeout(fallbackTimer)
+      }
+    }
   }, [onLoadComplete])
 
   if (isComplete) return null

@@ -26,6 +26,6 @@ export default defineConfig({
   },
   assetsInclude: ['**/*.pdf'],
   build: {
-    assetsInlineLimit: 0 // Don't inline PDFs
+    assetsInlineLimit: 0, // Don't inline PDFs
   }
 })
