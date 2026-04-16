@@ -35,7 +35,7 @@ export const ResumeSection = () => {
   }
 
   return (
-    <section id="resume" className="py-24 px-6 transition-colors duration-500" style={{ backgroundColor: isDark ? '#1A1510' : '#EFEBE3' }}>
+    <section id="resume" className="pt-0 pb-24 px-6 transition-colors duration-500" style={{ backgroundColor: isDark ? '#1A1510' : '#EFEBE3' }}>
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
         <motion.div 
@@ -43,11 +43,8 @@ export const ResumeSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-12"
         >
-          <span className="text-sm uppercase tracking-[0.2em] font-medium mb-4 block" style={{ color: '#E8570C' }}>
-            My Resume
-          </span>
           <h2 className="font-display text-4xl md:text-5xl font-bold mb-4 transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
             Professional Background
           </h2>

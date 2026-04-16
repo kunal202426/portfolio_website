@@ -9,6 +9,7 @@ import { AboutSection } from './components/ui/sections/AboutSection'
 import { ProjectsSection } from './components/ui/sections/ProjectsSection'
 import { ExperienceSection } from './components/ui/sections/ExperienceSection'
 import { TechMarquee } from './components/ui/sections/TechMarquee'
+import { RolesInterestSection } from './components/ui/sections/RolesInterestSection'
 import { EducationSection } from './components/ui/sections/EducationSection'
 import { CertificationsSection } from './components/ui/sections/CertificationsSection'
 import { ResumeSection } from './components/ui/sections/ResumeSection'
@@ -69,6 +70,7 @@ function AppContent() {
         <ProjectsSection />
         <TechMarquee />
         <ExperienceSection />
+        <RolesInterestSection />
         <ResumeSection />
         <div ref={educationCertRef} className="relative py-2 md:py-4">
           <motion.div
