@@ -28,13 +28,14 @@ export const HeroSection = () => {
     offset: ["start start", "end start"]
   })
   
-  // Text moves down and fades (goes behind mountains) - faster
-  const textY = useTransform(scrollYProgress, [0, 0.3], [0, 200])
-  const textOpacity = useTransform(scrollYProgress, [0, 0.25], [1, 0])
+  // Text moves downward faster so the parallax read is stronger.
+  const textY = useTransform(scrollYProgress, [0, 0.22], [0, 300])
+  const textOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0])
   
-  // Mountain parallax - back mountain stays static, others move
+  // Keep front mountain anchored to avoid exposing a bottom frame gap.
+  const backY = useTransform(scrollYProgress, [0, 0.6], [0, -140])
   const middleY = useTransform(scrollYProgress, [0, 0.6], [0, -60])
-  const frontY = useTransform(scrollYProgress, [0, 0.6], [0, -80])
+  const frontY = useTransform(scrollYProgress, [0, 1], [0, 0])
 
   useEffect(() => {
     if (!contentRef.current) return
@@ -100,17 +101,18 @@ export const HeroSection = () => {
           }}
         />
 
-        {/* Layer 5: Back Mountain (gemini2.png - static bg, doesn't move) */}
-        <img 
+        {/* Layer 5: Back Mountain (gemini2.png - faster upward for relative depth) */}
+        <motion.img 
           src={mountainBack} 
           alt="" 
           className="absolute left-0 w-full h-auto pointer-events-none"
           style={{ 
-            bottom: '-30%',
+            bottom: '-34%',
+            y: backY,
             zIndex: 1,
             objectFit: 'cover',
             objectPosition: 'bottom',
-            minHeight: '120%'
+            minHeight: '130%'
           }}
         />
 
@@ -157,7 +159,7 @@ export const HeroSection = () => {
               </p>
             </div>
 
-            <p className="hero-subtitle text-base md:text-lg max-w-2xl mx-auto leading-relaxed" style={{ color: '#9B8B70' }}>
+            <p className="hero-subtitle text-base md:text-lg max-w-2xl mx-auto leading-relaxed" style={{ color: '#FFFFFF' }}>
               Building scalable systems, training ML models, and analyzing data to drive insights - from backend APIs to production AI.
             </p>
           </div>
