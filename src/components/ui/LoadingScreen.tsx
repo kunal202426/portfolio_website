@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
 import { HashLoader } from 'react-spinners'
 
 interface LoadingScreenProps {
@@ -51,13 +50,12 @@ export const LoadingScreen = ({ onLoadComplete }: LoadingScreenProps) => {
 
   if (isComplete) return null
   return (
-    <motion.div
-      exit={{
-        opacity: 0,
-        transition: { duration: 0.4 }
-      }}
+    <div
       className="fixed inset-0 z-50 flex flex-col items-center justify-center"
-      style={{ backgroundColor: '#F5F0E8' }}
+      style={{
+        backgroundColor: '#F5F0E8',
+        position: 'fixed',
+      }}
     >
       {/* HashLoader Spinner */}
       <HashLoader
@@ -70,6 +68,6 @@ export const LoadingScreen = ({ onLoadComplete }: LoadingScreenProps) => {
       <p className="text-sm mt-8 tracking-wide" style={{ color: '#9B8B70' }}>
         Loading portfolio...
       </p>
-    </motion.div>
+    </div>
   )
 }

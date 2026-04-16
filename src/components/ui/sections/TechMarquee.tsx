@@ -4,12 +4,13 @@ import { PerspectiveMarquee } from '../remocn-perspective-marquee'
 import { resumeData } from '../../../lib/resume-data'
 
 type GravityModule = typeof import('../gravity')
+type GravityRuntimeMode = 'off' | 'mobile' | 'desktop'
 
 export const TechMarquee = () => {
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme === 'dark'
   const sectionRef = useRef<HTMLElement>(null)
-  const [allowInteractivePhysics, setAllowInteractivePhysics] = useState(false)
+  const [gravityMode, setGravityMode] = useState<GravityRuntimeMode>('off')
   const [shouldLoadPhysics, setShouldLoadPhysics] = useState(false)
   const [gravityModule, setGravityModule] = useState<GravityModule | null>(null)
 
@@ -63,15 +64,65 @@ export const TechMarquee = () => {
     { x: '38%', y: '68%' },
   ]
 
+  const allowInteractivePhysics = gravityMode !== 'off'
+
+  const gravityConfig = useMemo(() => {
+    if (gravityMode === 'desktop') {
+      return {
+        gravityY: 0.72,
+        maxFps: 44,
+        restitution: 0.28,
+        density: 0.0012,
+      }
+    }
+
+    if (gravityMode === 'mobile') {
+      return {
+        gravityY: 0.56,
+        maxFps: 30,
+        restitution: 0.18,
+        density: 0.001,
+      }
+    }
+
+    return {
+      gravityY: 0.72,
+      maxFps: 44,
+      restitution: 0.22,
+      density: 0.0011,
+    }
+  }, [gravityMode])
+
+  const activeGravitySkills = useMemo(
+    () => (gravityMode === 'mobile' ? gravitySkills.slice(0, 6) : gravitySkills),
+    [gravityMode, gravitySkills]
+  )
+
   useEffect(() => {
     const decidePhysicsMode = () => {
       const hasFinePointer = window.matchMedia('(pointer:fine)').matches
+      const hasCoarsePointer = window.matchMedia('(pointer:coarse)').matches
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
       const isDesktop = window.innerWidth >= 1024
       const deviceMemory = (navigator as Navigator & { deviceMemory?: number }).deviceMemory ?? 8
       const logicalCores = navigator.hardwareConcurrency ?? 8
 
-      setAllowInteractivePhysics(hasFinePointer && !reduceMotion && isDesktop && deviceMemory >= 4 && logicalCores >= 4)
+      if (reduceMotion) {
+        setGravityMode('off')
+        return
+      }
+
+      if (hasFinePointer && isDesktop && deviceMemory >= 4 && logicalCores >= 4) {
+        setGravityMode('desktop')
+        return
+      }
+
+      if (hasCoarsePointer && deviceMemory >= 2 && logicalCores >= 2) {
+        setGravityMode('mobile')
+        return
+      }
+
+      setGravityMode('off')
     }
 
     decidePhysicsMode()
@@ -144,8 +195,14 @@ export const TechMarquee = () => {
         >
           <div className="absolute inset-0 z-0">
             {allowInteractivePhysics && GravityComponent && MatterBodyComponent ? (
-              <GravityComponent gravity={{ x: 0, y: 0.72 }} className="w-full h-full" resetOnResize pauseWhenOffscreen maxFps={44}>
-                {gravitySkills.map((skill, index) => {
+              <GravityComponent
+                gravity={{ x: 0, y: gravityConfig.gravityY }}
+                className="w-full h-full"
+                resetOnResize
+                pauseWhenOffscreen
+                maxFps={gravityConfig.maxFps}
+              >
+                {activeGravitySkills.map((skill, index) => {
                   const position = gravityPositions[index] ?? { x: '50%', y: '18%' }
                   const bg = gravityPalette[index % gravityPalette.length]
 
@@ -154,8 +211,8 @@ export const TechMarquee = () => {
                       key={`${skill}-${index}`}
                       matterBodyOptions={{
                         friction: 0.42,
-                        restitution: 0.28,
-                        density: 0.0012,
+                        restitution: gravityConfig.restitution,
+                        density: gravityConfig.density,
                       }}
                       x={position.x}
                       y={position.y}
@@ -172,7 +229,7 @@ export const TechMarquee = () => {
               </GravityComponent>
             ) : (
               <div className="absolute inset-0">
-                {gravitySkills.map((skill, index) => {
+                {activeGravitySkills.map((skill, index) => {
                   const position = gravityPositions[index] ?? { x: '50%', y: '18%' }
                   const bg = gravityPalette[index % gravityPalette.length]
 

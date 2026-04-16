@@ -71,7 +71,7 @@ export const ContactSection = () => {
   const smoothTiltX = useSpring(tiltX, { stiffness: 220, damping: 24, mass: 0.4 })
   const smoothTiltY = useSpring(tiltY, { stiffness: 220, damping: 24, mass: 0.4 })
   const [showRobotPanel, setShowRobotPanel] = useState(() => (typeof window !== 'undefined' ? window.innerWidth >= 768 : true))
-  
+
   // Responsive laptop dimensions
   const [laptopSize, setLaptopSize] = useState(() => getLaptopSize(typeof window !== 'undefined' ? window.innerWidth : 1024))
 

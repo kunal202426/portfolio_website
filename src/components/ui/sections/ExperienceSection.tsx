@@ -58,9 +58,9 @@ export const ExperienceSection = () => {
         ease: 'none',
         scrollTrigger: {
           trigger: section,
-          start: 'top 70%',
-          end: 'bottom 15%',
-          scrub: 0.8,
+          start: 'top center',
+          end: 'bottom center',
+          scrub: true,
           invalidateOnRefresh: true,
           onRefresh: setPathDash,
         },

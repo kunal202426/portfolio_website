@@ -66,6 +66,14 @@ function calculatePosition(value: number | string | undefined, containerSize: nu
   return Math.min(Math.max(numeric, min), max)
 }
 
+function isCoarsePointerDevice() {
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+    return false
+  }
+
+  return window.matchMedia('(pointer: coarse)').matches
+}
+
 type GravityProps = {
   children: ReactNode
   debug?: boolean
@@ -94,6 +102,8 @@ type MatterBodyProps = {
 type PhysicsBody = {
   element: HTMLElement
   body: Matter.Body
+  width: number
+  height: number
   props: MatterBodyProps
 }
 
@@ -208,10 +218,10 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
 
       lastUiFrameTimeRef.current = time
 
-      bodiesMapRef.current.forEach(({ element, body }) => {
+      bodiesMapRef.current.forEach(({ element, body, width, height }) => {
         const { x, y } = body.position
         const rotation = body.angle * (180 / Math.PI)
-        element.style.transform = `translate(${x - element.offsetWidth / 2}px, ${y - element.offsetHeight / 2}px) rotate(${rotation}deg)`
+        element.style.transform = `translate3d(${x - width / 2}px, ${y - height / 2}px, 0) rotate(${rotation}deg)`
       })
 
       frameIdRef.current = requestAnimationFrame(updateElements)
@@ -221,8 +231,8 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
       (id: string, element: HTMLElement, bodyProps: MatterBodyProps) => {
         if (!canvasRef.current) return
 
-        const width = element.offsetWidth
-        const height = element.offsetHeight
+        const width = Math.max(1, element.offsetWidth)
+        const height = Math.max(1, element.offsetHeight)
         const canvasRect = canvasRef.current.getBoundingClientRect()
         const angle = (bodyProps.angle || 0) * (Math.PI / 180)
         const x = calculatePosition(bodyProps.x, canvasRect.width, width)
@@ -289,7 +299,8 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
         }
 
         World.add(engineRef.current.world, body)
-        bodiesMapRef.current.set(id, { element, body, props: bodyProps })
+        element.style.willChange = 'transform'
+        bodiesMapRef.current.set(id, { element, body, width, height, props: bodyProps })
       },
       [debug]
     )
@@ -394,6 +405,8 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
     const initializeRenderer = useCallback(() => {
       if (!canvasRef.current) return
 
+      const coarsePointer = isCoarsePointerDevice()
+
       const width = canvasRef.current.offsetWidth
       const height = canvasRef.current.offsetHeight
       if (!width || !height) return
@@ -404,6 +417,9 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
 
       engineRef.current.gravity.x = gravity.x
       engineRef.current.gravity.y = gravity.y
+        engineRef.current.positionIterations = coarsePointer ? 4 : 6
+        engineRef.current.velocityIterations = coarsePointer ? 3 : 4
+        engineRef.current.constraintIterations = coarsePointer ? 1 : 2
 
       const mouse = Mouse.create(canvasRef.current)
       mouseRef.current = mouse
@@ -417,7 +433,7 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
             height,
             wireframes: false,
             background: '#00000000',
-            pixelRatio: Math.min(window.devicePixelRatio || 1, 1.25),
+            pixelRatio: coarsePointer ? 1 : Math.min(window.devicePixelRatio || 1, 1.25),
           },
         })
 
@@ -430,7 +446,7 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
       mouseConstraintRef.current = MouseConstraint.create(engineRef.current, {
         mouse,
         constraint: {
-          stiffness: 0.2,
+          stiffness: coarsePointer ? 0.14 : 0.2,
           render: {
             visible: debug,
           },

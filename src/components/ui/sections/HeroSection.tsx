@@ -19,6 +19,7 @@ gsap.registerPlugin(ScrollTrigger)
 export const HeroSection = () => {
   const containerRef = useRef<HTMLElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
+  const heroScrollRef = useRef<HTMLDivElement>(null)
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme === 'dark'
   
@@ -48,6 +49,7 @@ export const HeroSection = () => {
     if (!contentRef.current) return
 
     const ctx = gsap.context(() => {
+      const scrollIndicator = heroScrollRef.current
       const tl = gsap.timeline({ delay: 0.8 })
 
       // Hero name slides in as a solid block from left
@@ -70,20 +72,23 @@ export const HeroSection = () => {
         duration: 0.8,
         ease: "power2.out"
       }, "-=0.4")
-      .from('.hero-scroll', {
-        y: 20,
-        opacity: 0,
-        duration: 0.6,
-        ease: "power2.out"
-      }, "-=0.3")
 
-      gsap.to('.hero-scroll', {
-        y: 10,
-        duration: 1.5,
-        repeat: -1,
-        yoyo: true,
-        ease: "power2.inOut"
-      })
+      if (scrollIndicator) {
+        tl.from(scrollIndicator, {
+          y: 20,
+          opacity: 0,
+          duration: 0.6,
+          ease: 'power2.out',
+        }, '-=0.3')
+
+        gsap.to(scrollIndicator, {
+          y: 10,
+          duration: 1.5,
+          repeat: -1,
+          yoyo: true,
+          ease: 'power2.inOut',
+        })
+      }
     }, contentRef)
 
     return () => ctx.revert()
@@ -220,6 +225,7 @@ export const HeroSection = () => {
 
         {/* Layer 5: Scroll Indicator - on top */}
         <div 
+          ref={heroScrollRef}
           className="hero-scroll absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2"
           style={{ zIndex: 20 }}
         >
