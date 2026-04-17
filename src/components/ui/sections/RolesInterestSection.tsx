@@ -12,8 +12,24 @@ const CONFIG = {
 const LOOP_SIZE = CONFIG.itemCount * CONFIG.zGap
 const TUNNEL_SCROLL_DISTANCE = ((CONFIG.itemCount - 1) * CONFIG.zGap) / CONFIG.camSpeed
 const VELOCITY_SMOOTHING = 0.06
-const LOCK_SCROLL_DISTANCE = 4800
+const LOCK_SCROLL_DISTANCE_DESKTOP = 4800
+const LOCK_SCROLL_DISTANCE_TOUCH = 1650
+const TOUCH_SCROLL_GAIN = 2.2
+const MAX_NORMALIZED_DELTA_DESKTOP = 120
+const MAX_NORMALIZED_DELTA_TOUCH = 180
 const RENDER_PROGRESS_SMOOTHING = 0.18
+
+function supportsTouchInput() {
+  if (typeof window === 'undefined') return false
+
+  const canMatchMedia = typeof window.matchMedia === 'function'
+  const coarsePrimary = canMatchMedia ? window.matchMedia('(pointer: coarse)').matches : false
+  const coarseAny = canMatchMedia ? window.matchMedia('(any-pointer: coarse)').matches : false
+  const touchPoints = navigator.maxTouchPoints ?? 0
+  const legacyTouchEvents = 'ontouchstart' in window
+
+  return coarsePrimary || coarseAny || touchPoints > 0 || legacyTouchEvents
+}
 
 const TEXTS = [
   'FULL STACK DEVELOPER',
@@ -187,6 +203,10 @@ export const RolesInterestSection = () => {
   }, [])
 
   useEffect(() => {
+    const isTouchDevice = supportsTouchInput()
+    const lockScrollDistance = isTouchDevice ? LOCK_SCROLL_DISTANCE_TOUCH : LOCK_SCROLL_DISTANCE_DESKTOP
+    const maxNormalizedDelta = isTouchDevice ? MAX_NORMALIZED_DELTA_TOUCH : MAX_NORMALIZED_DELTA_DESKTOP
+
     const onMouseMove = (event: MouseEvent) => {
       animState.current.mouseX = (event.clientX / window.innerWidth - 0.5) * 2
       animState.current.mouseY = (event.clientY / window.innerHeight - 0.5) * 2
@@ -321,7 +341,7 @@ export const RolesInterestSection = () => {
       window.scrollTo({ top: metrics.topDoc, behavior: 'auto' })
     }
 
-    const updateLockProgress = (delta: number) => {
+    const updateLockProgress = (delta: number, source: 'wheel' | 'touch' | 'key' = 'wheel') => {
       if (hasCompletedLockRef.current) return
 
       if (!isScrollLockedRef.current) {
@@ -333,8 +353,9 @@ export const RolesInterestSection = () => {
 
       if (!isScrollLockedRef.current) return
 
-      const normalizedDelta = Math.sign(delta) * Math.min(Math.abs(delta), 120)
-      const next = Math.min(1, Math.max(0, lockProgressRef.current + normalizedDelta / LOCK_SCROLL_DISTANCE))
+      const gain = source === 'touch' ? TOUCH_SCROLL_GAIN : 1
+      const normalizedDelta = Math.sign(delta) * Math.min(Math.abs(delta) * gain, maxNormalizedDelta)
+      const next = Math.min(1, Math.max(0, lockProgressRef.current + normalizedDelta / lockScrollDistance))
       lockProgressRef.current = next
 
       if (next >= 1 && normalizedDelta > 0) {
@@ -368,7 +389,7 @@ export const RolesInterestSection = () => {
         }
       }
 
-      updateLockProgress(event.deltaY)
+      updateLockProgress(event.deltaY, 'wheel')
 
       if (lockAnchorYRef.current !== null) {
         window.scrollTo({ top: lockAnchorYRef.current, behavior: 'auto' })
@@ -414,7 +435,7 @@ export const RolesInterestSection = () => {
       if (!shouldCaptureLock()) return
 
       event.preventDefault()
-      updateLockProgress(delta)
+      updateLockProgress(delta, 'touch')
 
       if (lockAnchorYRef.current !== null) {
         window.scrollTo({ top: lockAnchorYRef.current, behavior: 'auto' })
@@ -429,7 +450,7 @@ export const RolesInterestSection = () => {
       if (event.key === 'ArrowDown' || event.key === 'PageDown' || (event.key === ' ' && !event.shiftKey)) {
         if (!shouldCaptureLock()) return
         event.preventDefault()
-        updateLockProgress(120)
+        updateLockProgress(120, 'key')
 
         if (lockAnchorYRef.current !== null) {
           window.scrollTo({ top: lockAnchorYRef.current, behavior: 'auto' })
@@ -449,7 +470,7 @@ export const RolesInterestSection = () => {
         if (!shouldCaptureLock()) return
 
         event.preventDefault()
-        updateLockProgress(-120)
+        updateLockProgress(-120, 'key')
 
         if (lockAnchorYRef.current !== null) {
           window.scrollTo({ top: lockAnchorYRef.current, behavior: 'auto' })

@@ -22,6 +22,14 @@ export const ExperienceSection = () => {
     const pathElement = pathRef.current
     if (!section || !svgElement || !pathElement) return
 
+    const isTouchViewport =
+      window.matchMedia('(pointer: coarse)').matches ||
+      window.matchMedia('(max-width: 1023px)').matches
+
+    const timelineStart = isTouchViewport ? 'top 82%' : 'top center'
+    const timelineEnd = isTouchViewport ? 'bottom 22%' : 'bottom center'
+    const cardsStart = isTouchViewport ? 'top 74%' : 'top 60%'
+
     const setPathDash = () => {
       const pathLength = pathElement.getTotalLength()
       pathElement.setAttribute('stroke-dasharray', String(pathLength))
@@ -58,8 +66,8 @@ export const ExperienceSection = () => {
         ease: 'none',
         scrollTrigger: {
           trigger: section,
-          start: 'top center',
-          end: 'bottom center',
+          start: timelineStart,
+          end: timelineEnd,
           scrub: true,
           invalidateOnRefresh: true,
           onRefresh: setPathDash,
@@ -75,7 +83,7 @@ export const ExperienceSection = () => {
         ease: 'power3.out',
         scrollTrigger: {
           trigger: section,
-          start: 'top 60%'
+          start: cardsStart,
         }
       })
     }, section)
