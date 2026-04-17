@@ -77,6 +77,7 @@ export const TechMarquee = () => {
   ]
 
   const allowInteractivePhysics = gravityMode !== 'off'
+  const allowTouchScrollOnStrips = gravityMode === 'mobile'
 
   const gravityConfig = useMemo(() => {
     if (gravityMode === 'desktop') {
@@ -264,7 +265,10 @@ export const TechMarquee = () => {
             )}
           </div>
 
-          <div className="relative z-10 h-[170px] sm:h-[180px] pointer-events-none">
+          <div
+            className={`relative z-10 h-[170px] sm:h-[180px] ${allowTouchScrollOnStrips ? 'pointer-events-auto touch-pan-y' : 'pointer-events-none'}`}
+            style={allowTouchScrollOnStrips ? { touchAction: 'pan-y' } : undefined}
+          >
             <PerspectiveMarquee
               items={row1Skills}
               fontSize={34}
@@ -279,7 +283,13 @@ export const TechMarquee = () => {
             />
           </div>
 
-          <div className="relative z-10 h-[170px] sm:h-[180px] border-t pointer-events-none" style={{ borderColor: isDark ? 'rgba(212, 165, 116, 0.15)' : 'rgba(212, 165, 116, 0.25)' }}>
+          <div
+            className={`relative z-10 h-[170px] sm:h-[180px] border-t ${allowTouchScrollOnStrips ? 'pointer-events-auto touch-pan-y' : 'pointer-events-none'}`}
+            style={{
+              borderColor: isDark ? 'rgba(212, 165, 116, 0.15)' : 'rgba(212, 165, 116, 0.25)',
+              ...(allowTouchScrollOnStrips ? { touchAction: 'pan-y' } : {}),
+            }}
+          >
             <PerspectiveMarquee
               items={row2Skills}
               fontSize={34}
