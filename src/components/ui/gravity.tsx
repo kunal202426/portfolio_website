@@ -396,12 +396,12 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
       if (canvasRef.current && touchStartGateHandlerRef.current) {
         canvasRef.current.removeEventListener('touchstart', touchStartGateHandlerRef.current)
       }
-      if (touchMoveGateHandlerRef.current) {
-        window.removeEventListener('touchmove', touchMoveGateHandlerRef.current)
+      if (canvasRef.current && touchMoveGateHandlerRef.current) {
+        canvasRef.current.removeEventListener('touchmove', touchMoveGateHandlerRef.current)
       }
-      if (touchEndGateHandlerRef.current) {
-        window.removeEventListener('touchend', touchEndGateHandlerRef.current)
-        window.removeEventListener('touchcancel', touchEndGateHandlerRef.current)
+      if (canvasRef.current && touchEndGateHandlerRef.current) {
+        canvasRef.current.removeEventListener('touchend', touchEndGateHandlerRef.current)
+        canvasRef.current.removeEventListener('touchcancel', touchEndGateHandlerRef.current)
       }
       pointerDownHandlerRef.current = null
       pointerUpHandlerRef.current = null
@@ -445,7 +445,7 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
       const width = canvasRef.current.offsetWidth
       const height = canvasRef.current.offsetHeight
       if (!width || !height) {
-        if (attempt < 20) {
+        if (attempt < 60) {
           initRetryFrameRef.current = requestAnimationFrame(() => {
             initializeRenderer(attempt + 1)
           })
@@ -500,13 +500,6 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
           }
 
           touchRouteToMatterRef.current = false
-          if (touchMoveGateHandlerRef.current) {
-            window.removeEventListener('touchmove', touchMoveGateHandlerRef.current)
-          }
-          if (touchEndGateHandlerRef.current) {
-            window.removeEventListener('touchend', touchEndGateHandlerRef.current)
-            window.removeEventListener('touchcancel', touchEndGateHandlerRef.current)
-          }
         }
 
         touchStartGateHandlerRef.current = (event: TouchEvent) => {
@@ -518,17 +511,16 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
           }
 
           mouse.mousedown(event)
-
-          if (touchMoveGateHandlerRef.current) {
-            window.addEventListener('touchmove', touchMoveGateHandlerRef.current, { passive: false })
-          }
-          if (touchEndGateHandlerRef.current) {
-            window.addEventListener('touchend', touchEndGateHandlerRef.current, { passive: false })
-            window.addEventListener('touchcancel', touchEndGateHandlerRef.current, { passive: false })
-          }
         }
 
         canvasRef.current.addEventListener('touchstart', touchStartGateHandlerRef.current, { passive: false })
+        if (touchMoveGateHandlerRef.current) {
+          canvasRef.current.addEventListener('touchmove', touchMoveGateHandlerRef.current, { passive: false })
+        }
+        if (touchEndGateHandlerRef.current) {
+          canvasRef.current.addEventListener('touchend', touchEndGateHandlerRef.current, { passive: false })
+          canvasRef.current.addEventListener('touchcancel', touchEndGateHandlerRef.current, { passive: false })
+        }
       }
 
       if (debug) {
