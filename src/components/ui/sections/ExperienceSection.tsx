@@ -26,8 +26,9 @@ export const ExperienceSection = () => {
       window.matchMedia('(pointer: coarse)').matches ||
       window.matchMedia('(max-width: 1023px)').matches
 
-    const timelineStart = isTouchViewport ? 'top 82%' : 'top center'
-    const timelineEnd = isTouchViewport ? 'bottom 22%' : 'bottom center'
+    // On small/touch screens, tie the reveal to the viewport middle for tighter perceived sync.
+    const timelineStart = isTouchViewport ? 'top 50%' : 'top center'
+    const timelineEnd = isTouchViewport ? 'bottom 50%' : 'bottom center'
     const cardsStart = isTouchViewport ? 'top 74%' : 'top 60%'
 
     const setPathDash = () => {

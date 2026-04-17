@@ -192,6 +192,10 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
     ref
   ) => {
     const canvasRef = useRef<HTMLDivElement>(null)
+    const canHover = typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+      ? window.matchMedia('(hover: hover)').matches
+      : false
+    const allowTouchPassThrough = isCoarsePointerDevice() && !canHover
     const engineRef = useRef(Engine.create())
     const renderRef = useRef<Render | null>(null)
     const mouseRef = useRef<Matter.Mouse | null>(null)
@@ -600,7 +604,15 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
 
     return (
       <GravityContext.Provider value={{ registerElement, unregisterElement }}>
-        <div ref={canvasRef} className={cn(className, 'absolute inset-0 pointer-events-auto touch-none')} {...props}>
+        <div
+          ref={canvasRef}
+          className={cn(
+            className,
+            'absolute inset-0',
+            allowTouchPassThrough ? 'pointer-events-none touch-auto' : 'pointer-events-auto touch-none'
+          )}
+          {...props}
+        >
           {children}
         </div>
       </GravityContext.Provider>
