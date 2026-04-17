@@ -221,6 +221,7 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
     const touchMoveGateHandlerRef = useRef<((event: TouchEvent) => void) | null>(null)
     const touchEndGateHandlerRef = useRef<((event: TouchEvent) => void) | null>(null)
     const touchRouteToMatterRef = useRef(false)
+    const initRetryFrameRef = useRef<number | null>(null)
 
     useEffect(() => {
       frameIntervalRef.current = 1000 / Math.max(20, maxFps)
@@ -410,6 +411,10 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
       touchMoveGateHandlerRef.current = null
       touchEndGateHandlerRef.current = null
       touchRouteToMatterRef.current = false
+      if (initRetryFrameRef.current !== null) {
+        cancelAnimationFrame(initRetryFrameRef.current)
+        initRetryFrameRef.current = null
+      }
 
       if (mouseConstraintRef.current) {
         World.remove(engineRef.current.world, mouseConstraintRef.current)
@@ -432,14 +437,26 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
       runnerRef.current = null
     }, [stopEngine])
 
-    const initializeRenderer = useCallback(() => {
+    const initializeRenderer = useCallback((attempt = 0) => {
       if (!canvasRef.current) return
 
       const coarsePointer = isCoarsePointerDevice()
 
       const width = canvasRef.current.offsetWidth
       const height = canvasRef.current.offsetHeight
-      if (!width || !height) return
+      if (!width || !height) {
+        if (attempt < 20) {
+          initRetryFrameRef.current = requestAnimationFrame(() => {
+            initializeRenderer(attempt + 1)
+          })
+        }
+        return
+      }
+
+      if (initRetryFrameRef.current !== null) {
+        cancelAnimationFrame(initRetryFrameRef.current)
+        initRetryFrameRef.current = null
+      }
 
       canvasSizeRef.current = { width, height }
 

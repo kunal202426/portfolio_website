@@ -43,6 +43,9 @@ export const ExperienceSection = () => {
     const imageElements = Array.from(section.querySelectorAll('img'))
     const imageLoadHandler = () => refreshScroll()
 
+    let postLayoutRefreshFrameA: number | null = null
+    let postLayoutRefreshFrameB: number | null = null
+
     imageElements.forEach((img) => {
       if (!img.complete) {
         img.addEventListener('load', imageLoadHandler, { once: true })
@@ -59,6 +62,21 @@ export const ExperienceSection = () => {
     }
 
     window.addEventListener('load', refreshScroll)
+
+    // Cached assets can skip image/load callbacks; force a post-layout refresh cycle.
+    postLayoutRefreshFrameA = requestAnimationFrame(() => {
+      postLayoutRefreshFrameB = requestAnimationFrame(() => {
+        refreshScroll()
+      })
+    })
+
+    if ('fonts' in document) {
+      ;(document as Document & { fonts?: { ready: Promise<unknown> } }).fonts?.ready
+        .then(() => refreshScroll())
+        .catch(() => {
+          // Ignore font readiness errors; a regular refresh is already scheduled.
+        })
+    }
 
     const ctx = gsap.context(() => {
       if (isTouchViewport) {
@@ -112,6 +130,12 @@ export const ExperienceSection = () => {
 
     return () => {
       window.removeEventListener('load', refreshScroll)
+      if (postLayoutRefreshFrameA !== null) {
+        cancelAnimationFrame(postLayoutRefreshFrameA)
+      }
+      if (postLayoutRefreshFrameB !== null) {
+        cancelAnimationFrame(postLayoutRefreshFrameB)
+      }
       if (resizeObserver) resizeObserver.disconnect()
       ctx.revert()
     }
