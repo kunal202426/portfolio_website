@@ -203,6 +203,9 @@ export const RolesInterestSection = () => {
   }, [])
 
   useEffect(() => {
+    const sectionNode = sectionRef.current
+    if (!sectionNode) return
+
     const isTouchDevice = supportsTouchInput()
     const lockScrollDistance = isTouchDevice ? LOCK_SCROLL_DISTANCE_TOUCH : LOCK_SCROLL_DISTANCE_DESKTOP
     const maxNormalizedDelta = isTouchDevice ? MAX_NORMALIZED_DELTA_TOUCH : MAX_NORMALIZED_DELTA_DESKTOP
@@ -487,10 +490,10 @@ export const RolesInterestSection = () => {
       }
     }
 
-    window.addEventListener('wheel', onWheel, { passive: false })
-    window.addEventListener('touchstart', onTouchStart, { passive: false })
-    window.addEventListener('touchmove', onTouchMove, { passive: false })
-    window.addEventListener('touchend', onTouchEnd)
+    sectionNode.addEventListener('wheel', onWheel, { passive: false })
+    sectionNode.addEventListener('touchstart', onTouchStart, { passive: false })
+    sectionNode.addEventListener('touchmove', onTouchMove, { passive: false })
+    sectionNode.addEventListener('touchend', onTouchEnd)
     window.addEventListener('keydown', onKeyDown)
     window.addEventListener('scroll', onNativeScroll, { passive: true })
 
@@ -603,10 +606,10 @@ export const RolesInterestSection = () => {
 
     return () => {
       window.removeEventListener('mousemove', onMouseMove)
-      window.removeEventListener('wheel', onWheel)
-      window.removeEventListener('touchstart', onTouchStart)
-      window.removeEventListener('touchmove', onTouchMove)
-      window.removeEventListener('touchend', onTouchEnd)
+      sectionNode.removeEventListener('wheel', onWheel)
+      sectionNode.removeEventListener('touchstart', onTouchStart)
+      sectionNode.removeEventListener('touchmove', onTouchMove)
+      sectionNode.removeEventListener('touchend', onTouchEnd)
       window.removeEventListener('keydown', onKeyDown)
       window.removeEventListener('scroll', onNativeScroll)
 
