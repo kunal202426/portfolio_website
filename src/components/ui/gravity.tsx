@@ -227,6 +227,21 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
       frameIntervalRef.current = 1000 / Math.max(20, maxFps)
     }, [maxFps])
 
+    const detachMouseInputListeners = useCallback((mouse: Matter.Mouse | null) => {
+      if (!mouse) return
+
+      const element = mouse.element as HTMLElement | null
+      if (!element) return
+
+      element.removeEventListener('mousemove', mouse.mousemove)
+      element.removeEventListener('mousedown', mouse.mousedown)
+      element.removeEventListener('mouseup', mouse.mouseup)
+      element.removeEventListener('wheel', mouse.mousewheel)
+      element.removeEventListener('touchmove', mouse.mousemove)
+      element.removeEventListener('touchstart', mouse.mousedown)
+      element.removeEventListener('touchend', mouse.mouseup)
+    }, [])
+
     const updateElements = useCallback((time: number) => {
       if (time - lastUiFrameTimeRef.current < frameIntervalRef.current) {
         frameIdRef.current = requestAnimationFrame(updateElements)
@@ -421,6 +436,7 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
       }
 
       if (mouseRef.current) {
+        detachMouseInputListeners(mouseRef.current)
         Mouse.clearSourceEvents(mouseRef.current)
       }
 
@@ -643,10 +659,24 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
       if (autoStart) {
         syncEngineState()
       }
-    }, [addTopWall, autoStart, debug, grabCursor, gravity.x, gravity.y, pauseWhenOffscreen, syncEngineState])
+    }, [addTopWall, autoStart, debug, detachMouseInputListeners, grabCursor, gravity.x, gravity.y, pauseWhenOffscreen, syncEngineState])
 
     const handleResize = useCallback(() => {
       if (!resetOnResize || !canvasRef.current) return
+
+      const nextWidth = canvasRef.current.offsetWidth
+      const nextHeight = canvasRef.current.offsetHeight
+      if (!nextWidth || !nextHeight) return
+
+      const widthDelta = Math.abs(nextWidth - canvasSizeRef.current.width)
+      const heightDelta = Math.abs(nextHeight - canvasSizeRef.current.height)
+      const isNoOpResize = widthDelta < 1 && heightDelta < 1
+      const isTransientMobileViewportJitter = isCoarsePointerDevice() && widthDelta < 2 && heightDelta < 20
+
+      if (isNoOpResize || isTransientMobileViewportJitter) {
+        return
+      }
+
       clearRenderer()
       initializeRenderer()
     }, [clearRenderer, initializeRenderer, resetOnResize])
