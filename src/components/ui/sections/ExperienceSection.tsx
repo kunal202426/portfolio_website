@@ -26,9 +26,9 @@ export const ExperienceSection = () => {
       window.matchMedia('(pointer: coarse)').matches ||
       window.matchMedia('(max-width: 1023px)').matches
 
-    // On small/touch screens, tie the reveal to the viewport middle for tighter perceived sync.
-    const timelineStart = isTouchViewport ? 'top 50%' : 'top center'
-    const timelineEnd = isTouchViewport ? 'bottom 50%' : 'bottom center'
+    // On small/touch screens, widen trigger bounds so progress remains stable during kinetic scroll.
+    const timelineStart = isTouchViewport ? 'top 72%' : 'top center'
+    const timelineEnd = isTouchViewport ? 'bottom 28%' : 'bottom center'
     const cardsStart = isTouchViewport ? 'top 74%' : 'top 60%'
 
     const setPathDash = () => {
