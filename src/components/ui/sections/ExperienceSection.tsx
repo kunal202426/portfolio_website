@@ -35,6 +35,7 @@ export const ExperienceSection = () => {
       const pathLength = pathElement.getTotalLength()
       pathElement.setAttribute('stroke-dasharray', String(pathLength))
       pathElement.setAttribute('stroke-dashoffset', String(pathLength))
+      return pathLength
     }
 
     const refreshScroll = () => ScrollTrigger.refresh()
@@ -60,20 +61,40 @@ export const ExperienceSection = () => {
     window.addEventListener('load', refreshScroll)
 
     const ctx = gsap.context(() => {
-      setPathDash()
+      if (isTouchViewport) {
+        let pathLength = setPathDash()
 
-      gsap.to(pathElement, {
-        strokeDashoffset: 0,
-        ease: 'none',
-        scrollTrigger: {
+        ScrollTrigger.create({
           trigger: section,
           start: timelineStart,
           end: timelineEnd,
-          scrub: true,
           invalidateOnRefresh: true,
-          onRefresh: setPathDash,
-        },
-      })
+          onRefresh: (self) => {
+            pathLength = setPathDash()
+            pathElement.setAttribute('stroke-dashoffset', String(pathLength * (1 - self.progress)))
+          },
+          onUpdate: (self) => {
+            pathElement.setAttribute('stroke-dashoffset', String(pathLength * (1 - self.progress)))
+          },
+        })
+      } else {
+        setPathDash()
+
+        gsap.to(pathElement, {
+          strokeDashoffset: 0,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: section,
+            start: timelineStart,
+            end: timelineEnd,
+            scrub: true,
+            invalidateOnRefresh: true,
+            onRefresh: () => {
+              setPathDash()
+            },
+          },
+        })
+      }
 
       // Stagger cards
       gsap.from('.exp-card', {

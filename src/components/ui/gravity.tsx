@@ -393,14 +393,14 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
         window.removeEventListener('pointerup', pointerUpHandlerRef.current)
       }
       if (canvasRef.current && touchStartGateHandlerRef.current) {
-        canvasRef.current.removeEventListener('touchstart', touchStartGateHandlerRef.current, true)
+        canvasRef.current.removeEventListener('touchstart', touchStartGateHandlerRef.current)
       }
-      if (canvasRef.current && touchMoveGateHandlerRef.current) {
-        canvasRef.current.removeEventListener('touchmove', touchMoveGateHandlerRef.current, true)
+      if (touchMoveGateHandlerRef.current) {
+        window.removeEventListener('touchmove', touchMoveGateHandlerRef.current)
       }
-      if (canvasRef.current && touchEndGateHandlerRef.current) {
-        canvasRef.current.removeEventListener('touchend', touchEndGateHandlerRef.current, true)
-        canvasRef.current.removeEventListener('touchcancel', touchEndGateHandlerRef.current, true)
+      if (touchEndGateHandlerRef.current) {
+        window.removeEventListener('touchend', touchEndGateHandlerRef.current)
+        window.removeEventListener('touchcancel', touchEndGateHandlerRef.current)
       }
       pointerDownHandlerRef.current = null
       pointerUpHandlerRef.current = null
@@ -455,9 +455,41 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
       mouseRef.current = mouse
 
       if (coarsePointer && canvasRef.current) {
+        // Matter's default touch listeners prevent scrolling for the entire strip.
+        // We remove them and only proxy touches that start on draggable chips.
+        canvasRef.current.removeEventListener('touchstart', mouse.mousedown)
+        canvasRef.current.removeEventListener('touchmove', mouse.mousemove)
+        canvasRef.current.removeEventListener('touchend', mouse.mouseup)
+
+        const resolveTargetElement = (target: EventTarget | null) => {
+          if (target instanceof Element) return target
+          if (target instanceof Node) return target.parentElement
+          return null
+        }
+
         const shouldRouteToMatter = (target: EventTarget | null) => {
-          if (!(target instanceof Element)) return false
-          return Boolean(target.closest('[data-gravity-draggable="true"]'))
+          const targetElement = resolveTargetElement(target)
+          return Boolean(targetElement?.closest('[data-gravity-draggable="true"]'))
+        }
+
+        touchMoveGateHandlerRef.current = (event: TouchEvent) => {
+          if (!touchRouteToMatterRef.current) return
+          mouse.mousemove(event)
+        }
+
+        touchEndGateHandlerRef.current = (event: TouchEvent) => {
+          if (touchRouteToMatterRef.current) {
+            mouse.mouseup(event)
+          }
+
+          touchRouteToMatterRef.current = false
+          if (touchMoveGateHandlerRef.current) {
+            window.removeEventListener('touchmove', touchMoveGateHandlerRef.current)
+          }
+          if (touchEndGateHandlerRef.current) {
+            window.removeEventListener('touchend', touchEndGateHandlerRef.current)
+            window.removeEventListener('touchcancel', touchEndGateHandlerRef.current)
+          }
         }
 
         touchStartGateHandlerRef.current = (event: TouchEvent) => {
@@ -465,28 +497,21 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
           touchRouteToMatterRef.current = routeToMatter
 
           if (!routeToMatter) {
-            event.stopImmediatePropagation()
+            return
+          }
+
+          mouse.mousedown(event)
+
+          if (touchMoveGateHandlerRef.current) {
+            window.addEventListener('touchmove', touchMoveGateHandlerRef.current, { passive: false })
+          }
+          if (touchEndGateHandlerRef.current) {
+            window.addEventListener('touchend', touchEndGateHandlerRef.current, { passive: false })
+            window.addEventListener('touchcancel', touchEndGateHandlerRef.current, { passive: false })
           }
         }
 
-        touchMoveGateHandlerRef.current = (event: TouchEvent) => {
-          if (!touchRouteToMatterRef.current) {
-            event.stopImmediatePropagation()
-          }
-        }
-
-        touchEndGateHandlerRef.current = (event: TouchEvent) => {
-          if (!touchRouteToMatterRef.current) {
-            event.stopImmediatePropagation()
-          }
-
-          touchRouteToMatterRef.current = false
-        }
-
-        canvasRef.current.addEventListener('touchstart', touchStartGateHandlerRef.current, { capture: true, passive: true })
-        canvasRef.current.addEventListener('touchmove', touchMoveGateHandlerRef.current, { capture: true, passive: true })
-        canvasRef.current.addEventListener('touchend', touchEndGateHandlerRef.current, { capture: true, passive: true })
-        canvasRef.current.addEventListener('touchcancel', touchEndGateHandlerRef.current, { capture: true, passive: true })
+        canvasRef.current.addEventListener('touchstart', touchStartGateHandlerRef.current, { passive: false })
       }
 
       if (debug) {
