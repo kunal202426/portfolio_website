@@ -6,6 +6,18 @@ import { resumeData } from '../../../lib/resume-data'
 type GravityModule = typeof import('../gravity')
 type GravityRuntimeMode = 'off' | 'mobile' | 'desktop'
 
+function supportsTouchInput() {
+  if (typeof window === 'undefined') return false
+
+  const canMatchMedia = typeof window.matchMedia === 'function'
+  const coarsePrimary = canMatchMedia ? window.matchMedia('(pointer: coarse)').matches : false
+  const coarseAny = canMatchMedia ? window.matchMedia('(any-pointer: coarse)').matches : false
+  const touchPoints = navigator.maxTouchPoints ?? 0
+  const legacyTouchEvents = 'ontouchstart' in window
+
+  return coarsePrimary || coarseAny || touchPoints > 0 || legacyTouchEvents
+}
+
 export const TechMarquee = () => {
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme === 'dark'
@@ -100,24 +112,24 @@ export const TechMarquee = () => {
 
   useEffect(() => {
     const decidePhysicsMode = () => {
-      const hasFinePointer = window.matchMedia('(pointer:fine)').matches
-      const hasCoarsePointer = window.matchMedia('(pointer:coarse)').matches
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      const canMatchMedia = typeof window.matchMedia === 'function'
+      const hasFinePointer = canMatchMedia ? window.matchMedia('(pointer: fine)').matches : false
+      const hasHover = canMatchMedia ? window.matchMedia('(hover: hover)').matches : false
+      const reduceMotion = canMatchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)').matches : false
       const isDesktop = window.innerWidth >= 1024
-      const deviceMemory = (navigator as Navigator & { deviceMemory?: number }).deviceMemory ?? 8
-      const logicalCores = navigator.hardwareConcurrency ?? 8
+      const canUseTouch = supportsTouchInput()
 
       if (reduceMotion) {
         setGravityMode('off')
         return
       }
 
-      if (hasFinePointer && isDesktop && deviceMemory >= 4 && logicalCores >= 4) {
+      if (hasFinePointer && hasHover && isDesktop) {
         setGravityMode('desktop')
         return
       }
 
-      if (hasCoarsePointer && deviceMemory >= 2 && logicalCores >= 2) {
+      if (canUseTouch) {
         setGravityMode('mobile')
         return
       }

@@ -67,11 +67,17 @@ function calculatePosition(value: number | string | undefined, containerSize: nu
 }
 
 function isCoarsePointerDevice() {
-  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+  if (typeof window === 'undefined') {
     return false
   }
 
-  return window.matchMedia('(pointer: coarse)').matches
+  const canMatchMedia = typeof window.matchMedia === 'function'
+  const coarsePrimary = canMatchMedia ? window.matchMedia('(pointer: coarse)').matches : false
+  const coarseAny = canMatchMedia ? window.matchMedia('(any-pointer: coarse)').matches : false
+  const touchPoints = navigator.maxTouchPoints ?? 0
+  const legacyTouchEvents = 'ontouchstart' in window
+
+  return coarsePrimary || coarseAny || touchPoints > 0 || legacyTouchEvents
 }
 
 type GravityProps = {
