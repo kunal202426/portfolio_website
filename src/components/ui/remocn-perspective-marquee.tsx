@@ -158,6 +158,7 @@ export function PerspectiveMarquee({
         position: 'absolute',
         inset: 0,
         background,
+        pointerEvents: 'none',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
