@@ -16,7 +16,7 @@ export const AboutSection = () => {
 
   const stats = [
     { label: 'Years Coding', value: '3+' },
-    { label: 'Projects Built', value: '15+' },
+    { label: 'Projects Built', value: '20+' },
     { label: 'Teams Led', value: '3' },
   ]
 
