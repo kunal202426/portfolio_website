@@ -71,27 +71,6 @@ export const ContactSection = () => {
   const smoothTiltX = useSpring(tiltX, { stiffness: 220, damping: 24, mass: 0.4 })
   const smoothTiltY = useSpring(tiltY, { stiffness: 220, damping: 24, mass: 0.4 })
   const [showRobotPanel, setShowRobotPanel] = useState(() => (typeof window !== 'undefined' ? window.innerWidth >= 768 : true))
-  const [hoveredKey, setHoveredKey] = useState<string | null>(null)
-
-  const keyStyle = (id: string, h: number): React.CSSProperties => {
-    const on = hoveredKey === id
-    return {
-      height: `${h}px`,
-      borderRadius: '3px',
-      background: on ? '#FF5500' : isDark ? 'rgba(14, 14, 11, 0.6)' : 'rgba(10, 10, 8, 0.7)',
-      borderTop: on ? '3px solid #FFE066' : `1px solid ${isDark ? 'rgba(212, 165, 116, 0.15)' : 'rgba(212, 165, 116, 0.2)'}`,
-      borderLeft: on ? '1px solid #FF8844' : `1px solid ${isDark ? 'rgba(212, 165, 116, 0.15)' : 'rgba(212, 165, 116, 0.2)'}`,
-      borderRight: on ? '1px solid #FF8844' : `1px solid ${isDark ? 'rgba(212, 165, 116, 0.15)' : 'rgba(212, 165, 116, 0.2)'}`,
-      borderBottom: on ? '1px solid #CC3300' : `1px solid ${isDark ? 'rgba(212, 165, 116, 0.15)' : 'rgba(212, 165, 116, 0.2)'}`,
-      boxShadow: on ? '0 0 14px 5px rgba(255, 85, 0, 0.85), 0 6px 16px rgba(255, 85, 0, 0.6)' : 'none',
-      transform: on ? 'translateY(-6px) scale(1.18)' : 'translateY(0) scale(1)',
-      filter: on ? 'brightness(1.4)' : 'none',
-      transition: 'transform 80ms ease, background 80ms ease, box-shadow 80ms ease, filter 80ms ease',
-      cursor: 'default',
-      position: 'relative',
-      zIndex: on ? 20 : 1,
-    }
-  }
 
   // Responsive laptop dimensions
   const [laptopSize, setLaptopSize] = useState(() => getLaptopSize(typeof window !== 'undefined' ? window.innerWidth : 1024))
@@ -336,7 +315,7 @@ export const ContactSection = () => {
 
             {/* Laptop Base/Keyboard */}
             <div
-              className="relative"
+              className="relative overflow-hidden"
               style={{
                 width: `${laptopSize.width}px`,
                 height: `${laptopSize.keyboardHeight}px`,
@@ -361,41 +340,53 @@ export const ContactSection = () => {
               >
                 {/* Row 1 - Function keys */}
                 {[...Array(12)].map((_, i) => (
-                  <div
+                  <div 
                     key={`fkey-${i}`}
-                    onMouseEnter={() => setHoveredKey(`fkey-${i}`)}
-                    onMouseLeave={() => setHoveredKey(null)}
-                    style={keyStyle(`fkey-${i}`, Math.max(12, laptopSize.keyboardHeight / 8))}
+                    className="rounded"
+                    style={{
+                      height: `${Math.max(12, laptopSize.keyboardHeight / 8)}px`,
+                      background: isDark ? 'rgba(14, 14, 11, 0.6)' : 'rgba(10, 10, 8, 0.7)',
+                      border: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.15)' : 'rgba(212, 165, 116, 0.2)'}`,
+                    }}
                   />
                 ))}
-
+                
                 {/* Row 2 - Number keys */}
                 {[...Array(12)].map((_, i) => (
-                  <div
+                  <div 
                     key={`numkey-${i}`}
-                    onMouseEnter={() => setHoveredKey(`numkey-${i}`)}
-                    onMouseLeave={() => setHoveredKey(null)}
-                    style={keyStyle(`numkey-${i}`, Math.max(12, laptopSize.keyboardHeight / 8))}
+                    className="rounded"
+                    style={{
+                      height: `${Math.max(12, laptopSize.keyboardHeight / 8)}px`,
+                      background: isDark ? 'rgba(14, 14, 11, 0.6)' : 'rgba(10, 10, 8, 0.7)',
+                      border: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.15)' : 'rgba(212, 165, 116, 0.2)'}`,
+                    }}
                   />
                 ))}
-
+                
                 {/* Row 3 - QWERTY row */}
                 {[...Array(12)].map((_, i) => (
-                  <div
+                  <div 
                     key={`qkey-${i}`}
-                    onMouseEnter={() => setHoveredKey(`qkey-${i}`)}
-                    onMouseLeave={() => setHoveredKey(null)}
-                    style={keyStyle(`qkey-${i}`, Math.max(12, laptopSize.keyboardHeight / 8))}
+                    className="rounded"
+                    style={{
+                      height: `${Math.max(12, laptopSize.keyboardHeight / 8)}px`,
+                      background: isDark ? 'rgba(14, 14, 11, 0.6)' : 'rgba(10, 10, 8, 0.7)',
+                      border: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.15)' : 'rgba(212, 165, 116, 0.2)'}`,
+                    }}
                   />
                 ))}
-
+                
                 {/* Row 4 - ASDF row */}
                 {[...Array(12)].map((_, i) => (
-                  <div
+                  <div 
                     key={`akey-${i}`}
-                    onMouseEnter={() => setHoveredKey(`akey-${i}`)}
-                    onMouseLeave={() => setHoveredKey(null)}
-                    style={keyStyle(`akey-${i}`, Math.max(12, laptopSize.keyboardHeight / 8))}
+                    className="rounded"
+                    style={{
+                      height: `${Math.max(12, laptopSize.keyboardHeight / 8)}px`,
+                      background: isDark ? 'rgba(14, 14, 11, 0.6)' : 'rgba(10, 10, 8, 0.7)',
+                      border: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.15)' : 'rgba(212, 165, 116, 0.2)'}`,
+                    }}
                   />
                 ))}
               </div>
