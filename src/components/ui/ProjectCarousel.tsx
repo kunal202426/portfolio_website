@@ -1,4 +1,5 @@
 import { memo, useEffect, useState } from 'react'
+import { Star } from 'lucide-react'
 import { BrutalButton } from './BrutalButton'
 import { useTheme } from '../providers/ThemeProvider'
 
@@ -12,6 +13,7 @@ interface ProjectCarouselProps {
     liveUrl?: string
     githubUrl?: string
     color: string
+    starred?: boolean
   }>
 }
 
@@ -73,7 +75,7 @@ const hasSameDimensions = (prev: CarouselDimensions, next: CarouselDimensions) =
 )
 
 export const ProjectCarousel = memo(function ProjectCarousel({ projects }: ProjectCarouselProps) {
-  const [index, setIndex] = useState(Math.min(2, Math.max(projects.length - 1, 0)))
+  const [index, setIndex] = useState(0)
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme === 'dark'
 
@@ -247,6 +249,29 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                     willChange: 'transform, opacity',
                   }}
                 >
+                  {/* Star badge for highlighted projects */}
+                  {project.starred && (
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: 10,
+                        right: 10,
+                        zIndex: 20,
+                        background: 'rgba(245, 197, 66, 0.18)',
+                        border: '1.5px solid rgba(245, 197, 66, 0.7)',
+                        borderRadius: '50%',
+                        width: 28,
+                        height: 28,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                      }}
+                    >
+                      <Star size={13} fill="#F5C542" color="#F5C542" />
+                    </div>
+                  )}
+
                   {/* Top section */}
                   <div className="w-full flex-1 flex flex-col">
                     <div className="flex items-center justify-center gap-3 mb-4">
