@@ -1,4 +1,5 @@
 import { memo, useMemo } from 'react'
+import { motion } from 'framer-motion'
 import { Award, Calendar, ExternalLink } from 'lucide-react'
 import { resumeData } from '../../../lib/resume-data'
 import { useTheme } from '../../providers/ThemeProvider'
@@ -143,7 +144,45 @@ export const CertificationsSection = () => {
           <h3 className="text-2xl font-display font-bold mb-8 text-center transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
             Certifications
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 place-items-center">
+
+          {/* Mobile: compact staggered cards */}
+          <div className="md:hidden grid grid-cols-2 gap-3">
+            {resumeData.certifications.map((cert, index) => (
+              <motion.div
+                key={`cert-mobile-${index}`}
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.3, delay: index * 0.07 }}
+                className="rounded-xl p-4 flex flex-col gap-2"
+                style={{
+                  backgroundColor: isDark ? 'rgba(26, 21, 16, 0.9)' : 'rgba(255, 255, 255, 0.95)',
+                  border: `1.5px solid ${isDark ? 'rgba(212, 165, 116, 0.3)' : 'rgba(232, 87, 12, 0.35)'}`,
+                  boxShadow: isDark ? '0 4px 16px rgba(0,0,0,0.3)' : '0 4px 16px rgba(232,87,12,0.1)',
+                }}
+              >
+                <span
+                  className="text-[10px] font-mono font-bold uppercase tracking-widest px-2 py-0.5 rounded-full w-fit"
+                  style={{
+                    background: 'rgba(232,87,12,0.15)',
+                    color: '#E8570C',
+                    border: '1px solid rgba(232,87,12,0.3)',
+                  }}
+                >
+                  {cert.year}
+                </span>
+                <p className="text-xs font-bold leading-tight" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
+                  {cert.title}
+                </p>
+                <p className="text-[11px] font-medium" style={{ color: '#9B8B70' }}>
+                  {cert.issuer}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Desktop: full award cards */}
+          <div className="hidden md:grid md:grid-cols-3 gap-8 place-items-center">
             {resumeData.certifications.map((cert, index) => (
               <div
                 key={`cert-${index}`}
