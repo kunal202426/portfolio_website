@@ -309,22 +309,16 @@ export const resumeData = {
   ],
   certifications: [
     {
-      title: 'McKinsey Forward Program',
-      issuer: 'McKinsey & Company',
-      year: 2025,
-      description: 'Future-skills program covering problem-solving, digital fluency, communication, and leadership frameworks used by McKinsey consultants.',
-    },
-    {
-      title: 'Data Analytics Job Simulation',
-      issuer: 'Deloitte Australia',
-      year: 2025,
-      description: 'Hands-on simulation covering data analysis, forensic technology, and business insights — modeled on real Deloitte client engagements.',
-    },
-    {
       title: 'Technology Software Development',
       issuer: 'Citi',
-      year: 2025,
+      year: 2026,
       description: 'Job simulation covering software engineering practices, system design, and technology infrastructure within a global banking environment.',
+    },
+    {
+      title: 'McKinsey Forward Program',
+      issuer: 'McKinsey & Company',
+      year: 2026,
+      description: 'Future-skills program covering problem-solving, digital fluency, communication, and leadership frameworks used by McKinsey consultants.',
     },
     {
       title: 'Data Analytics - Skill Up',
@@ -332,6 +326,12 @@ export const resumeData = {
       year: 2026,
       description:
         '9-week program, 98% (874/895 modules) - Python, NumPy, Pandas, EDA, SQL, Power BI, Tableau, Excel, Web Scraping; capstone projects in end-to-end data analysis and web scraping integration.',
+    },
+    {
+      title: 'Data Analytics Job Simulation',
+      issuer: 'Deloitte Australia',
+      year: 2025,
+      description: 'Hands-on simulation covering data analysis, forensic technology, and business insights — modeled on real Deloitte client engagements.',
     },
     {
       title: 'Blockchain Developer Certification',
