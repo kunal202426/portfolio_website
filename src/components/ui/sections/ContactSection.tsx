@@ -78,18 +78,18 @@ export const ContactSection = () => {
     return {
       height: `${h}px`,
       borderRadius: '3px',
-      background: on
-        ? 'linear-gradient(180deg, #FF7733 0%, #E8570C 100%)'
-        : isDark ? 'rgba(14, 14, 11, 0.6)' : 'rgba(10, 10, 8, 0.7)',
-      border: `2px solid ${on ? '#FFAA55' : isDark ? 'rgba(212, 165, 116, 0.15)' : 'rgba(212, 165, 116, 0.2)'}`,
-      boxShadow: on
-        ? 'inset 0 1px 0 rgba(255, 200, 120, 0.9), inset 0 -2px 4px rgba(120, 30, 0, 0.6)'
-        : 'none',
-      transform: on ? 'translateY(-5px) scale(1.12)' : 'translateY(0) scale(1)',
-      transition: 'transform 80ms ease, background 80ms ease, box-shadow 80ms ease, border-color 80ms ease',
+      background: on ? '#FF5500' : isDark ? 'rgba(14, 14, 11, 0.6)' : 'rgba(10, 10, 8, 0.7)',
+      borderTop: on ? '3px solid #FFE066' : `1px solid ${isDark ? 'rgba(212, 165, 116, 0.15)' : 'rgba(212, 165, 116, 0.2)'}`,
+      borderLeft: on ? '1px solid #FF8844' : `1px solid ${isDark ? 'rgba(212, 165, 116, 0.15)' : 'rgba(212, 165, 116, 0.2)'}`,
+      borderRight: on ? '1px solid #FF8844' : `1px solid ${isDark ? 'rgba(212, 165, 116, 0.15)' : 'rgba(212, 165, 116, 0.2)'}`,
+      borderBottom: on ? '1px solid #CC3300' : `1px solid ${isDark ? 'rgba(212, 165, 116, 0.15)' : 'rgba(212, 165, 116, 0.2)'}`,
+      boxShadow: on ? '0 0 14px 5px rgba(255, 85, 0, 0.85), 0 6px 16px rgba(255, 85, 0, 0.6)' : 'none',
+      transform: on ? 'translateY(-6px) scale(1.18)' : 'translateY(0) scale(1)',
+      filter: on ? 'brightness(1.4)' : 'none',
+      transition: 'transform 80ms ease, background 80ms ease, box-shadow 80ms ease, filter 80ms ease',
       cursor: 'default',
       position: 'relative',
-      zIndex: on ? 10 : 1,
+      zIndex: on ? 20 : 1,
     }
   }
 
@@ -336,7 +336,7 @@ export const ContactSection = () => {
 
             {/* Laptop Base/Keyboard */}
             <div
-              className="relative overflow-hidden"
+              className="relative"
               style={{
                 width: `${laptopSize.width}px`,
                 height: `${laptopSize.keyboardHeight}px`,
