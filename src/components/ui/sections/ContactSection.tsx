@@ -79,17 +79,17 @@ export const ContactSection = () => {
       height: `${h}px`,
       borderRadius: '3px',
       background: on
-        ? 'linear-gradient(145deg, #FF6B1A, #E8570C)'
+        ? 'linear-gradient(180deg, #FF7733 0%, #E8570C 100%)'
         : isDark ? 'rgba(14, 14, 11, 0.6)' : 'rgba(10, 10, 8, 0.7)',
-      border: `1px solid ${on ? '#FF6B1A' : isDark ? 'rgba(212, 165, 116, 0.15)' : 'rgba(212, 165, 116, 0.2)'}`,
+      border: `2px solid ${on ? '#FFAA55' : isDark ? 'rgba(212, 165, 116, 0.15)' : 'rgba(212, 165, 116, 0.2)'}`,
       boxShadow: on
-        ? '0 0 8px rgba(232, 87, 12, 0.9), 0 4px 12px rgba(232, 87, 12, 0.6), inset 0 1px 0 rgba(255,255,255,0.25)'
+        ? 'inset 0 1px 0 rgba(255, 200, 120, 0.9), inset 0 -2px 4px rgba(120, 30, 0, 0.6)'
         : 'none',
-      transform: on ? 'translateY(-4px) scale(1.08)' : 'translateY(0) scale(1)',
-      transition: 'transform 90ms ease, background 90ms ease, box-shadow 90ms ease, border-color 90ms ease',
+      transform: on ? 'translateY(-5px) scale(1.12)' : 'translateY(0) scale(1)',
+      transition: 'transform 80ms ease, background 80ms ease, box-shadow 80ms ease, border-color 80ms ease',
       cursor: 'default',
-      zIndex: on ? 10 : 'auto',
       position: 'relative',
+      zIndex: on ? 10 : 1,
     }
   }
 
