@@ -13,6 +13,8 @@ export const AboutSection = () => {
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme === 'dark'
   const [bookTilt, setBookTilt] = useState({ x: 0, y: 0 })
+  const [scrollSpin, setScrollSpin] = useState(0)
+  const lastScrollY = useRef(0)
 
   const stats = [
     { label: 'Years Coding', value: '3+' },
@@ -61,6 +63,17 @@ export const AboutSection = () => {
     }, containerRef)
 
     return () => ctx.revert()
+  }, [])
+
+  useEffect(() => {
+    lastScrollY.current = window.scrollY
+    const handleScroll = () => {
+      const delta = window.scrollY - lastScrollY.current
+      lastScrollY.current = window.scrollY
+      setScrollSpin(prev => prev + delta * 0.25)
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   const handleBookMove = (event: MouseEvent<HTMLDivElement>) => {
@@ -205,8 +218,8 @@ export const AboutSection = () => {
               initial={{ opacity: 0, scale: 0.9, y: 24 }}
               whileInView={{ opacity: 1, scale: 1, y: 0 }}
               viewport={{ once: true, amount: 0.35 }}
-              animate={{ rotateX: bookTilt.x, rotateY: bookTilt.y }}
-              transition={{ type: 'spring', stiffness: 150, damping: 18, mass: 0.6 }}
+              animate={{ rotateX: bookTilt.x, rotateY: bookTilt.y + scrollSpin }}
+              transition={{ type: 'spring', stiffness: 80, damping: 20, mass: 0.8 }}
             >
               <motion.div
                 className="relative"
