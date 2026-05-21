@@ -26,6 +26,18 @@ export const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
   const [pdfFile, setPdfFile] = useState<string | Blob>(resumePdfUrl)
   const [fitMode, setFitMode] = useState<'width' | 'height' | 'custom'>('width')
 
+  // Lock all scrolling while modal is open (body + Lenis)
+  useEffect(() => {
+    if (!isOpen) return
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    window.lenis?.stop()
+    return () => {
+      document.body.style.overflow = prevOverflow
+      window.lenis?.start()
+    }
+  }, [isOpen])
+
   useEffect(() => {
     if (!isOpen) return
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -98,24 +110,25 @@ export const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
             style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.82)', zIndex: 40 }}
           />
 
-          {/* Modal */}
+          {/* Modal — full-screen on mobile, inset on desktop */}
           <motion.div
             initial={{ opacity: 0, y: 24, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.96 }}
+            className="resume-modal-panel"
             style={{
               position: 'fixed',
-              top: '1rem', right: '1rem', bottom: '1rem', left: '1rem',
+              top: 0, right: 0, bottom: 0, left: 0,
               zIndex: 50,
               display: 'flex',
               flexDirection: 'column',
               background: bg,
-              borderRadius: '12px',
               border: `1.5px solid ${border}`,
               boxShadow: isDark
                 ? '0 32px 80px rgba(0,0,0,0.7)'
                 : '0 32px 80px rgba(26,18,8,0.25)',
               overflow: 'hidden',
+              borderRadius: 0,
             }}
           >
             {/* Header */}

@@ -397,3 +397,14 @@ code,
   outline: 2px solid #e8570c;
   outline-offset: 2px;
 }
+
+/* Resume modal: full-screen on mobile, inset + rounded on desktop */
+@media (min-width: 768px) {
+  .resume-modal-panel {
+    top: 2rem !important;
+    right: 2rem !important;
+    bottom: 2rem !important;
+    left: 2rem !important;
+    border-radius: 14px !important;
+  }
+}
