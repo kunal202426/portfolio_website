@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState, type MouseEvent } from 'react'
-import { motion, useMotionValue, useSpring } from 'framer-motion'
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { resumeData } from '../../../lib/resume-data'
@@ -70,6 +70,10 @@ export const ContactSection = () => {
   const tiltY = useMotionValue(0)
   const smoothTiltX = useSpring(tiltX, { stiffness: 220, damping: 24, mass: 0.4 })
   const smoothTiltY = useSpring(tiltY, { stiffness: 220, damping: 24, mass: 0.4 })
+  const hoverGlareOpacity = useMotionValue(0)
+  const smoothHoverGlareOpacity = useSpring(hoverGlareOpacity, { stiffness: 180, damping: 22 })
+  const hoverGlareX = useTransform(smoothTiltY, [-5, 5], ['-45%', '45%'])
+  const hoverGlareY = useTransform(smoothTiltX, [-4, 4], ['12%', '-12%'])
   const [showRobotPanel, setShowRobotPanel] = useState(() => (typeof window !== 'undefined' ? window.innerWidth >= 768 : true))
 
   // Responsive laptop dimensions
@@ -128,11 +132,13 @@ export const ContactSection = () => {
     const pointerY = (event.clientY - rect.top) / rect.height - 0.5
     tiltX.set(-pointerY * 8)
     tiltY.set(pointerX * 10)
+    hoverGlareOpacity.set(1)
   }
 
   const resetLaptopTilt = () => {
     tiltX.set(0)
     tiltY.set(0)
+    hoverGlareOpacity.set(0)
   }
 
   return (
@@ -258,13 +264,26 @@ export const ContactSection = () => {
                 transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
               />
 
+              {/* Hover-driven glare */}
+              <motion.div
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background: 'linear-gradient(110deg, transparent 25%, rgba(255,245,210,0.14) 45%, rgba(255,255,255,0.26) 52%, rgba(255,245,210,0.14) 60%, transparent 78%)',
+                  zIndex: 2,
+                  borderRadius: '12px',
+                  opacity: smoothHoverGlareOpacity,
+                  x: hoverGlareX,
+                  y: hoverGlareY,
+                }}
+              />
+
               {/* Screen Content - Icons */}
               <div
                 className="absolute inset-0 flex items-center justify-center p-4"
                 style={{
                   gap: `${laptopSize.gap}px`,
                   padding: `${laptopSize.padding}px`,
-                  zIndex: 2,
+                  zIndex: 3,
                 }}
               >
                 {/* GitHub Icon */}
