@@ -1,5 +1,5 @@
 import { Suspense, lazy, useState, type MouseEvent } from 'react'
-import { motion, useMotionValue, useSpring } from 'framer-motion'
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { Eye, Download, FileText, ExternalLink } from 'lucide-react'
 import { useTheme } from '../../providers/ThemeProvider'
 import { KeycapButton } from '../KeycapButton'
@@ -15,6 +15,10 @@ export const ResumeSection = () => {
   const tiltY = useMotionValue(0)
   const smoothTiltX = useSpring(tiltX, { stiffness: 220, damping: 24, mass: 0.45 })
   const smoothTiltY = useSpring(tiltY, { stiffness: 220, damping: 24, mass: 0.45 })
+  const hoverGlareOpacity = useMotionValue(0)
+  const smoothHoverGlareOpacity = useSpring(hoverGlareOpacity, { stiffness: 180, damping: 22 })
+  const hoverGlareX = useTransform(smoothTiltY, [-5, 5], ['-50%', '50%'])
+  const hoverGlareY = useTransform(smoothTiltX, [-4.5, 4.5], ['10%', '-10%'])
 
   
   const openResume = () => {
@@ -27,11 +31,13 @@ export const ResumeSection = () => {
     const pointerY = (event.clientY - rect.top) / rect.height - 0.5
     tiltX.set(-pointerY * 9)
     tiltY.set(pointerX * 10)
+    hoverGlareOpacity.set(1)
   }
 
   const resetPhoneTilt = () => {
     tiltX.set(0)
     tiltY.set(0)
+    hoverGlareOpacity.set(0)
   }
 
   return (
@@ -85,15 +91,52 @@ export const ResumeSection = () => {
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-7 rounded-b-2xl" style={{ backgroundColor: isDark ? '#0E0E0B' : '#1A1208' }} />
               
               {/* Screen */}
-              <div 
+              <div
                 className="relative rounded-[2.5rem] overflow-hidden transition-colors duration-500"
-                style={{ 
+                style={{
                   backgroundColor: isDark ? '#1A1510' : '#F5F0E8',
                   aspectRatio: '9/19.5'
                 }}
               >
+                {/* Continuous reflection sweep */}
+                <motion.div
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background: 'linear-gradient(115deg, transparent 20%, rgba(255,220,180,0.07) 40%, rgba(255,255,255,0.14) 50%, rgba(255,220,180,0.07) 60%, transparent 80%)',
+                    zIndex: 1,
+                    borderRadius: '2.5rem',
+                  }}
+                  animate={{ x: ['-110%', '110%'] }}
+                  transition={{ duration: 3.5, repeat: Infinity, repeatDelay: 5, ease: 'easeInOut' }}
+                />
+
+                {/* Ambient orange pulse */}
+                <motion.div
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background: 'radial-gradient(ellipse at 30% 40%, rgba(232,87,12,0.07) 0%, transparent 60%)',
+                    zIndex: 1,
+                    borderRadius: '2.5rem',
+                  }}
+                  animate={{ opacity: [0.4, 1, 0.4], x: ['-8%', '8%', '-8%'] }}
+                  transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+                />
+
+                {/* Hover-driven glare */}
+                <motion.div
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background: 'linear-gradient(110deg, transparent 25%, rgba(255,245,210,0.15) 45%, rgba(255,255,255,0.28) 52%, rgba(255,245,210,0.15) 60%, transparent 78%)',
+                    zIndex: 2,
+                    borderRadius: '2.5rem',
+                    opacity: smoothHoverGlareOpacity,
+                    x: hoverGlareX,
+                    y: hoverGlareY,
+                  }}
+                />
+
                 {/* Status Bar */}
-                <div className="flex justify-between items-center px-6 py-2 text-xs font-medium transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
+                <div className="flex justify-between items-center px-6 py-2 text-xs font-medium transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208', position: 'relative', zIndex: 3 }}>
                   <span>9:41</span>
                   <div className="flex gap-1">
                     <div className="w-4 h-2 rounded-sm" style={{ backgroundColor: isDark ? '#F0EBE0' : '#1A1208' }} />
@@ -101,7 +144,7 @@ export const ResumeSection = () => {
                 </div>
 
                 {/* PDF Preview Placeholder */}
-                <div className="p-2 h-full overflow-hidden flex items-center justify-center">
+                <div className="p-2 h-full overflow-hidden flex items-center justify-center" style={{ position: 'relative', zIndex: 3 }}>
                   <div className="w-full h-full rounded-lg shadow-inner flex flex-col items-center justify-center gap-4 p-4 transition-colors duration-500" style={{ backgroundColor: isDark ? '#0E0E0B' : 'white' }}>
                     <FileText size={48} style={{ color: '#E8570C' }} />
                     <span className="text-sm font-medium text-center transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>

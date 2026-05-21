@@ -63,18 +63,23 @@ export const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
 
   // Calculate optimal page width based on fit mode
   const getPageWidth = () => {
-    const containerWidth = window.innerWidth - 200 // Modal padding
-    const containerHeight = window.innerHeight - 300 // Modal header/footer
-    
+    // Modal occupies viewport minus inset-4 (md:inset-8) on each side
+    const inset = window.innerWidth >= 768 ? 64 : 32
+    const modalWidth = window.innerWidth - inset * 2
+    const modalHeight = window.innerHeight - inset * 2
+    // Reserve ~120px for header + footer
+    const bodyHeight = modalHeight - 120
+
     switch (fitMode) {
       case 'width':
-        return Math.min(containerWidth * 0.8, 800)
+        return Math.max(300, modalWidth - 48) // 24px padding on each side
       case 'height':
-        return Math.min(containerHeight * 0.9, 600) 
+        // A4 ratio is ~0.707 — derive width from available height
+        return Math.max(300, Math.floor(bodyHeight * 0.707))
       case 'custom':
-        return 600 * (zoom / 100)
+        return Math.max(200, Math.floor((modalWidth - 48) * (zoom / 100)))
       default:
-        return 600
+        return Math.max(300, modalWidth - 48)
     }
   }
 
@@ -183,15 +188,14 @@ export const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
             </div>
 
             {/* Body - PDF Viewer */}
-            <div className="flex-1 overflow-auto bg-bg-primary">
-              <div className="w-full h-full flex items-center justify-center p-4">
+            <div className="flex-1 overflow-auto bg-bg-primary" style={{ minHeight: 0 }}>
+              <div className="flex justify-center p-4 pb-8">
                 <div className="relative">
                   {isLoading && (
-                    <div className="absolute inset-0 flex items-center justify-center z-10 bg-bg-primary">
+                    <div className="flex items-center justify-center p-12">
                       <Loader2 className="w-8 h-8 text-accent-primary animate-spin duration-1000" />
                     </div>
                   )}
-                
                 <Document
                   file={pdfFile}
                   onLoadSuccess={onDocumentLoadSuccess}
@@ -208,7 +212,7 @@ export const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
                       <p className="text-xs mb-2">PDF.js version: {pdfjs.version}</p>
                       <p className="text-xs mb-2">Worker: {pdfjs.GlobalWorkerOptions.workerSrc}</p>
                       <p className="text-xs">Please try downloading the file instead</p>
-                      <button 
+                      <button
                         onClick={() => window.open(resumePdfUrl, '_blank')}
                         className="mt-4 px-4 py-2 bg-accent-primary text-white rounded hover:bg-accent-secondary"
                       >
