@@ -232,79 +232,119 @@ export const AboutSection = () => {
                   width: '200px',
                   height: '280px',
                   transformStyle: 'preserve-3d',
-                  transform: 'rotateX(25deg) rotateZ(-5deg)',
                 }}
-                animate={{ 
+                initial={{ rotateX: 28, rotateY: -18, rotateZ: -5, y: 0 }}
+                animate={{
+                  rotateX: [28, 24, 28],
+                  rotateY: [-18, -10, -18],
                   rotateZ: [-5, -3, -5],
                   y: [0, -5, 0]
                 }}
                 transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
               >
-                {/* Book Cover */}
+                {/* Front Cover */}
                 <div
-                  className="absolute inset-0 rounded-lg"
+                  className="absolute inset-0 rounded-r-lg"
                   style={{
-                    background: isDark 
-                      ? 'linear-gradient(145deg, #E8570C, #C74809)' 
+                    background: isDark
+                      ? 'linear-gradient(145deg, #E8570C, #C74809)'
                       : 'linear-gradient(145deg, #E8570C, #FF6B1A)',
-                    border: `2px solid ${isDark ? 'rgba(232, 87, 12, 0.5)' : 'rgba(232, 87, 12, 0.4)'}`,
-                    boxShadow: isDark 
-                      ? '0 20px 40px rgba(0, 0, 0, 0.7), 0 10px 20px rgba(232, 87, 12, 0.3)'
-                      : '0 20px 50px rgba(0, 0, 0, 0.25), 0 10px 25px rgba(232, 87, 12, 0.4)',
-                    transformStyle: 'preserve-3d',
-                    transform: 'translateZ(8px)'
+                    boxShadow: isDark
+                      ? '0 20px 40px rgba(0,0,0,0.7), 0 10px 20px rgba(232,87,12,0.3)'
+                      : '0 20px 50px rgba(0,0,0,0.25), 0 10px 25px rgba(232,87,12,0.4)',
+                    transform: 'translateZ(24px)',
                   }}
                 >
-                  {/* Book Icon */}
                   <div className="absolute inset-0 flex items-center justify-center">
                     <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" opacity="0.8">
                       <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
                       <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
                     </svg>
                   </div>
-
-                  {/* Book Shine */}
-                  <div 
+                  <div
                     className="absolute top-0 left-0 right-0 h-1/3 rounded-t-lg"
-                    style={{
-                      background: 'linear-gradient(to bottom, rgba(255,255,255,0.3), transparent)',
-                    }}
+                    style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.28), transparent)' }}
                   />
                 </div>
 
-                {/* Book Spine (Left Edge) */}
+                {/* Back Cover */}
                 <div
-                  className="absolute top-0 left-0 bottom-0 w-3 rounded-l-lg"
+                  className="absolute inset-0 rounded-r-lg"
                   style={{
-                    background: isDark ? 'linear-gradient(to right, #9B3506, #C74809)' : 'linear-gradient(to right, #C74809, #E8570C)',
-                    transformStyle: 'preserve-3d',
-                    transformOrigin: 'left',
-                    transform: 'rotateY(-90deg) translateZ(-5px)',
-                    boxShadow: 'inset -2px 0 4px rgba(0,0,0,0.5)'
+                    background: isDark ? '#6B1B04' : '#9B3506',
+                    transform: 'rotateY(180deg) translateZ(24px)',
                   }}
                 />
 
-                {/* Book Pages (Right Edge) */}
+                {/* Spine — left face, hinged at left edge, spans z 0→24 */}
                 <div
-                  className="absolute top-1 right-0 bottom-1 w-2"
+                  className="absolute"
                   style={{
-                    background: isDark ? 'linear-gradient(to left, #F0EBE0, #D4C4A8)' : 'linear-gradient(to left, #FFFBF5, #F0EBE0)',
-                    transformStyle: 'preserve-3d',
-                    transformOrigin: 'right',
-                    transform: 'rotateY(90deg) translateZ(-5px)',
-                    boxShadow: 'inset 2px 0 4px rgba(0,0,0,0.3)'
+                    left: 0, top: 0,
+                    width: '24px', height: '280px',
+                    background: isDark
+                      ? 'linear-gradient(to right, #4A1203, #7B2506)'
+                      : 'linear-gradient(to right, #7B2506, #9B3506)',
+                    transformOrigin: 'left center',
+                    transform: 'rotateY(-90deg)',
+                    boxShadow: 'inset -3px 0 6px rgba(0,0,0,0.5)',
                   }}
                 />
 
-                {/* Book Bottom (Thickness) */}
+                {/* Pages — right face, hinged at right edge, spans z 0→24 */}
                 <div
-                  className="absolute bottom-0 left-0 right-0 h-3 rounded-b-lg"
+                  className="absolute"
                   style={{
-                    background: isDark ? '#9B3506' : '#C74809',
-                    transformStyle: 'preserve-3d',
-                    transformOrigin: 'bottom',
-                    transform: 'rotateX(90deg) translateZ(-5px)',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.6)'
+                    right: 0, top: 3,
+                    width: '24px', height: '274px',
+                    background: isDark
+                      ? 'linear-gradient(to left, #F0EBE0, #DDD0BC)'
+                      : 'linear-gradient(to left, #FFFBF5, #EEE5D5)',
+                    transformOrigin: 'right center',
+                    transform: 'rotateY(90deg)',
+                  }}
+                >
+                  {[...Array(7)].map((_, i) => (
+                    <div key={i} style={{
+                      position: 'absolute', left: 3, right: 3,
+                      height: '1px', top: `${10 + i * 36}px`,
+                      background: 'rgba(0,0,0,0.09)',
+                    }} />
+                  ))}
+                </div>
+
+                {/* Top edge — hinged at top, spans z 0→24 */}
+                <div
+                  className="absolute"
+                  style={{
+                    top: 0, left: 0,
+                    width: '200px', height: '24px',
+                    background: isDark
+                      ? 'linear-gradient(to bottom, #D4C4A8, #C0B090)'
+                      : 'linear-gradient(to bottom, #F5EDD8, #EDE0C0)',
+                    transformOrigin: 'center top',
+                    transform: 'rotateX(90deg)',
+                  }}
+                >
+                  {[...Array(5)].map((_, i) => (
+                    <div key={i} style={{
+                      position: 'absolute', top: 0, bottom: 0,
+                      left: `${24 + i * 34}px`, width: '1px',
+                      background: 'rgba(0,0,0,0.07)',
+                    }} />
+                  ))}
+                </div>
+
+                {/* Bottom edge — hinged at bottom, spans z 0→24 */}
+                <div
+                  className="absolute"
+                  style={{
+                    bottom: 0, left: 0,
+                    width: '200px', height: '24px',
+                    background: isDark ? '#5A1B04' : '#7B2506',
+                    transformOrigin: 'center bottom',
+                    transform: 'rotateX(-90deg)',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.7)',
                   }}
                 />
               </motion.div>
