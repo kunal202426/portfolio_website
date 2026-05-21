@@ -1,5 +1,5 @@
-import { useRef, useEffect, useState, type MouseEvent } from 'react'
-import { motion } from 'framer-motion'
+import { useRef, useEffect, type MouseEvent } from 'react'
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { User } from 'lucide-react'
@@ -12,8 +12,13 @@ export const AboutSection = () => {
   const containerRef = useRef<HTMLElement>(null)
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme === 'dark'
-  const [bookTilt, setBookTilt] = useState({ x: 0, y: 0 })
-  const [scrollSpin, setScrollSpin] = useState(0)
+  const tiltX = useMotionValue(0)
+  const tiltY = useMotionValue(0)
+  const spinY = useMotionValue(0)
+  const smoothX = useSpring(tiltX, { stiffness: 120, damping: 22, mass: 0.6 })
+  const smoothTiltY = useSpring(tiltY, { stiffness: 120, damping: 22, mass: 0.6 })
+  const smoothSpinY = useSpring(spinY, { stiffness: 80, damping: 20, mass: 0.8 })
+  const combinedY = useTransform([smoothTiltY, smoothSpinY], ([t, s]) => (t as number) + (s as number))
   const lastScrollY = useRef(0)
 
   const stats = [
@@ -70,21 +75,23 @@ export const AboutSection = () => {
     const handleScroll = () => {
       const delta = window.scrollY - lastScrollY.current
       lastScrollY.current = window.scrollY
-      setScrollSpin(prev => prev + delta * 0.25)
+      spinY.set(spinY.get() + delta * 0.25)
     }
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  }, [spinY])
 
   const handleBookMove = (event: MouseEvent<HTMLDivElement>) => {
     const rect = event.currentTarget.getBoundingClientRect()
     const pointerX = (event.clientX - rect.left) / rect.width - 0.5
     const pointerY = (event.clientY - rect.top) / rect.height - 0.5
-    setBookTilt({ x: -pointerY * 10, y: pointerX * 12 })
+    tiltX.set(-pointerY * 10)
+    tiltY.set(pointerX * 12)
   }
 
   const resetBookTilt = () => {
-    setBookTilt({ x: 0, y: 0 })
+    tiltX.set(0)
+    tiltY.set(0)
   }
 
   return (
@@ -214,12 +221,10 @@ export const AboutSection = () => {
             {/* 3D Book on Table - Top-Down Angle */}
             <motion.div
               className="relative z-10"
-              style={{ perspective: '800px', perspectiveOrigin: '50% 30%' }}
+              style={{ perspective: '800px', perspectiveOrigin: '50% 30%', rotateX: smoothX, rotateY: combinedY }}
               initial={{ opacity: 0, scale: 0.9, y: 24 }}
               whileInView={{ opacity: 1, scale: 1, y: 0 }}
               viewport={{ once: true, amount: 0.35 }}
-              animate={{ rotateX: bookTilt.x, rotateY: bookTilt.y + scrollSpin }}
-              transition={{ type: 'spring', stiffness: 80, damping: 20, mass: 0.8 }}
             >
               <motion.div
                 className="relative"
