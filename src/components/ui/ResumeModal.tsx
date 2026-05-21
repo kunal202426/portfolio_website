@@ -214,7 +214,8 @@ export const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
             </div>
 
             {/* Body - scrollable PDF */}
-            <div style={{ flex: 1, overflowY: 'auto', overflowX: 'auto', minHeight: 0, background: bgBody }}>
+            {/* data-lenis-prevent tells Lenis to skip wheel events inside this element */}
+            <div data-lenis-prevent style={{ flex: 1, overflowY: 'auto', overflowX: 'auto', minHeight: 0, background: bgBody, overscrollBehavior: 'contain' }}>
               <div style={{ display: 'flex', justifyContent: 'center', padding: '20px 16px 32px' }}>
                 <div style={{ position: 'relative' }}>
                   {isLoading && (
