@@ -71,6 +71,21 @@ export const ContactSection = () => {
   const smoothTiltX = useSpring(tiltX, { stiffness: 220, damping: 24, mass: 0.4 })
   const smoothTiltY = useSpring(tiltY, { stiffness: 220, damping: 24, mass: 0.4 })
   const [showRobotPanel, setShowRobotPanel] = useState(() => (typeof window !== 'undefined' ? window.innerWidth >= 768 : true))
+  const [hoveredKey, setHoveredKey] = useState<string | null>(null)
+
+  const keyStyle = (id: string, h: number): React.CSSProperties => {
+    const on = hoveredKey === id
+    return {
+      height: `${h}px`,
+      borderRadius: '3px',
+      background: on ? 'rgba(232, 87, 12, 0.45)' : isDark ? 'rgba(14, 14, 11, 0.6)' : 'rgba(10, 10, 8, 0.7)',
+      border: `1px solid ${on ? 'rgba(232, 87, 12, 0.85)' : isDark ? 'rgba(212, 165, 116, 0.15)' : 'rgba(212, 165, 116, 0.2)'}`,
+      boxShadow: on ? '0 4px 10px rgba(232, 87, 12, 0.5), inset 0 1px 0 rgba(255,255,255,0.12)' : 'none',
+      transform: on ? 'translateY(-2.5px)' : 'translateY(0)',
+      transition: 'transform 100ms ease, background 100ms ease, box-shadow 100ms ease, border-color 100ms ease',
+      cursor: 'default',
+    }
+  }
 
   // Responsive laptop dimensions
   const [laptopSize, setLaptopSize] = useState(() => getLaptopSize(typeof window !== 'undefined' ? window.innerWidth : 1024))
@@ -340,53 +355,41 @@ export const ContactSection = () => {
               >
                 {/* Row 1 - Function keys */}
                 {[...Array(12)].map((_, i) => (
-                  <div 
+                  <div
                     key={`fkey-${i}`}
-                    className="rounded"
-                    style={{
-                      height: `${Math.max(12, laptopSize.keyboardHeight / 8)}px`,
-                      background: isDark ? 'rgba(14, 14, 11, 0.6)' : 'rgba(10, 10, 8, 0.7)',
-                      border: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.15)' : 'rgba(212, 165, 116, 0.2)'}`,
-                    }}
+                    onMouseEnter={() => setHoveredKey(`fkey-${i}`)}
+                    onMouseLeave={() => setHoveredKey(null)}
+                    style={keyStyle(`fkey-${i}`, Math.max(12, laptopSize.keyboardHeight / 8))}
                   />
                 ))}
-                
+
                 {/* Row 2 - Number keys */}
                 {[...Array(12)].map((_, i) => (
-                  <div 
+                  <div
                     key={`numkey-${i}`}
-                    className="rounded"
-                    style={{
-                      height: `${Math.max(12, laptopSize.keyboardHeight / 8)}px`,
-                      background: isDark ? 'rgba(14, 14, 11, 0.6)' : 'rgba(10, 10, 8, 0.7)',
-                      border: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.15)' : 'rgba(212, 165, 116, 0.2)'}`,
-                    }}
+                    onMouseEnter={() => setHoveredKey(`numkey-${i}`)}
+                    onMouseLeave={() => setHoveredKey(null)}
+                    style={keyStyle(`numkey-${i}`, Math.max(12, laptopSize.keyboardHeight / 8))}
                   />
                 ))}
-                
+
                 {/* Row 3 - QWERTY row */}
                 {[...Array(12)].map((_, i) => (
-                  <div 
+                  <div
                     key={`qkey-${i}`}
-                    className="rounded"
-                    style={{
-                      height: `${Math.max(12, laptopSize.keyboardHeight / 8)}px`,
-                      background: isDark ? 'rgba(14, 14, 11, 0.6)' : 'rgba(10, 10, 8, 0.7)',
-                      border: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.15)' : 'rgba(212, 165, 116, 0.2)'}`,
-                    }}
+                    onMouseEnter={() => setHoveredKey(`qkey-${i}`)}
+                    onMouseLeave={() => setHoveredKey(null)}
+                    style={keyStyle(`qkey-${i}`, Math.max(12, laptopSize.keyboardHeight / 8))}
                   />
                 ))}
-                
+
                 {/* Row 4 - ASDF row */}
                 {[...Array(12)].map((_, i) => (
-                  <div 
+                  <div
                     key={`akey-${i}`}
-                    className="rounded"
-                    style={{
-                      height: `${Math.max(12, laptopSize.keyboardHeight / 8)}px`,
-                      background: isDark ? 'rgba(14, 14, 11, 0.6)' : 'rgba(10, 10, 8, 0.7)',
-                      border: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.15)' : 'rgba(212, 165, 116, 0.2)'}`,
-                    }}
+                    onMouseEnter={() => setHoveredKey(`akey-${i}`)}
+                    onMouseLeave={() => setHoveredKey(null)}
+                    style={keyStyle(`akey-${i}`, Math.max(12, laptopSize.keyboardHeight / 8))}
                   />
                 ))}
               </div>
