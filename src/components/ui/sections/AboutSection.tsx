@@ -124,12 +124,10 @@ export const AboutSection = () => {
             {/* Bio */}
             <div className="space-y-4 mb-8">
               <p className="text-lg leading-relaxed transition-colors duration-500" style={{ color: isDark ? '#D4C4A8' : '#4A3C2A' }}>
-                I'm a full-stack developer and ML engineer focused on building scalable systems that solve real problems. 
-                From distributed architectures to deep learning pipelines, I work across the entire stack.
+                I'm a developer who gets genuinely excited about how systems work under pressure. Most of my projects sit at the intersection of backend engineering, ML, and real-time data - the kind of stuff that breaks in interesting ways.
               </p>
               <p className="text-lg leading-relaxed transition-colors duration-500" style={{ color: isDark ? '#D4C4A8' : '#4A3C2A' }}>
-                Currently working with production React apps, FastAPI backends, ML model deployment, and data analytics.
-                I believe in writing clean code, building robust systems, and shipping features that matter.
+                Right now I'm building at YES Securities (YES Bank) while finishing my CS degree at VIT. Outside of work I spend time on side projects, competitive engineering challenges, and occasionally making websites look cooler than they need to.
               </p>
             </div>
 

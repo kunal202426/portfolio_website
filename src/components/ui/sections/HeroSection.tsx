@@ -181,7 +181,7 @@ export const HeroSection = () => {
             </div>
 
             <p className="hero-subtitle text-base md:text-lg max-w-2xl mx-auto leading-relaxed" style={{ color: '#FFFFFF' }}>
-              Building scalable systems, training ML models, and analyzing data to drive insights - from backend APIs to production AI.
+              I build things that work at scale - backends, ML pipelines, real-time systems, and the occasional overengineered side project.
             </p>
           </div>
         </motion.div>

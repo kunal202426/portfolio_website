@@ -41,13 +41,13 @@ export const SkillsSection = () => {
             variants={itemVariants}
             className="text-sm text-accent-primary font-mono uppercase tracking-widest mb-4"
           >
-            // 04 Skills
+            04 / Skills
           </motion.p>
           <motion.h2
             variants={itemVariants}
             className="text-4xl md:text-5xl font-display font-bold text-text-primary mb-4"
           >
-            Technical Arsenal
+            Skills & Stack
           </motion.h2>
         </motion.div>
 
