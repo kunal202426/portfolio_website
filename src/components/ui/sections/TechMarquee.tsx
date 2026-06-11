@@ -47,7 +47,14 @@ export const TechMarquee = () => {
     const splitPoint = Math.ceil(dedupedTech.length / 2)
     const row1 = dedupedTech.slice(0, splitPoint)
     const row2 = dedupedTech.slice(splitPoint)
-    const gravityItems = dedupedTech.slice(0, 8)
+
+    const gravityPriority = [
+      'PostgreSQL', 'MongoDB', 'Redis', 'Node.js', 'FastAPI',
+      'Docker', 'TypeScript', 'Python',
+    ]
+    const gravityItems = gravityPriority.filter((item) =>
+      dedupedTech.some((t) => t.toLowerCase() === item.toLowerCase())
+    )
 
     return [row1, row2.length > 0 ? row2 : row1, gravityItems]
   }, [])
