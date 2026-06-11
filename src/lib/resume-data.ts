@@ -267,7 +267,13 @@ export const resumeData = {
       { name: 'Microservices', level: 82 },
       { name: 'System Design', level: 85 },
     ],
-    databases: ['PostgreSQL', 'MongoDB', 'Firebase'],
+    databases: [
+      { name: 'PostgreSQL', level: 88 },
+      { name: 'MongoDB', level: 85 },
+      { name: 'Redis', level: 80 },
+      { name: 'MySQL', level: 82 },
+      { name: 'Firebase', level: 78 },
+    ],
     mlai: [
       { name: 'TensorFlow', level: 85 },
       { name: 'Scikit-learn', level: 88 },

@@ -6,14 +6,16 @@ import { resumeData } from '../../lib/resume-data'
 const skillCategories = [
   { name: 'Frontend', skills: resumeData.skills.frontend, color: '#6C63FF' },
   { name: 'Backend', skills: resumeData.skills.backend, color: '#00E5FF' },
-  { name: 'ML/AI', skills: resumeData.skills.mlai, color: '#F5C542' },
+  { name: 'Databases', skills: resumeData.skills.databases, color: '#10B981' },
+  { name: 'ML / AI', skills: resumeData.skills.mlai, color: '#F5C542' },
   { name: 'Tools & Cloud', skills: resumeData.skills.tools, color: '#FF3CAC' },
 ]
 
 const tools = [
   'React', 'Three.js', 'Node.js', 'FastAPI', 'TypeScript', 'Python',
-  'PostgreSQL', 'MongoDB', 'AWS', 'Vercel', 'TensorFlow', 'Solidity',
-  'Git', 'Figma', 'Blender', 'WebSocket'
+  'PostgreSQL', 'MongoDB', 'Redis', 'MySQL', 'AWS', 'Docker',
+  'Vercel', 'TensorFlow', 'PyTorch', 'Solidity', 'GraphQL',
+  'Git', 'Figma', 'WebSocket', 'REST APIs', 'Microservices', 'CI/CD',
 ]
 
 export const SkillsSection = () => {
@@ -55,7 +57,7 @@ export const SkillsSection = () => {
           whileInView="visible"
           viewport={{ once: true, amount: 0.1 }}
           variants={containerVariants}
-          className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-20"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mb-20"
         >
           {skillCategories.map((category) => (
             <motion.div key={category.name} variants={itemVariants}>
@@ -87,8 +89,8 @@ export const SkillsSection = () => {
           <div className="relative overflow-hidden rounded-lg bg-bg-card border border-border-subtle p-8">
             <motion.div
               className="flex gap-8 w-fit"
-              animate={{ x: [0, -1000] }}
-              transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+              animate={{ x: [0, -1400] }}
+              transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
             >
               {[...tools, ...tools].map((tool, i) => (
                 <motion.span
