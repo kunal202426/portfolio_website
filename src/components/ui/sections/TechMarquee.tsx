@@ -31,7 +31,7 @@ export const TechMarquee = () => {
       ...resumeData.skills.languages,
       ...resumeData.skills.frontend.map((skill) => skill.name),
       ...resumeData.skills.backend.map((skill) => skill.name),
-      ...resumeData.skills.databases,
+      ...resumeData.skills.databases.map((db) => db.name),
       ...resumeData.skills.mlai.map((skill) => skill.name),
       ...resumeData.skills.blockchain,
       ...resumeData.skills.tools.map((skill) => skill.name),
