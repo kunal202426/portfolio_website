@@ -110,7 +110,7 @@ export const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
             style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.82)', zIndex: 40 }}
           />
 
-          {/* Modal — full-screen on mobile, inset on desktop */}
+          {/* Modal - full-screen on mobile, inset on desktop */}
           <motion.div
             initial={{ opacity: 0, y: 24, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -192,7 +192,7 @@ export const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
                   <Download size={16} style={{ color: '#E8570C', display: 'block' }} />
                 </button>
 
-                {/* Close — always visible, orange-accented */}
+                {/* Close - always visible, orange-accented */}
                 <button
                   onClick={onClose}
                   title="Close"

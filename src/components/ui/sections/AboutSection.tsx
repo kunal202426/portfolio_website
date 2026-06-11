@@ -276,7 +276,7 @@ export const AboutSection = () => {
                   }}
                 />
 
-                {/* Spine — left face, hinged at left edge, spans z 0→24 */}
+                {/* Spine -left face, hinged at left edge, spans z 0→24 */}
                 <div
                   className="absolute"
                   style={{
@@ -291,7 +291,7 @@ export const AboutSection = () => {
                   }}
                 />
 
-                {/* Pages — right face, hinged at right edge, spans z 0→24 */}
+                {/* Pages -right face, hinged at right edge, spans z 0→24 */}
                 <div
                   className="absolute"
                   style={{
@@ -313,7 +313,7 @@ export const AboutSection = () => {
                   ))}
                 </div>
 
-                {/* Top edge — hinged at top, spans z 0→24 */}
+                {/* Top edge -hinged at top, spans z 0→24 */}
                 <div
                   className="absolute"
                   style={{
@@ -335,7 +335,7 @@ export const AboutSection = () => {
                   ))}
                 </div>
 
-                {/* Bottom edge — hinged at bottom, spans z 0→24 */}
+                {/* Bottom edge -hinged at bottom, spans z 0→24 */}
                 <div
                   className="absolute"
                   style={{
