@@ -50,7 +50,7 @@ export const TechMarquee = () => {
 
     const gravityPriority = [
       'PostgreSQL', 'MongoDB', 'Redis', 'Node.js', 'FastAPI',
-      'Docker', 'TypeScript', 'Python',
+      'Docker', 'TypeScript', 'Javascript',
     ]
     const gravityItems = gravityPriority.filter((item) =>
       dedupedTech.some((t) => t.toLowerCase() === item.toLowerCase())

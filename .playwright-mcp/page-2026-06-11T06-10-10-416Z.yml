@@ -1,0 +1,784 @@
+- generic [ref=e3]:
+  - paragraph [ref=e8]: Loading portfolio...
+  - navigation [ref=e10]:
+    - generic [ref=e11]:
+      - button "Kunal Mathur" [ref=e12] [cursor=pointer]
+      - navigation "Primary navigation" [ref=e14]:
+        - button "About" [ref=e15] [cursor=pointer]
+        - button "Projects" [ref=e16] [cursor=pointer]
+        - button "Skills" [ref=e17] [cursor=pointer]
+        - button "Experience" [ref=e18] [cursor=pointer]
+        - button "Resume" [ref=e19] [cursor=pointer]
+        - button "Contact" [ref=e20] [cursor=pointer]
+      - checkbox "Switch to dark theme" [ref=e23] [cursor=pointer]
+  - main [ref=e31]:
+    - generic [ref=e33]:
+      - generic [ref=e36]:
+        - heading "Kunal Mathur" [level=1] [ref=e37]:
+          - generic [ref=e39]: Kunal
+          - generic [ref=e41]: Mathur
+        - paragraph [ref=e43]: Full-Stack Developer & ML Engineer
+        - paragraph [ref=e44]: I build things that work at scale - backends, ML pipelines, real-time systems, and the occasional overengineered side project.
+      - generic [ref=e46]:
+        - link "View Projects" [ref=e47] [cursor=pointer]:
+          - /url: "#projects"
+        - link "Get in Touch" [ref=e48] [cursor=pointer]:
+          - /url: "#contact"
+      - generic [ref=e50]: Scroll
+    - generic [ref=e56]:
+      - generic [ref=e57]:
+        - generic [ref=e58]:
+          - img [ref=e59]
+          - text: About Me
+        - heading "I build systems, not just applications." [level=2] [ref=e62]:
+          - text: I build systems,
+          - text: not just applications.
+        - generic [ref=e63]:
+          - paragraph [ref=e64]: I'm a developer who gets genuinely excited about how systems work under pressure. Most of my projects sit at the intersection of backend engineering, ML, and real-time data - the kind of stuff that breaks in interesting ways.
+          - paragraph [ref=e65]: Right now I'm building at YES Securities (YES Bank) while finishing my CS degree at VIT. Outside of work I spend time on side projects, competitive engineering challenges, and occasionally making websites look cooler than they need to.
+        - generic [ref=e66]:
+          - generic [ref=e67]:
+            - generic [ref=e68]: 3+
+            - generic [ref=e69]: Years Coding
+          - generic [ref=e70]:
+            - generic [ref=e71]: 20+
+            - generic [ref=e72]: Projects Built
+          - generic [ref=e73]:
+            - generic [ref=e74]: "3"
+            - generic [ref=e75]: Teams Led
+        - generic [ref=e76]:
+          - link "→ View My Work" [ref=e77] [cursor=pointer]:
+            - /url: "#projects"
+            - generic [ref=e79]:
+              - generic [ref=e80]: →
+              - generic [ref=e81]: View My Work
+          - link "✉ Let's Talk" [ref=e82] [cursor=pointer]:
+            - /url: "#contact"
+            - generic [ref=e84]:
+              - generic [ref=e85]: ✉
+              - generic [ref=e86]: Let's Talk
+      - generic [ref=e87]:
+        - img [ref=e88]
+        - img [ref=e97]
+    - generic [ref=e122]:
+      - paragraph [ref=e123]: FEATURED PROJECTS
+      - generic [ref=e124]:
+        - generic [ref=e125]:
+          - generic [ref=e126]:
+            - img [ref=e128]
+            - generic [ref=e130]:
+              - generic [ref=e132]: "2026"
+              - generic [ref=e134]: ML & Finance Tech
+              - heading "Hybrid Stock Price Prediction System" [level=3] [ref=e135]
+              - paragraph [ref=e136]: Predicts stock prices by combining LSTM, LightGBM, and FinBERT sentiment analysis on live news - all packaged into a real-time web app.
+              - generic [ref=e137]:
+                - generic [ref=e138]: Python
+                - generic [ref=e139]: LSTM
+                - generic [ref=e140]: LightGBM
+                - generic [ref=e141]: NLP
+            - button "View Live" [ref=e143] [cursor=pointer]:
+              - generic [ref=e144]: View Live
+              - generic [ref=e145]: →
+          - button "2026 Real-Time Data Simulation & KPI Dashboard CityFlow - Urban Mobility Analytics Platform A city traffic simulator with live dashboards - dial in fleet size, surge pricing, and weather, then watch demand and congestion respond in real time. Python React TypeScript Recharts View Live" [ref=e146] [cursor=pointer]:
+            - img [ref=e148]
+            - generic [ref=e150]:
+              - generic [ref=e152]: "2026"
+              - generic [ref=e154]: Real-Time Data Simulation & KPI Dashboard
+              - heading "CityFlow - Urban Mobility Analytics Platform" [level=3] [ref=e155]
+              - paragraph [ref=e156]: A city traffic simulator with live dashboards - dial in fleet size, surge pricing, and weather, then watch demand and congestion respond in real time.
+              - generic [ref=e157]:
+                - generic [ref=e158]: Python
+                - generic [ref=e159]: React
+                - generic [ref=e160]: TypeScript
+                - generic [ref=e161]: Recharts
+            - button "View Live" [ref=e163]:
+              - generic [ref=e164]: View Live
+              - generic [ref=e165]: →
+          - generic [ref=e166]:
+            - img [ref=e168]
+            - generic [ref=e170]:
+              - generic [ref=e172]: "2026"
+              - generic [ref=e174]: AI-Native Repository Intelligence
+              - heading "CodeGraph Intelligence" [level=3] [ref=e175]
+              - paragraph [ref=e176]: A semantic code intelligence tool that builds a knowledge graph of your entire codebase, letting AI agents and developers search, query, and navigate code the way you think about it.
+              - generic [ref=e177]:
+                - generic [ref=e178]: Python
+                - generic [ref=e179]: Graph DB
+                - generic [ref=e180]: AI Agents
+                - generic [ref=e181]: Semantic Search
+            - button "View Code" [ref=e183] [cursor=pointer]:
+              - generic [ref=e184]: View Code
+              - generic [ref=e185]: →
+        - generic [ref=e186]:
+          - button "Previous project" [ref=e187] [cursor=pointer]: ←
+          - button "Next project" [ref=e188] [cursor=pointer]: →
+    - generic [ref=e190]:
+      - heading "Technologies & Tools" [level=2] [ref=e192]
+      - generic [ref=e194]:
+        - generic [ref=e196]:
+          - generic: PostgreSQL
+          - generic: MongoDB
+          - generic: Redis
+          - generic: Node.js
+          - generic: FastAPI
+          - generic: TypeScript
+          - generic: Python
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - generic: Java
+                - generic: Python
+                - generic: JavaScript (ES6+)
+                - generic: Solidity
+                - generic: TypeScript
+                - generic: React.js
+                - generic: Three.js
+                - generic: ReactFlow
+                - generic: HTML5
+                - generic: CSS3
+                - generic: Responsive UI Design
+                - generic: Framer Motion
+                - generic: Tailwind CSS
+                - generic: Node.js
+                - generic: FastAPI
+                - generic: Express.js
+                - generic: RESTful APIs
+                - generic: WebSocket
+                - generic: Microservices
+                - generic: System Design
+                - generic: PostgreSQL
+                - generic: MongoDB
+                - generic: Redis
+                - generic: MySQL
+                - generic: Firebase
+                - generic: TensorFlow
+                - generic: Scikit-learn
+                - generic: LSTM
+                - generic: LightGBM
+                - generic: NLP (FinBERT)
+                - generic: Deep Learning
+                - generic: Computer Vision
+                - generic: Kalman Filtering
+                - generic: Feature Engineering
+                - generic: ETL Pipelines
+                - generic: Data Analysis
+                - generic: Web Scraping
+                - generic: Ethereum
+                - generic: Smart Contracts
+                - generic: Web3.js
+                - generic: Java
+                - generic: Python
+                - generic: JavaScript (ES6+)
+                - generic: Solidity
+                - generic: TypeScript
+                - generic: React.js
+                - generic: Three.js
+                - generic: ReactFlow
+                - generic: HTML5
+                - generic: CSS3
+                - generic: Responsive UI Design
+                - generic: Framer Motion
+                - generic: Tailwind CSS
+                - generic: Node.js
+                - generic: FastAPI
+                - generic: Express.js
+                - generic: RESTful APIs
+                - generic: WebSocket
+                - generic: Microservices
+                - generic: System Design
+                - generic: PostgreSQL
+                - generic: MongoDB
+                - generic: Redis
+                - generic: MySQL
+                - generic: Firebase
+                - generic: TensorFlow
+                - generic: Scikit-learn
+                - generic: LSTM
+                - generic: LightGBM
+                - generic: NLP (FinBERT)
+                - generic: Deep Learning
+                - generic: Computer Vision
+                - generic: Kalman Filtering
+                - generic: Feature Engineering
+                - generic: ETL Pipelines
+                - generic: Data Analysis
+                - generic: Web Scraping
+                - generic: Ethereum
+                - generic: Smart Contracts
+                - generic: Web3.js
+                - generic: Java
+                - generic: Python
+                - generic: JavaScript (ES6+)
+                - generic: Solidity
+                - generic: TypeScript
+                - generic: React.js
+                - generic: Three.js
+                - generic: ReactFlow
+                - generic: HTML5
+                - generic: CSS3
+                - generic: Responsive UI Design
+                - generic: Framer Motion
+                - generic: Tailwind CSS
+                - generic: Node.js
+                - generic: FastAPI
+                - generic: Express.js
+                - generic: RESTful APIs
+                - generic: WebSocket
+                - generic: Microservices
+                - generic: System Design
+                - generic: PostgreSQL
+                - generic: MongoDB
+                - generic: Redis
+                - generic: MySQL
+                - generic: Firebase
+                - generic: TensorFlow
+                - generic: Scikit-learn
+                - generic: LSTM
+                - generic: LightGBM
+                - generic: NLP (FinBERT)
+                - generic: Deep Learning
+                - generic: Computer Vision
+                - generic: Kalman Filtering
+                - generic: Feature Engineering
+                - generic: ETL Pipelines
+                - generic: Data Analysis
+                - generic: Web Scraping
+                - generic: Ethereum
+                - generic: Smart Contracts
+                - generic: Web3.js
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - generic: DApps
+                - generic: Hyperledger Fabric
+                - generic: Git
+                - generic: GitHub
+                - generic: AWS
+                - generic: Vercel
+                - generic: Figma
+                - generic: Blender
+                - generic: VS Code
+                - generic: Distributed Systems
+                - generic: Chaos Engineering
+                - generic: CI/CD
+                - generic: Agile/Scrum
+                - generic: SDLC
+                - generic: OOP
+                - generic: NLP
+                - generic: React
+                - generic: Finance
+                - generic: Recharts
+                - generic: Zustand
+                - generic: Graph DB
+                - generic: AI Agents
+                - generic: Semantic Search
+                - generic: LLM
+                - generic: WebSockets
+                - generic: PyTorch
+                - generic: AI Agent
+                - generic: Neural Networks
+                - generic: ML
+                - generic: Blockchain
+                - generic: AI
+                - generic: Chrome Extension
+                - generic: SaaS
+                - generic: LinkedIn
+                - generic: DApp
+                - generic: WebGL
+                - generic: Responsive Design
+                - generic: DevOps
+                - generic: SEO
+                - generic: DApps
+                - generic: Hyperledger Fabric
+                - generic: Git
+                - generic: GitHub
+                - generic: AWS
+                - generic: Vercel
+                - generic: Figma
+                - generic: Blender
+                - generic: VS Code
+                - generic: Distributed Systems
+                - generic: Chaos Engineering
+                - generic: CI/CD
+                - generic: Agile/Scrum
+                - generic: SDLC
+                - generic: OOP
+                - generic: NLP
+                - generic: React
+                - generic: Finance
+                - generic: Recharts
+                - generic: Zustand
+                - generic: Graph DB
+                - generic: AI Agents
+                - generic: Semantic Search
+                - generic: LLM
+                - generic: WebSockets
+                - generic: PyTorch
+                - generic: AI Agent
+                - generic: Neural Networks
+                - generic: ML
+                - generic: Blockchain
+                - generic: AI
+                - generic: Chrome Extension
+                - generic: SaaS
+                - generic: LinkedIn
+                - generic: DApp
+                - generic: WebGL
+                - generic: Responsive Design
+                - generic: DevOps
+                - generic: SEO
+                - generic: DApps
+                - generic: Hyperledger Fabric
+                - generic: Git
+                - generic: GitHub
+                - generic: AWS
+                - generic: Vercel
+                - generic: Figma
+                - generic: Blender
+                - generic: VS Code
+                - generic: Distributed Systems
+                - generic: Chaos Engineering
+                - generic: CI/CD
+                - generic: Agile/Scrum
+                - generic: SDLC
+                - generic: OOP
+                - generic: NLP
+                - generic: React
+                - generic: Finance
+                - generic: Recharts
+                - generic: Zustand
+                - generic: Graph DB
+                - generic: AI Agents
+                - generic: Semantic Search
+                - generic: LLM
+                - generic: WebSockets
+                - generic: PyTorch
+                - generic: AI Agent
+                - generic: Neural Networks
+                - generic: ML
+                - generic: Blockchain
+                - generic: AI
+                - generic: Chrome Extension
+                - generic: SaaS
+                - generic: LinkedIn
+                - generic: DApp
+                - generic: WebGL
+                - generic: Responsive Design
+                - generic: DevOps
+                - generic: SEO
+    - generic [ref=e200]:
+      - generic [ref=e201]:
+        - generic [ref=e202]:
+          - img [ref=e203]
+          - text: Experience
+        - heading "Career Journey" [level=2] [ref=e206]
+      - generic [ref=e207]:
+        - img
+        - generic [ref=e209]:
+          - generic [ref=e210]:
+            - generic [ref=e211]:
+              - img "YES Securities (YES Bank)" [ref=e213]
+              - generic [ref=e214]:
+                - heading "YES Securities (YES Bank)" [level=3] [ref=e215]
+                - paragraph [ref=e216]: Full Stack Developer Intern
+            - generic [ref=e217]:
+              - generic [ref=e218]:
+                - img [ref=e219]
+                - text: Jan 2026 - Jun 2026
+              - generic [ref=e221]:
+                - img [ref=e222]
+                - text: Bengaluru, India
+          - list [ref=e225]:
+            - listitem [ref=e226]:
+              - generic [ref=e227]: ▸
+              - generic [ref=e228]: Building production-grade features for OMNI trading platform using React, Node.js, and RESTful APIs in Agile sprints.
+            - listitem [ref=e229]:
+              - generic [ref=e230]: ▸
+              - generic [ref=e231]: Optimized backend microservices and PostgreSQL schema for improved reliability and reduced latency.
+        - generic [ref=e233]:
+          - generic [ref=e234]:
+            - generic [ref=e235]:
+              - img "Team Levitate Hyperloop" [ref=e237]
+              - generic [ref=e238]:
+                - heading "Team Levitate Hyperloop" [level=3] [ref=e239]
+                - paragraph [ref=e240]: Senior Engineer - AI & Software
+            - generic [ref=e241]:
+              - generic [ref=e242]:
+                - img [ref=e243]
+                - text: 2024 - 2025
+              - generic [ref=e245]:
+                - img [ref=e246]
+                - text: Vellore, India
+          - list [ref=e249]:
+            - listitem [ref=e250]:
+              - generic [ref=e251]: ▸
+              - generic [ref=e252]: Led development of levitatehyperloop.com - responsive 3D website with Three.js and React.
+            - listitem [ref=e253]:
+              - generic [ref=e254]: ▸
+              - generic [ref=e255]: Architected backend services and real-time data pipelines for pod hardware integration.
+        - generic [ref=e257]:
+          - generic [ref=e258]:
+            - generic [ref=e259]:
+              - img "E-Cell VIT" [ref=e261]
+              - generic [ref=e262]:
+                - heading "E-Cell VIT" [level=3] [ref=e263]
+                - paragraph [ref=e264]: Junior Core Member
+            - generic [ref=e265]:
+              - generic [ref=e266]:
+                - img [ref=e267]
+                - text: 2023 - 2024
+              - generic [ref=e269]:
+                - img [ref=e270]
+                - text: Vellore, India
+          - list [ref=e273]:
+            - listitem [ref=e274]:
+              - generic [ref=e275]: ▸
+              - generic [ref=e276]: Co-organized E-Summit and Futurepreneurs events with cross-functional planning.
+    - generic [ref=e279]:
+      - generic:
+        - generic [ref=e280]:
+          - generic: FULL STACK DEVELOPER
+        - generic [ref=e282]:
+          - generic [ref=e284]: ID-5827
+          - heading "SOFTWARE DESIGNER" [level=3] [ref=e286]
+          - generic [ref=e287]:
+            - generic [ref=e288]: "GRID: 8x5"
+            - generic [ref=e289]: "DATA_SIZE: 46.3MB"
+          - generic: "01"
+        - generic [ref=e291]:
+          - generic [ref=e293]: ID-7613
+          - heading "FULL STACK INTERN" [level=3] [ref=e295]
+          - generic [ref=e296]:
+            - generic [ref=e297]: "GRID: 0x5"
+            - generic [ref=e298]: "DATA_SIZE: 22.6MB"
+          - generic: "02"
+        - generic [ref=e300]:
+          - generic [ref=e302]: ID-9985
+          - heading "AI SOFTWARE ENGINEER" [level=3] [ref=e304]
+          - generic [ref=e305]:
+            - generic [ref=e306]: "GRID: 0x7"
+            - generic [ref=e307]: "DATA_SIZE: 25.8MB"
+          - generic: "03"
+        - generic [ref=e308]:
+          - generic: ML ENGINEER
+        - generic [ref=e310]:
+          - generic [ref=e312]: ID-543
+          - heading "DATA ANALYST" [level=3] [ref=e314]
+          - generic [ref=e315]:
+            - generic [ref=e316]: "GRID: 4x1"
+            - generic [ref=e317]: "DATA_SIZE: 51.8MB"
+          - generic: "05"
+        - generic [ref=e319]:
+          - generic [ref=e321]: ID-3553
+          - heading "BACKEND ENGINEER" [level=3] [ref=e323]
+          - generic [ref=e324]:
+            - generic [ref=e325]: "GRID: 1x1"
+            - generic [ref=e326]: "DATA_SIZE: 99.0MB"
+          - generic: "06"
+        - generic [ref=e328]:
+          - generic [ref=e330]: ID-7105
+          - heading "FRONTEND ENGINEER" [level=3] [ref=e332]
+          - generic [ref=e333]:
+            - generic [ref=e334]: "GRID: 0x3"
+            - generic [ref=e335]: "DATA_SIZE: 73.6MB"
+          - generic: "07"
+        - generic [ref=e336]:
+          - generic: REACT DEVELOPER
+        - generic [ref=e338]:
+          - generic [ref=e340]: ID-8014
+          - heading "NODE JS DEVELOPER" [level=3] [ref=e342]
+          - generic [ref=e343]:
+            - generic [ref=e344]: "GRID: 4x6"
+            - generic [ref=e345]: "DATA_SIZE: 92.1MB"
+          - generic: "09"
+        - generic [ref=e347]:
+          - generic [ref=e349]: ID-777
+          - heading "FASTAPI DEVELOPER" [level=3] [ref=e351]
+          - generic [ref=e352]:
+            - generic [ref=e353]: "GRID: 8x9"
+            - generic [ref=e354]: "DATA_SIZE: 42.1MB"
+          - generic: "10"
+        - generic [ref=e356]:
+          - generic [ref=e358]: ID-6115
+          - heading "AI ENGINEER" [level=3] [ref=e360]
+          - generic [ref=e361]:
+            - generic [ref=e362]: "GRID: 3x2"
+            - generic [ref=e363]: "DATA_SIZE: 24.9MB"
+          - generic: "11"
+        - generic [ref=e364]:
+          - generic: DATA ENGINEER
+        - generic [ref=e366]:
+          - generic [ref=e368]: ID-3613
+          - heading "ANALYTICS ENGINEER" [level=3] [ref=e370]
+          - generic [ref=e371]:
+            - generic [ref=e372]: "GRID: 7x4"
+            - generic [ref=e373]: "DATA_SIZE: 39.8MB"
+          - generic: "13"
+        - generic [ref=e375]:
+          - generic [ref=e377]: ID-6034
+          - heading "MICROSERVICES ENGINEER" [level=3] [ref=e379]
+          - generic [ref=e380]:
+            - generic [ref=e381]: "GRID: 1x1"
+            - generic [ref=e382]: "DATA_SIZE: 62.3MB"
+          - generic: "14"
+        - generic [ref=e384]:
+          - generic [ref=e386]: ID-2149
+          - heading "TRADING PLATFORM DEV" [level=3] [ref=e388]
+          - generic [ref=e389]:
+            - generic [ref=e390]: "GRID: 0x1"
+            - generic [ref=e391]: "DATA_SIZE: 84.9MB"
+          - generic: "15"
+        - generic [ref=e392]:
+          - generic: SYSTEM DESIGN ENGINEER
+        - generic [ref=e394]:
+          - generic [ref=e396]: ID-4581
+          - heading "DISTRIBUTED SYSTEMS" [level=3] [ref=e398]
+          - generic [ref=e399]:
+            - generic [ref=e400]: "GRID: 7x6"
+            - generic [ref=e401]: "DATA_SIZE: 76.8MB"
+          - generic: "17"
+        - generic [ref=e403]:
+          - generic [ref=e405]: ID-8190
+          - heading "DATA PIPELINE DEV" [level=3] [ref=e407]
+          - generic [ref=e408]:
+            - generic [ref=e409]: "GRID: 9x5"
+            - generic [ref=e410]: "DATA_SIZE: 34.4MB"
+          - generic: "18"
+        - generic [ref=e412]:
+          - generic [ref=e414]: ID-2543
+          - heading "BLOCKCHAIN DEVELOPER" [level=3] [ref=e416]
+          - generic [ref=e417]:
+            - generic [ref=e418]: "GRID: 2x3"
+            - generic [ref=e419]: "DATA_SIZE: 49.0MB"
+          - generic: "19"
+    - generic [ref=e571]:
+      - generic [ref=e572]:
+        - heading "Professional Background" [level=2] [ref=e573]
+        - paragraph [ref=e574]: A detailed overview of my experience, skills, and achievements
+      - generic [ref=e575]:
+        - generic [ref=e579] [cursor=pointer]:
+          - generic [ref=e581]: 9:41
+          - generic [ref=e585]:
+            - img [ref=e586]
+            - generic [ref=e589]: Resume
+            - generic [ref=e590]: Kunal Mathur
+            - generic [ref=e591]:
+              - img [ref=e592]
+              - generic [ref=e596]: Tap to open
+          - generic [ref=e598]:
+            - img [ref=e599]
+            - text: Open in new tab
+        - generic [ref=e605]:
+          - heading "View My Resume" [level=3] [ref=e606]
+          - paragraph [ref=e607]: Click the phone or use the buttons below to view my complete resume. You can also download a copy for your records.
+          - generic [ref=e608]:
+            - button "View Resume" [ref=e609] [cursor=pointer]:
+              - generic [ref=e611]:
+                - img [ref=e613]
+                - generic [ref=e616]: View Resume
+            - link "Download PDF" [ref=e617] [cursor=pointer]:
+              - /url: /Resume_general.pdf
+              - generic [ref=e619]:
+                - img [ref=e621]
+                - generic [ref=e624]: Download PDF
+    - generic [ref=e625]:
+      - generic [ref=e630]:
+        - generic [ref=e631]:
+          - generic [ref=e632]:
+            - img [ref=e633]
+            - text: Education
+          - heading "Academic Journey" [level=2] [ref=e636]
+        - generic [ref=e637]:
+          - generic [ref=e641]:
+            - generic [ref=e642]:
+              - img [ref=e644]
+              - generic [ref=e647]:
+                - heading "Vellore Institute of Technology" [level=3] [ref=e648]:
+                  - link "Vellore Institute of Technology" [ref=e649] [cursor=pointer]:
+                    - /url: https://vit.ac.in/
+                - paragraph [ref=e650]:
+                  - text: B.Tech in Computer Science & Engineering
+                  - generic [ref=e651]: • Blockchain
+            - generic [ref=e652]:
+              - generic [ref=e653]:
+                - img [ref=e654]
+                - generic [ref=e656]: 2022 - Present
+              - generic [ref=e657]:
+                - img [ref=e658]
+                - generic [ref=e661]: Vellore, Tamil Nadu
+          - generic [ref=e665]:
+            - generic [ref=e666]:
+              - img [ref=e668]
+              - generic [ref=e671]:
+                - heading "Turning Point School" [level=3] [ref=e672]
+                - paragraph [ref=e673]: CBSE Class XII
+            - generic [ref=e674]:
+              - generic [ref=e675]:
+                - img [ref=e676]
+                - generic [ref=e678]: 2020 - 2022
+              - generic [ref=e679]:
+                - img [ref=e680]
+                - generic [ref=e683]: Ajmer, Rajasthan
+          - generic [ref=e687]:
+            - generic [ref=e688]:
+              - img [ref=e690]
+              - generic [ref=e693]:
+                - heading "Mayoor School" [level=3] [ref=e694]:
+                  - link "Mayoor School" [ref=e695] [cursor=pointer]:
+                    - /url: https://mayoorschool.org/
+                - paragraph [ref=e696]: CBSE Class X
+            - generic [ref=e697]:
+              - generic [ref=e698]:
+                - img [ref=e699]
+                - generic [ref=e701]: 2018 - 2020
+              - generic [ref=e702]:
+                - img [ref=e703]
+                - generic [ref=e706]: Ajmer, Rajasthan
+      - generic [ref=e711]:
+        - generic [ref=e712]:
+          - generic [ref=e713]:
+            - img [ref=e714]
+            - text: Certifications
+          - heading "Professional Credentials" [level=2] [ref=e717]
+        - generic [ref=e718]:
+          - heading "Certifications" [level=3] [ref=e719]
+          - generic [ref=e720]:
+            - generic [ref=e724]:
+              - img [ref=e725]
+              - heading "Certificate of Technology Software Development" [level=1] [ref=e727]:
+                - text: Certificate
+                - generic [ref=e728]: of Technology Software Development
+              - paragraph [ref=e729]: This is to certify that
+              - heading "Citi" [level=1] [ref=e730]
+              - paragraph [ref=e731]: Job simulation covering software engineering practices, system design, and technology infrastructure within a global banking environment.
+              - img [ref=e733]
+              - generic [ref=e736]: "Awarded on: 2026"
+            - generic [ref=e740]:
+              - img [ref=e741]
+              - heading "Certificate of McKinsey Forward Program" [level=1] [ref=e743]:
+                - text: Certificate
+                - generic [ref=e744]: of McKinsey Forward Program
+              - paragraph [ref=e745]: This is to certify that
+              - heading "McKinsey & Company" [level=1] [ref=e746]
+              - paragraph [ref=e747]: Future-skills program covering problem-solving, digital fluency, communication, and leadership frameworks used by McKinsey consultants.
+              - img [ref=e749]
+              - generic [ref=e752]: "Awarded on: 2026"
+            - generic [ref=e756]:
+              - img [ref=e757]
+              - heading "Certificate of Data Analytics - Skill Up" [level=1] [ref=e759]:
+                - text: Certificate
+                - generic [ref=e760]: of Data Analytics - Skill Up
+              - paragraph [ref=e761]: This is to certify that
+              - heading "GeeksforGeeks" [level=1] [ref=e762]
+              - paragraph [ref=e763]: 9-week program, 98% (874/895 modules) - Python, NumPy, Pandas, EDA, SQL, Power BI, Tableau, Excel, Web Scraping; capstone projects in end-to-end data analysis and web scraping integration.
+              - img [ref=e765]
+              - generic [ref=e768]: "Awarded on: 2026"
+            - generic [ref=e772]:
+              - img [ref=e773]
+              - heading "Certificate of Data Analytics Job Simulation" [level=1] [ref=e775]:
+                - text: Certificate
+                - generic [ref=e776]: of Data Analytics Job Simulation
+              - paragraph [ref=e777]: This is to certify that
+              - heading "Deloitte Australia" [level=1] [ref=e778]
+              - paragraph [ref=e779]: Hands-on simulation covering data analysis, forensic technology, and business insights, modeled on real Deloitte client engagements.
+              - img [ref=e781]
+              - generic [ref=e784]: "Awarded on: 2025"
+            - generic [ref=e788]:
+              - img [ref=e789]
+              - heading "Certificate of Blockchain Developer Certification" [level=1] [ref=e791]:
+                - text: Certificate
+                - generic [ref=e792]: of Blockchain Developer Certification
+              - paragraph [ref=e793]: This is to certify that
+              - heading "IBM Career Education" [level=1] [ref=e794]
+              - paragraph [ref=e795]: Blockchain fundamentals, smart contract development, Hyperledger Fabric, and DApp architecture.
+              - img [ref=e797]
+              - generic [ref=e800]: "Awarded on: 2025"
+            - generic [ref=e804]:
+              - img [ref=e805]
+              - heading "Certificate of Full Stack Web Development (MERN)" [level=1] [ref=e807]:
+                - text: Certificate
+                - generic [ref=e808]: of Full Stack Web Development (MERN)
+              - paragraph [ref=e809]: This is to certify that
+              - heading "Apna College" [level=1] [ref=e810]
+              - paragraph [ref=e811]: Built and deployed multiple production full-stack web applications end-to-end.
+              - img [ref=e813]
+              - generic [ref=e816]: "Awarded on: 2024"
+        - generic [ref=e817]:
+          - heading "Notable Achievements" [level=3] [ref=e818]
+          - generic [ref=e819]:
+            - article [ref=e820]:
+              - generic [ref=e821]:
+                - generic [ref=e822]:
+                  - img [ref=e824]
+                  - generic [ref=e827]:
+                    - generic [ref=e828]:
+                      - heading "Winner - Global Hyperloop Competition" [level=3] [ref=e829]
+                      - generic [ref=e830]: Award
+                    - paragraph [ref=e831]: Asia's First Hyperloop Competition, IIT Madras
+                - generic [ref=e832]:
+                  - generic [ref=e834]: Achievement
+                  - paragraph [ref=e835]: Secured six awards across engineering, design, and technical presentation - representing VIT Vellore.
+                  - generic [ref=e836]:
+                    - img [ref=e837]
+                    - generic [ref=e842]: "2025"
+                  - link "View Source" [ref=e843] [cursor=pointer]:
+                    - /url: https://www.ghciitm.com/
+                    - text: View Source
+                    - img [ref=e844]
+            - article [ref=e848]:
+              - generic [ref=e849]:
+                - generic [ref=e850]:
+                  - img [ref=e852]
+                  - generic [ref=e855]:
+                    - generic [ref=e856]:
+                      - heading "National Semi-Finalist - Flipkart GRiD 7.0" [level=3] [ref=e857]
+                      - generic [ref=e858]: Award
+                    - paragraph [ref=e859]: Notable Achievement
+                - generic [ref=e860]:
+                  - generic [ref=e862]: Achievement
+                  - paragraph [ref=e863]: Advanced to national semi-finals in a highly competitive real-world software engineering challenge.
+                  - generic [ref=e864]:
+                    - img [ref=e865]
+                    - generic [ref=e870]: "2025"
+                  - link "View Source" [ref=e871] [cursor=pointer]:
+                    - /url: https://www.flipkartcareers.com/flipkart/grid
+                    - text: View Source
+                    - img [ref=e872]
+    - generic [ref=e879]:
+      - generic [ref=e880]:
+        - generic [ref=e881]: Let's Connect
+        - heading "Get in Touch" [level=2] [ref=e882]
+        - paragraph [ref=e883]: Feel free to reach out through GitHub or LinkedIn
+        - generic [ref=e886]: Available for new opportunities
+      - generic [ref=e895]:
+        - link "GitHub" [ref=e896] [cursor=pointer]:
+          - /url: https://github.com/kunal202426
+          - img [ref=e898]
+          - generic [ref=e900]: GitHub
+        - link "LinkedIn" [ref=e901] [cursor=pointer]:
+          - /url: https://linkedin.com/in/kunal-mathur-612108267
+          - img [ref=e903]
+          - generic [ref=e905]: LinkedIn
+      - generic [ref=e957]:
+        - heading "Contact Information" [level=3] [ref=e958]
+        - generic [ref=e959]:
+          - link "Email mathurkunal000@gmail.com" [ref=e960] [cursor=pointer]:
+            - /url: mailto:mathurkunal000@gmail.com
+            - img [ref=e962]
+            - generic [ref=e965]:
+              - paragraph [ref=e966]: Email
+              - paragraph [ref=e967]: mathurkunal000@gmail.com
+          - link "Phone +91 759-720-9058" [ref=e968] [cursor=pointer]:
+            - /url: tel:+91 759-720-9058
+            - img [ref=e970]
+            - generic [ref=e972]:
+              - paragraph [ref=e973]: Phone
+              - paragraph [ref=e974]: +91 759-720-9058
+          - generic [ref=e975]:
+            - img [ref=e977]
+            - generic [ref=e980]:
+              - paragraph [ref=e981]: Location
+              - paragraph [ref=e982]: India
+      - paragraph [ref=e984]: © 2026 Kunal Mathur. Crafted with attention to detail.
