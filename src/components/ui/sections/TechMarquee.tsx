@@ -49,8 +49,8 @@ export const TechMarquee = () => {
     const row2 = dedupedTech.slice(splitPoint)
 
     const gravityPriority = [
-      'PostgreSQL', 'MongoDB', 'Redis', 'Node.js', 'FastAPI',
-      'Docker', 'TypeScript', 'Javascript',
+      'React.js', 'Java', 'PostgreSQL', 'MongoDB',
+      'Redis', 'Node.js', 'FastAPI', 'TypeScript', 'Docker',
     ]
     const gravityItems = gravityPriority.filter((item) =>
       dedupedTech.some((t) => t.toLowerCase() === item.toLowerCase())
@@ -80,7 +80,8 @@ export const TechMarquee = () => {
     { x: '24%', y: '44%' },
     { x: '44%', y: '46%' },
     { x: '64%', y: '44%' },
-    { x: '38%', y: '68%' },
+    { x: '30%', y: '68%' },
+    { x: '58%', y: '68%' },
   ]
 
   const allowInteractivePhysics = gravityMode !== 'off'
