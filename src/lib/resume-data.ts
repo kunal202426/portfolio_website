@@ -204,7 +204,7 @@ export const resumeData = {
       color: '#6C63FF',
       featured: false,
       category: 'dev',
-      liveUrl: 'https://jobhuntpro-lemon.vercel.app/',
+      liveUrl: 'https://job-hunt-pro.vercel.app/',
       githubUrl: 'https://github.com/kunal202426',
       achievements: [
         'Built LinkedIn job scraper with AI-powered cold email generator for automated outreach.',
