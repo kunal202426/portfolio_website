@@ -25,11 +25,11 @@ export const LenisProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 0.82,
-      easing: (t) => 1 - Math.pow(1 - t, 4),
+      duration: 1.05,
+      easing: (t) => 1 - Math.pow(1 - t, 3.5),
       smoothWheel: true,
       smoothTouch: false,
-      wheelMultiplier: 0.9,
+      wheelMultiplier: 0.85,
       touchMultiplier: 1.2,
     })
     lenisRef.current = lenis

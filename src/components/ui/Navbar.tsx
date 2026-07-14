@@ -263,7 +263,7 @@ export const Navbar = () => {
           opacity: isMobileMenuOpen ? 1 : 0,
           height: isMobileMenuOpen ? 'auto' : 0,
         }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
         className="fixed top-16 left-0 right-0 md:hidden z-30 overflow-hidden"
         style={{ 
           backgroundColor: isDark ? '#0E0E0B' : '#F5F0E8',
@@ -278,7 +278,7 @@ export const Navbar = () => {
               onTouchStart={(e) => handleMobileNavClick(item.href, e)}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.1 }}
+              transition={{ delay: i * 0.06, duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
               className="text-left transition-colors py-3 px-4 rounded-lg hover:bg-opacity-10 active:scale-95 cursor-pointer select-none"
               style={{ 
                 color: isDark ? '#F0EBE0' : '#1A1208',

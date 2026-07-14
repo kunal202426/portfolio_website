@@ -1,12 +1,14 @@
 import type { Variants } from 'framer-motion'
 
-// Simplified, fast animations
+// Shared easing curve for a fluid, decelerated glide (matches ThemeTransition)
+const smoothEase = [0.22, 1, 0.36, 1] as const
+
 export const fadeInUp: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.3, ease: 'easeOut' },
+    transition: { duration: 0.45, ease: smoothEase },
   },
 }
 
@@ -14,7 +16,7 @@ export const staggerContainer: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.05, delayChildren: 0 },
+    transition: { staggerChildren: 0.08, delayChildren: 0 },
   },
 }
 
@@ -23,7 +25,7 @@ export const staggerItem: Variants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.3 },
+    transition: { duration: 0.45, ease: smoothEase },
   },
 }
 
@@ -32,7 +34,7 @@ export const scaleIn: Variants = {
   visible: {
     opacity: 1,
     scale: 1,
-    transition: { duration: 0.2 },
+    transition: { duration: 0.35, ease: smoothEase },
   },
 }
 
@@ -41,7 +43,7 @@ export const slideInLeft: Variants = {
   visible: {
     opacity: 1,
     x: 0,
-    transition: { duration: 0.3 },
+    transition: { duration: 0.45, ease: smoothEase },
   },
 }
 
@@ -50,7 +52,7 @@ export const slideInRight: Variants = {
   visible: {
     opacity: 1,
     x: 0,
-    transition: { duration: 0.3 },
+    transition: { duration: 0.45, ease: smoothEase },
   },
 }
 
@@ -58,7 +60,7 @@ export const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.05 },
+    transition: { staggerChildren: 0.08 },
   },
 }
 
@@ -67,7 +69,7 @@ export const itemVariants: Variants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.3 },
+    transition: { duration: 0.45, ease: smoothEase },
   },
 }
 
@@ -76,12 +78,12 @@ export const itemVariants: Variants = {
 export const loaderExit: Variants = {
   exit: {
     clipPath: ['inset(0% 0% 0% 0%)', 'inset(0% 0% 100% 0%)'],
-    transition: { duration: 0.5, ease: 'easeInOut' },
+    transition: { duration: 0.6, ease: smoothEase },
   },
 }
 
 export const springConfig = {
   type: 'spring',
-  stiffness: 400,
-  damping: 30,
+  stiffness: 260,
+  damping: 28,
 }
