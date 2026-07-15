@@ -5,6 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { User } from 'lucide-react'
 import { useTheme } from '../../providers/ThemeProvider'
 import { KeycapButton } from '../KeycapButton'
+import { KeycapCharacter } from '../KeycapCharacter'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -145,10 +146,24 @@ export const AboutSection = () => {
             </div>
 
 
-            {/* CTA Button */}
-            <div className="flex flex-wrap gap-5 pt-4">
-              <KeycapButton href="#projects" label="View My Work" icon="→" tone="orange" size="wide" />
-              <KeycapButton href="#contact" label="Let's Talk" icon="✉" tone="cream" size="wide" />
+            {/* CTA Button — top padding clears the bouncer above, bottom padding clears the hanger dangling below */}
+            <div className="flex flex-wrap gap-5 pt-14 pb-16 md:pb-8">
+              <div className="relative inline-flex">
+                <KeycapButton href="#projects" label="View My Work" icon="→" tone="orange" size="wide" />
+                <KeycapCharacter
+                  variant="bouncer"
+                  className="pointer-events-none absolute"
+                  style={{ left: '50%', bottom: 'calc(100% - 8px)', transform: 'translateX(-50%)', zIndex: 5 }}
+                />
+              </div>
+              <div className="relative inline-flex">
+                <KeycapButton href="#contact" label="Let's Talk" icon="✉" tone="cream" size="wide" />
+                <KeycapCharacter
+                  variant="hanger"
+                  className="pointer-events-none absolute"
+                  style={{ left: '50%', top: 'calc(100% - 8px)', transform: 'translateX(-50%)', zIndex: 5 }}
+                />
+              </div>
             </div>
           </div>
 
