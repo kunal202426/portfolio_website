@@ -29,36 +29,36 @@ type CarouselDimensions = {
 }
 
 const DESKTOP_DIMENSIONS: CarouselDimensions = {
-  cardWidth: 420,
-  cardHeight: 560,
-  xOffset: 440,
-  yOffset: 30,
-  containerHeight: 580,
-  marginLeft: -210,
-  marginTop: -280,
-  padding: '36px 32px 28px 32px',
+  cardWidth: 360,
+  cardHeight: 480,
+  xOffset: 380,
+  yOffset: 26,
+  containerHeight: 500,
+  marginLeft: -180,
+  marginTop: -240,
+  padding: '30px 26px 24px 26px',
 }
 
 const TABLET_DIMENSIONS: CarouselDimensions = {
-  cardWidth: 320,
-  cardHeight: 480,
-  xOffset: 340,
-  yOffset: 25,
-  containerHeight: 500,
-  marginLeft: -160,
-  marginTop: -240,
-  padding: '28px 24px 20px 24px',
+  cardWidth: 290,
+  cardHeight: 430,
+  xOffset: 305,
+  yOffset: 22,
+  containerHeight: 450,
+  marginLeft: -145,
+  marginTop: -215,
+  padding: '25px 21px 18px 21px',
 }
 
 const MOBILE_DIMENSIONS: CarouselDimensions = {
-  cardWidth: 280,
-  cardHeight: 420,
-  xOffset: 300,
-  yOffset: 20,
-  containerHeight: 440,
-  marginLeft: -140,
-  marginTop: -210,
-  padding: '20px 16px 16px 16px',
+  cardWidth: 258,
+  cardHeight: 388,
+  xOffset: 276,
+  yOffset: 18,
+  containerHeight: 408,
+  marginLeft: -129,
+  marginTop: -194,
+  padding: '18px 14px 14px 14px',
 }
 
 const getDimensionsForWidth = (width: number): CarouselDimensions => {
