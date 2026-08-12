@@ -30,34 +30,34 @@ type CarouselDimensions = {
 
 const DESKTOP_DIMENSIONS: CarouselDimensions = {
   cardWidth: 360,
-  cardHeight: 480,
+  cardHeight: 570,
   xOffset: 380,
   yOffset: 26,
-  containerHeight: 500,
+  containerHeight: 590,
   marginLeft: -180,
-  marginTop: -240,
-  padding: '30px 26px 24px 26px',
+  marginTop: -285,
+  padding: '32px 26px 24px 26px',
 }
 
 const TABLET_DIMENSIONS: CarouselDimensions = {
   cardWidth: 290,
-  cardHeight: 430,
+  cardHeight: 480,
   xOffset: 305,
   yOffset: 22,
-  containerHeight: 450,
+  containerHeight: 500,
   marginLeft: -145,
-  marginTop: -215,
-  padding: '25px 21px 18px 21px',
+  marginTop: -240,
+  padding: '26px 21px 18px 21px',
 }
 
 const MOBILE_DIMENSIONS: CarouselDimensions = {
   cardWidth: 258,
-  cardHeight: 388,
+  cardHeight: 416,
   xOffset: 276,
   yOffset: 18,
-  containerHeight: 408,
+  containerHeight: 436,
   marginLeft: -129,
-  marginTop: -194,
+  marginTop: -208,
   padding: '18px 14px 14px 14px',
 }
 
@@ -335,8 +335,8 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                         display: '-webkit-box',
                         WebkitBoxOrient: 'vertical',
                         WebkitLineClamp: isCenter
-                          ? (dimensions.cardWidth <= 280 ? 5 : dimensions.cardWidth <= 320 ? 6 : 7)
-                          : (dimensions.cardWidth <= 280 ? 4 : dimensions.cardWidth <= 320 ? 5 : 6),
+                          ? (dimensions.cardWidth <= 280 ? 5 : dimensions.cardWidth <= 320 ? 6 : 6)
+                          : (dimensions.cardWidth <= 280 ? 4 : dimensions.cardWidth <= 320 ? 5 : 5),
                         overflow: 'hidden',
                       }}
                     >
