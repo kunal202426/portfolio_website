@@ -42,7 +42,7 @@ const twigs = [
 ]
 
 const TumbleweedBall = () => (
-  <svg width={104} height={104} viewBox="0 0 104 104">
+  <svg width={72} height={72} viewBox="0 0 104 104">
     <defs>
       <radialGradient id="tw-shade" cx="35%" cy="30%" r="72%">
         <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.22" />
@@ -110,7 +110,7 @@ export const GithubTumbleweed = () => {
 
   if (reduce) {
     return (
-      <div className="relative w-full -mt-10 md:-mt-20 flex justify-center pointer-events-none z-20">
+      <div className="relative w-full -mt-4 md:-mt-7 flex justify-center pointer-events-none z-20">
         <a
           href={resumeData.personal.github}
           target="_blank"
@@ -125,10 +125,10 @@ export const GithubTumbleweed = () => {
   }
 
   return (
-    <div className="relative w-full -mt-10 md:-mt-20 h-28 md:h-32 pointer-events-none overflow-hidden z-20">
+    <div className="relative w-full -mt-4 md:-mt-7 h-20 pointer-events-none overflow-hidden z-20">
       {/* Desert horizon line */}
       <div
-        className="absolute left-0 right-0 bottom-6 h-px"
+        className="absolute left-0 right-0 bottom-3 h-px"
         style={{
           background:
             'linear-gradient(90deg, transparent, rgba(212,165,116,0.35) 18%, rgba(212,165,116,0.35) 82%, transparent)',
@@ -137,7 +137,7 @@ export const GithubTumbleweed = () => {
 
       {/* Horizontal travel only — shadow, dust and bounce all live inside this so they track the ball across the screen */}
       <motion.div
-        className="absolute bottom-6 pointer-events-auto"
+        className="absolute bottom-1 pointer-events-auto"
         style={{ willChange: 'transform' }}
         animate={{ x: ['118vw', '-24vw'] }}
         transition={{ duration: 17, repeat: Infinity, ease: 'linear' }}

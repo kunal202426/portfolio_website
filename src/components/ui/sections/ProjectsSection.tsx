@@ -10,7 +10,7 @@ export const ProjectsSection = () => {
   return (
     <section 
       id="projects" 
-      className="relative w-full py-12 md:py-24 px-4 md:px-6 overflow-hidden transition-colors duration-500"
+      className="relative w-full py-6 md:py-10 px-4 md:px-6 overflow-hidden transition-colors duration-500"
       style={{
         backgroundColor: isDark ? '#0E0E0B' : '#F5F0E8',
         contentVisibility: 'auto',

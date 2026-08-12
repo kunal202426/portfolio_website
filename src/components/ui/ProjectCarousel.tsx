@@ -29,36 +29,36 @@ type CarouselDimensions = {
 }
 
 const DESKTOP_DIMENSIONS: CarouselDimensions = {
-  cardWidth: 360,
-  cardHeight: 570,
-  xOffset: 380,
-  yOffset: 26,
-  containerHeight: 590,
-  marginLeft: -180,
-  marginTop: -285,
-  padding: '32px 26px 24px 26px',
+  cardWidth: 340,
+  cardHeight: 460,
+  xOffset: 360,
+  yOffset: 20,
+  containerHeight: 476,
+  marginLeft: -170,
+  marginTop: -230,
+  padding: '24px 22px 18px 22px',
 }
 
 const TABLET_DIMENSIONS: CarouselDimensions = {
-  cardWidth: 290,
-  cardHeight: 480,
-  xOffset: 305,
-  yOffset: 22,
-  containerHeight: 500,
-  marginLeft: -145,
-  marginTop: -240,
-  padding: '26px 21px 18px 21px',
+  cardWidth: 278,
+  cardHeight: 398,
+  xOffset: 292,
+  yOffset: 17,
+  containerHeight: 412,
+  marginLeft: -139,
+  marginTop: -199,
+  padding: '20px 18px 16px 18px',
 }
 
 const MOBILE_DIMENSIONS: CarouselDimensions = {
-  cardWidth: 258,
-  cardHeight: 416,
-  xOffset: 276,
-  yOffset: 18,
-  containerHeight: 436,
-  marginLeft: -129,
-  marginTop: -208,
-  padding: '18px 14px 14px 14px',
+  cardWidth: 248,
+  cardHeight: 358,
+  xOffset: 264,
+  yOffset: 14,
+  containerHeight: 372,
+  marginLeft: -124,
+  marginTop: -179,
+  padding: '15px 12px 12px 12px',
 }
 
 const getDimensionsForWidth = (width: number): CarouselDimensions => {
@@ -146,7 +146,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
   const gridColor = isDark ? 'rgba(232, 87, 12, 0.06)' : 'rgba(232, 87, 12, 0.08)'
 
   return (
-    <section className="relative overflow-hidden py-12 md:py-24 transition-colors duration-500" style={{ background: bgColor }}>
+    <section className="relative overflow-hidden py-6 md:py-10 transition-colors duration-500" style={{ background: bgColor }}>
       {/* Static grid background - no animation for performance */}
       <div
         className="absolute inset-0 pointer-events-none"
@@ -160,8 +160,8 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
 
       {/* Content */}
       <div className="relative z-10 w-full px-3 md:px-6">
-        <p 
-          className="text-xs uppercase tracking-[0.15em] mb-12 md:mb-20 font-bold text-center" 
+        <p
+          className="text-xs uppercase tracking-[0.15em] mb-5 md:mb-7 font-bold text-center"
           style={{ color: isDark ? '#9B8B70' : '#6B5D4A' }}
         >
           FEATURED PROJECTS
@@ -170,7 +170,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
         {/* Carousel container - perfectly centered */}
         <div className="flex flex-col items-center justify-center w-full">
           <div
-            className="relative w-full flex items-center justify-center mb-8 md:mb-16"
+            className="relative w-full flex items-center justify-center mb-4 md:mb-6"
             style={{
               perspective: isCompactMotion ? 1200 : 2000,
               height: dimensions.containerHeight,
@@ -274,12 +274,12 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
 
                   {/* Top section */}
                   <div className="w-full flex-1 flex flex-col">
-                    <div className="flex items-center justify-center gap-3 mb-4">
-                      <span 
+                    <div className="flex items-center justify-center gap-3 mb-2">
+                      <span
                         className="text-xs font-mono uppercase tracking-widest font-bold"
-                        style={{ 
+                        style={{
                           border: isCenter ? '2px solid rgba(232, 87, 12, 0.7)' : `2px solid ${isDark ? 'rgba(212,165,116,0.3)' : 'rgba(212,165,116,0.5)'}`,
-                          padding: '5px 12px',
+                          padding: '4px 10px',
                           background: isCenter ? 'rgba(232, 87, 12, 0.15)' : isDark ? 'rgba(26, 21, 16, 0.5)' : 'rgba(212,165,116,0.1)',
                           color: isCenter ? '#E8570C' : '#D4A574',
                         }}
@@ -288,9 +288,9 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                       </span>
                     </div>
 
-                    <div className="mb-4">
-                      <span 
-                        className="text-xs px-4 py-1.5 font-bold uppercase tracking-wider inline-block"
+                    <div className="mb-2">
+                      <span
+                        className="text-xs px-3 py-1 font-bold uppercase tracking-wider inline-block"
                         style={{
                           background: isCenter ? 'rgba(232, 87, 12, 0.2)' : isDark ? 'rgba(212,165,116,0.1)' : 'rgba(212,165,116,0.15)',
                           color: isCenter ? '#E8570C' : '#D4A574',
@@ -298,59 +298,60 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                           maxWidth: '100%',
                           whiteSpace: 'normal',
                           wordBreak: 'break-word',
-                          lineHeight: 1.25,
+                          lineHeight: 1.2,
+                          fontSize: '0.68rem',
                         }}
                       >
                         {project.subtitle}
                       </span>
                     </div>
 
-                    <h3 
-                      className="font-display font-bold mb-4 leading-tight px-2"
+                    <h3
+                      className="font-display font-bold mb-2 leading-tight px-2"
                       style={{
-                        fontSize: isCenter 
-                          ? (dimensions.cardWidth <= 280 ? '1.25rem' : dimensions.cardWidth <= 320 ? '1.5rem' : '2rem')
-                          : (dimensions.cardWidth <= 280 ? '1.25rem' : dimensions.cardWidth <= 320 ? '1.5rem' : '1.75rem'),
+                        fontSize: isCenter
+                          ? (dimensions.cardWidth <= 260 ? '1.15rem' : dimensions.cardWidth <= 300 ? '1.35rem' : '1.7rem')
+                          : (dimensions.cardWidth <= 260 ? '1.1rem' : dimensions.cardWidth <= 300 ? '1.3rem' : '1.5rem'),
                         color: isCenter ? titleColor : inactiveTitleColor,
                         wordBreak: 'break-word',
                         overflowWrap: 'anywhere',
                         display: '-webkit-box',
                         WebkitBoxOrient: 'vertical',
-                        WebkitLineClamp: dimensions.cardWidth <= 280 ? 3 : 2,
+                        WebkitLineClamp: 2,
                         overflow: 'hidden',
                       }}
                     >
                       {project.title}
                     </h3>
 
-                    <p 
-                      className="leading-relaxed mb-4 px-2"
+                    <p
+                      className="leading-snug mb-2 px-2"
                       style={{
-                        fontSize: isCenter 
-                          ? (dimensions.cardWidth <= 280 ? '0.8rem' : dimensions.cardWidth <= 320 ? '0.85rem' : '0.92rem')
-                          : (dimensions.cardWidth <= 280 ? '0.75rem' : dimensions.cardWidth <= 320 ? '0.8rem' : '0.88rem'),
+                        fontSize: isCenter
+                          ? (dimensions.cardWidth <= 260 ? '0.75rem' : dimensions.cardWidth <= 300 ? '0.8rem' : '0.85rem')
+                          : (dimensions.cardWidth <= 260 ? '0.7rem' : dimensions.cardWidth <= 300 ? '0.75rem' : '0.8rem'),
                         opacity: isCenter ? 0.9 : 0.7,
                         color: isCenter ? descColor : inactiveDescColor,
                         flexGrow: 1,
                         display: '-webkit-box',
                         WebkitBoxOrient: 'vertical',
                         WebkitLineClamp: isCenter
-                          ? (dimensions.cardWidth <= 280 ? 5 : dimensions.cardWidth <= 320 ? 6 : 6)
-                          : (dimensions.cardWidth <= 280 ? 4 : dimensions.cardWidth <= 320 ? 5 : 5),
+                          ? (dimensions.cardWidth <= 260 ? 4 : dimensions.cardWidth <= 300 ? 4 : 5)
+                          : (dimensions.cardWidth <= 260 ? 3 : dimensions.cardWidth <= 300 ? 4 : 4),
                         overflow: 'hidden',
                       }}
                     >
                       {project.description}
                     </p>
 
-                    <div className="flex flex-wrap gap-2 justify-center px-2 mb-4">
-                      {project.tags.slice(0, dimensions.cardWidth <= 280 ? 2 : dimensions.cardWidth <= 320 ? 3 : 4).map((tag) => (
+                    <div className="flex flex-wrap gap-1.5 justify-center px-2 mb-1">
+                      {project.tags.slice(0, dimensions.cardWidth <= 260 ? 2 : dimensions.cardWidth <= 300 ? 3 : 4).map((tag) => (
                         <span
                           key={tag}
                           className="text-xs px-2.5 py-1 font-medium"
                           style={{
-                            fontSize: dimensions.cardWidth <= 280 ? '0.7rem' : '0.75rem',
-                            padding: dimensions.cardWidth <= 280 ? '4px 8px' : '4px 10px',
+                            fontSize: dimensions.cardWidth <= 260 ? '0.65rem' : '0.7rem',
+                            padding: dimensions.cardWidth <= 260 ? '3px 7px' : '3px 8px',
                             background: isCenter ? 'rgba(232, 87, 12, 0.15)' : isDark ? 'rgba(212,165,116,0.08)' : 'rgba(212,165,116,0.15)',
                             border: isCenter ? '1px solid rgba(232, 87, 12, 0.3)' : `1px solid ${isDark ? 'rgba(212,165,116,0.12)' : 'rgba(212,165,116,0.25)'}`,
                             color: isCenter ? '#E8570C' : '#D4A574',
@@ -363,7 +364,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                   </div>
 
                   {/* Button at bottom - fixed height container */}
-                  <div className="w-full flex justify-center pt-3">
+                  <div className="w-full flex justify-center pt-1">
                     <BrutalButton
                       tone={isCenter ? 'on-dark' : 'default'}
                       onClick={(e) => {
@@ -384,15 +385,15 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
           </div>
 
           {/* Navigation arrows - responsive size */}
-          <div className="flex justify-center" style={{ gap: dimensions.cardWidth <= 280 ? '16px' : '24px' }}>
+          <div className="flex justify-center" style={{ gap: dimensions.cardWidth <= 260 ? '14px' : '18px' }}>
             <button
               onClick={prev}
               className="transition-all flex items-center justify-center font-bold hover:scale-105"
               aria-label="Previous project"
-              style={{ 
-                width: dimensions.cardWidth <= 280 ? '48px' : '56px',
-                height: dimensions.cardWidth <= 280 ? '48px' : '56px',
-                fontSize: dimensions.cardWidth <= 280 ? '18px' : '24px',
+              style={{
+                width: dimensions.cardWidth <= 260 ? '38px' : '44px',
+                height: dimensions.cardWidth <= 260 ? '38px' : '44px',
+                fontSize: dimensions.cardWidth <= 260 ? '15px' : '18px',
                 border: '2px solid rgba(232, 87, 12, 0.4)',
                 background: isDark 
                   ? 'linear-gradient(145deg, #1A1510, #0E0E0B)' 
@@ -409,10 +410,10 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
               onClick={next}
               className="transition-all flex items-center justify-center font-bold hover:scale-105"
               aria-label="Next project"
-              style={{ 
-                width: dimensions.cardWidth <= 280 ? '48px' : '56px',
-                height: dimensions.cardWidth <= 280 ? '48px' : '56px',
-                fontSize: dimensions.cardWidth <= 280 ? '18px' : '24px',
+              style={{
+                width: dimensions.cardWidth <= 260 ? '38px' : '44px',
+                height: dimensions.cardWidth <= 260 ? '38px' : '44px',
+                fontSize: dimensions.cardWidth <= 260 ? '15px' : '18px',
                 border: '2px solid rgba(232, 87, 12, 0.4)',
                 background: isDark 
                   ? 'linear-gradient(145deg, #1A1510, #0E0E0B)' 
