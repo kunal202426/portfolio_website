@@ -1,4 +1,5 @@
 import { ProjectCarousel } from '../ProjectCarousel'
+import { GithubTumbleweed } from '../GithubTumbleweed'
 import { resumeData } from '../../../lib/resume-data'
 import { useTheme } from '../../providers/ThemeProvider'
 
@@ -23,6 +24,8 @@ export const ProjectsSection = () => {
       <div className="relative z-10 max-w-7xl mx-auto">
         <ProjectCarousel projects={resumeData.projects} />
       </div>
+
+      <GithubTumbleweed />
     </section>
   )
 }
