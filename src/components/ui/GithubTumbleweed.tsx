@@ -110,7 +110,7 @@ export const GithubTumbleweed = () => {
 
   if (reduce) {
     return (
-      <div className="relative w-full mt-10 md:mt-16 flex justify-center pointer-events-none z-[3]">
+      <div className="relative w-full -mt-10 md:-mt-20 flex justify-center pointer-events-none z-[3]">
         <a
           href={resumeData.personal.github}
           target="_blank"
@@ -125,7 +125,7 @@ export const GithubTumbleweed = () => {
   }
 
   return (
-    <div className="relative w-full mt-10 md:mt-16 h-28 md:h-32 pointer-events-none overflow-hidden z-[3]">
+    <div className="relative w-full -mt-10 md:-mt-20 h-28 md:h-32 pointer-events-none overflow-hidden z-[3]">
       {/* Desert horizon line */}
       <div
         className="absolute left-0 right-0 bottom-6 h-px"
