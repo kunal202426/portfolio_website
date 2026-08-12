@@ -1,6 +1,7 @@
 import { memo, useEffect, useState } from 'react'
 import { Star } from 'lucide-react'
 import { BrutalButton } from './BrutalButton'
+import { GithubTumbleweed } from './GithubTumbleweed'
 import { useTheme } from '../providers/ThemeProvider'
 
 interface ProjectCarouselProps {
@@ -146,7 +147,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
   const gridColor = isDark ? 'rgba(232, 87, 12, 0.06)' : 'rgba(232, 87, 12, 0.08)'
 
   return (
-    <section className="relative overflow-hidden py-6 md:py-10 transition-colors duration-500" style={{ background: bgColor }}>
+    <section className="relative overflow-hidden pt-6 pb-28 md:pt-10 md:pb-44 transition-colors duration-500" style={{ background: bgColor }}>
       {/* Static grid background - no animation for performance */}
       <div
         className="absolute inset-0 pointer-events-none"
@@ -177,6 +178,8 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
               maxWidth: '100%',
             }}
           >
+            <GithubTumbleweed />
+
             {projects.map((project, i) => {
               const offset = i - index
               const maxVisibleOffset = dimensions.cardWidth <= 320 ? 1 : 2
@@ -384,8 +387,9 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
             })}
           </div>
 
-          {/* Navigation arrows - responsive size */}
-          <div className="flex justify-center" style={{ gap: dimensions.cardWidth <= 260 ? '14px' : '18px' }}>
+          {/* Navigation arrows - responsive size. Relative + z-10 keeps them
+              clickable above the tumbleweed's big downward reach. */}
+          <div className="relative z-10 flex justify-center" style={{ gap: dimensions.cardWidth <= 260 ? '14px' : '18px' }}>
             <button
               onClick={prev}
               className="transition-all flex items-center justify-center font-bold hover:scale-105"

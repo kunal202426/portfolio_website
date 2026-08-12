@@ -41,8 +41,14 @@ const twigs = [
   { x1: 84.9, y1: 33, x2: 93.6, y2: 28 },
 ]
 
+// Shared with the wrapper's offset math below so the ball, horizon line,
+// shadow and dust all stay in sync regardless of viewport width.
+const BALL_SIZE = 'clamp(140px, 18vw, 200px)'
+// How much of the ball's top stays tucked behind the card above it.
+const PEEK_BEHIND_CARDS = 30
+
 const TumbleweedBall = () => (
-  <svg width={72} height={72} viewBox="0 0 104 104">
+  <svg style={{ width: BALL_SIZE, height: BALL_SIZE, display: 'block' }} viewBox="0 0 104 104">
     <defs>
       <radialGradient id="tw-shade" cx="35%" cy="30%" r="72%">
         <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.22" />
@@ -94,9 +100,9 @@ const TumbleweedBall = () => (
 )
 
 const DUST_PUFFS = [
-  { offset: 34, size: 20, delay: 0 },
-  { offset: 58, size: 26, delay: 0.5 },
-  { offset: 86, size: 30, delay: 1 },
+  { offset: 40, size: 26, delay: 0 },
+  { offset: 72, size: 34, delay: 0.5 },
+  { offset: 108, size: 40, delay: 1 },
 ]
 
 /**
@@ -108,9 +114,24 @@ const DUST_PUFFS = [
 export const GithubTumbleweed = () => {
   const reduce = useReducedMotion()
 
+  // Anchored to the bottom of the card stack's own stacking context (see
+  // ProjectCarousel), z-5 sits below the cards (z 8-10) but above the grid
+  // background (z-0) — so it visibly tucks behind the lower edge of
+  // whichever card it's rolling past, while staying visible everywhere else.
+  // `bottom` is set to (peek - ballSize): a negative offset that pushes the
+  // ball mostly below the card stack while leaving exactly
+  // PEEK_BEHIND_CARDS px of its top edge inside the container, tucked
+  // behind whichever card sits above it. An explicit height is required —
+  // every child here is itself position:absolute, so auto-height would
+  // otherwise collapse this wrapper to 0 and break the offset math.
+  const wrapperBottom = `calc(${PEEK_BEHIND_CARDS}px - ${BALL_SIZE})`
+
   if (reduce) {
     return (
-      <div className="relative w-full -mt-4 md:-mt-7 flex justify-center pointer-events-none z-20">
+      <div
+        className="absolute left-0 right-0 flex justify-center pointer-events-none z-[5]"
+        style={{ bottom: wrapperBottom, height: BALL_SIZE }}
+      >
         <a
           href={resumeData.personal.github}
           target="_blank"
@@ -125,31 +146,37 @@ export const GithubTumbleweed = () => {
   }
 
   return (
-    <div className="relative w-full -mt-4 md:-mt-7 h-20 pointer-events-none overflow-hidden z-20">
-      {/* Desert horizon line */}
+    <div
+      className="absolute left-0 right-0 pointer-events-none z-[5]"
+      style={{ bottom: wrapperBottom, height: BALL_SIZE }}
+    >
+      {/* Desert horizon line, right where the ball's underside touches ground */}
       <div
-        className="absolute left-0 right-0 bottom-3 h-px"
+        className="absolute left-0 right-0 pointer-events-none"
         style={{
+          top: BALL_SIZE,
           background:
             'linear-gradient(90deg, transparent, rgba(212,165,116,0.35) 18%, rgba(212,165,116,0.35) 82%, transparent)',
+          height: 1,
         }}
       />
 
       {/* Horizontal travel only — shadow, dust and bounce all live inside this so they track the ball across the screen */}
       <motion.div
-        className="absolute bottom-1 pointer-events-auto"
+        className="absolute left-0 top-0 pointer-events-auto"
         style={{ willChange: 'transform' }}
-        animate={{ x: ['118vw', '-24vw'] }}
+        animate={{ x: ['118vw', '-30vw'] }}
         transition={{ duration: 17, repeat: Infinity, ease: 'linear' }}
       >
         {/* Ground contact shadow */}
         <div
-          className="absolute left-1/2 bottom-1 -translate-x-1/2 pointer-events-none"
+          className="absolute left-1/2 -translate-x-1/2 pointer-events-none"
           style={{
-            width: 66,
-            height: 13,
+            top: `calc(${BALL_SIZE} + 6px)`,
+            width: 110,
+            height: 20,
             background: 'radial-gradient(ellipse, rgba(26,18,8,0.32), transparent 72%)',
-            filter: 'blur(3px)',
+            filter: 'blur(4px)',
           }}
         />
 
@@ -157,29 +184,30 @@ export const GithubTumbleweed = () => {
         {DUST_PUFFS.map((d, i) => (
           <motion.div
             key={i}
-            className="absolute bottom-2 pointer-events-none rounded-full"
+            className="absolute pointer-events-none rounded-full"
             style={{
+              top: `calc(${BALL_SIZE} - 40px)`,
               right: d.offset,
               width: d.size,
               height: d.size * 0.7,
               background: 'radial-gradient(ellipse, rgba(212,165,116,0.4), rgba(212,165,116,0) 70%)',
-              filter: 'blur(4px)',
+              filter: 'blur(5px)',
             }}
-            animate={{ opacity: [0, 0.8, 0], scale: [0.6, 1.15, 1.4], x: [0, -10, -20] }}
+            animate={{ opacity: [0, 0.8, 0], scale: [0.6, 1.15, 1.4], x: [0, -16, -32] }}
             transition={{ duration: 1.4, repeat: Infinity, ease: 'easeOut', delay: d.delay }}
           />
         ))}
 
         {/* Uneven ground bounce, independent of the cross-screen travel */}
         <motion.div
-          animate={{ y: [0, -9, 0, -5, 0] }}
+          animate={{ y: [0, -14, 0, -7, 0] }}
           transition={{ duration: 0.9, repeat: Infinity, ease: 'easeInOut' }}
         >
           {/* Tumbling spin, its own independent timing */}
           <motion.div
             animate={{ rotate: [0, -360] }}
             transition={{ duration: 2.1, repeat: Infinity, ease: 'linear' }}
-            whileHover={{ scale: 1.1 }}
+            whileHover={{ scale: 1.08 }}
           >
             <a
               href={resumeData.personal.github}
