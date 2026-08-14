@@ -390,7 +390,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
               single-project mode; phones use drag/swipe on the screen itself,
               and in All Projects mode navigation is by clicking a branch node. */}
           <div
-            className={`w-full flex gap-3 lg:gap-5 ${allView ? 'flex-col md:flex-row items-center md:items-start justify-center md:justify-start' : 'items-center justify-center'}`}
+            className={`w-full flex gap-3 lg:gap-5 ${allView ? 'flex-col md:flex-row items-stretch md:items-start justify-center md:justify-start' : 'items-center justify-center'}`}
           >
             {!allView && (
               <button
@@ -417,7 +417,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                 Projects mode opens, so the flex row genuinely reflows and makes
                 room for the branch view beside it rather than leaving a gap. */}
             <motion.div
-              className="flex flex-col items-center relative flex-shrink-0"
+              className={`flex flex-col items-center relative flex-shrink-0 ${allView ? 'self-center md:self-start' : ''}`}
               animate={{ width: allView ? 260 : '100%' }}
               transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
               style={{ maxWidth: 620, perspective: 1400 }}
