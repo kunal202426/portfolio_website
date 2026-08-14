@@ -22,12 +22,14 @@ interface ProjectCarouselProps {
   projects: Project[]
 }
 
-const SWIPE_DISTANCE_THRESHOLD = 60
-const SWIPE_VELOCITY_THRESHOLD = 400
+// Kept low so a light, natural swipe registers — not a hard, deliberate drag.
+const SWIPE_DISTANCE_THRESHOLD = 40
+const SWIPE_VELOCITY_THRESHOLD = 280
 const SCREENSHOT_CYCLE_MS = 3800
 
 // Old channel recedes back and slides off, new one enters small from the
 // opposite side and grows to fill the screen — the "TV channel change" beat.
+// Durations kept short so the gesture feels immediate rather than laggy.
 const screenVariants: Variants = {
   enter: (direction: number) => ({
     x: direction > 0 ? '55%' : '-55%',
@@ -38,13 +40,13 @@ const screenVariants: Variants = {
     x: 0,
     scale: 1,
     opacity: 1,
-    transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.38, ease: [0.22, 1, 0.36, 1] },
   },
   exit: (direction: number) => ({
     x: direction > 0 ? '-55%' : '55%',
     scale: 0.55,
     opacity: 0,
-    transition: { duration: 0.4, ease: [0.5, 0, 1, 1] },
+    transition: { duration: 0.26, ease: [0.5, 0, 1, 1] },
   }),
 }
 
@@ -169,33 +171,85 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
 
         <div className="flex flex-col items-center w-full">
           {/* TV set */}
-          <div className="w-full flex flex-col items-center" style={{ maxWidth: 620 }}>
+          <div
+            className="w-full flex flex-col items-center relative"
+            style={{ maxWidth: 620, perspective: 1400 }}
+          >
+            {/* Ambient rim glow — keeps the set separated from the page background
+                at any brightness/theme, not just relying on the bezel's own contrast */}
+            <div
+              aria-hidden="true"
+              className="absolute pointer-events-none"
+              style={{
+                inset: '-6% -4%',
+                background: 'radial-gradient(ellipse at 50% 40%, rgba(232,87,12,0.16), transparent 68%)',
+                filter: 'blur(18px)',
+                zIndex: 0,
+              }}
+            />
+
             <div
               className="relative w-full"
               style={{
-                borderRadius: '22px 22px 16px 16px',
-                background: 'linear-gradient(155deg, #2E2620, #14100B)',
+                borderRadius: '20px 20px 14px 14px',
+                background: 'linear-gradient(155deg, #3A2F26, #120D08)',
                 padding: isCompact ? '14px 14px 18px' : '20px 20px 26px',
-                boxShadow: isDark
-                  ? '0 30px 60px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06)'
-                  : '0 30px 60px rgba(26,18,8,0.3), inset 0 1px 0 rgba(255,255,255,0.08)',
+                transform: 'rotateX(2.5deg)',
+                transformStyle: 'preserve-3d',
+                boxShadow: [
+                  '0 36px 70px rgba(0,0,0,0.6)',
+                  '0 0 0 1.5px rgba(232,87,12,0.4)',
+                  '0 0 0 6px rgba(0,0,0,0.35)',
+                  'inset 0 2px 0 rgba(255,255,255,0.1)',
+                  'inset 0 -10px 18px rgba(0,0,0,0.55)',
+                  'inset -4px 0 12px rgba(0,0,0,0.3)',
+                ].join(', '),
               }}
             >
+              {/* Corner screws for a hand-built, not-generic feel */}
+              {[
+                { top: 7, left: 8 },
+                { top: 7, right: 8 },
+                { bottom: 10, left: 8 },
+                { bottom: 10, right: 8 },
+              ].map((pos, i) => (
+                <div
+                  key={i}
+                  aria-hidden="true"
+                  className="absolute rounded-full"
+                  style={{
+                    ...pos,
+                    width: 5,
+                    height: 5,
+                    background: 'radial-gradient(circle at 35% 35%, #6b5c4a, #1a140d 70%)',
+                    boxShadow: '0 1px 0 rgba(255,255,255,0.12)',
+                  }}
+                />
+              ))}
+
               {/* Brand strip */}
               <div className="flex items-center justify-between mb-2 md:mb-3 px-1">
                 <span
                   className="font-display font-bold tracking-wide"
-                  style={{ fontSize: isCompact ? '0.65rem' : '0.75rem', color: 'rgba(212,165,116,0.55)' }}
+                  style={{ fontSize: isCompact ? '0.65rem' : '0.75rem', color: 'rgba(212,165,116,0.6)' }}
                 >
                   KM&nbsp;TV
                 </span>
-                <motion.span
-                  aria-hidden="true"
-                  className="rounded-full"
-                  style={{ width: 7, height: 7, background: '#E8570C' }}
-                  animate={{ opacity: [1, 0.35, 1] }}
-                  transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
-                />
+                <div className="flex items-center gap-2">
+                  {/* Tiny speaker grille */}
+                  <div className="flex gap-[3px]" aria-hidden="true">
+                    {[0, 1, 2].map((i) => (
+                      <span key={i} style={{ width: 2, height: 9, borderRadius: 1, background: 'rgba(212,165,116,0.25)' }} />
+                    ))}
+                  </div>
+                  <motion.span
+                    aria-hidden="true"
+                    className="rounded-full"
+                    style={{ width: 7, height: 7, background: '#E8570C', boxShadow: '0 0 6px rgba(232,87,12,0.7)' }}
+                    animate={{ opacity: [1, 0.35, 1] }}
+                    transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
+                  />
+                </div>
               </div>
 
               {/* Screen */}
@@ -204,14 +258,16 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                 className="relative w-full overflow-hidden"
                 style={{
                   aspectRatio: '16 / 10',
-                  borderRadius: 10,
+                  borderRadius: 8,
                   background: '#0A0806',
-                  boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.6), inset 0 12px 30px rgba(0,0,0,0.5)',
+                  boxShadow: [
+                    'inset 0 0 0 1px rgba(0,0,0,0.7)',
+                    'inset 0 0 0 3px rgba(212,165,116,0.12)',
+                    'inset 0 14px 34px rgba(0,0,0,0.6)',
+                    'inset 0 -6px 16px rgba(0,0,0,0.4)',
+                  ].join(', '),
                 }}
               >
-                {/* Tumbleweed rolls behind the current card, peeking below it — untouched, same component as elsewhere */}
-                <GithubTumbleweed />
-
                 <AnimatePresence custom={direction} initial={false}>
                   <motion.div
                     key={index}
@@ -222,9 +278,11 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                     exit="exit"
                     drag="x"
                     dragConstraints={{ left: 0, right: 0 }}
-                    dragElastic={0.6}
+                    dragElastic={0.3}
+                    dragMomentum={false}
                     onDragEnd={handleDragEnd}
                     className="absolute inset-0 z-10 cursor-grab active:cursor-grabbing touch-pan-y"
+                    style={{ willChange: 'transform' }}
                   >
                     {hasShots ? (
                       <>
@@ -381,6 +439,9 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
             ))}
           </div>
         </div>
+
+        {/* Tumbleweed rolls across the open background here, outside and behind the TV — untouched, same component as elsewhere */}
+        <GithubTumbleweed />
       </div>
     </section>
   )
