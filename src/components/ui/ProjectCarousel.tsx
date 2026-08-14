@@ -55,10 +55,24 @@ const BRANCH_ROW_HEIGHT = 44
 // How far across (in viewBox %) the branch lines reach before meeting their node.
 const BRANCH_END_X = 74
 
+const useIsNarrow = () => {
+  const [narrow, setNarrow] = useState(() => (typeof window === 'undefined' ? false : window.innerWidth < 768))
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)')
+    const update = () => setNarrow(mq.matches)
+    update()
+    mq.addEventListener('change', update)
+    return () => mq.removeEventListener('change', update)
+  }, [])
+  return narrow
+}
+
 // Bezier branch lines fan out from the TV toward a stacked list of project
-// nodes — same "draw the path in" beat as the Experience section's timeline,
-// but forking into N paths instead of one continuous line. Each line and its
-// node stagger in together so the reveal reads left-to-right.
+// nodes — same "draw the path in" beat as the Experience section's timeline.
+// On laptop/desktop they fan sideways from the TV; on phones there's no room
+// for that, so a single vertical trunk runs downward instead (matching the
+// Experience section's own serpentine timeline) with short branches ticking
+// out left/right to each node.
 const AllProjectsBranch = ({
   projects,
   isDark,
@@ -70,6 +84,85 @@ const AllProjectsBranch = ({
 }) => {
   const n = projects.length
   const startY = n / 2
+  const narrow = useIsNarrow()
+
+  if (narrow) {
+    return (
+      <div className="relative w-full" style={{ height: n * BRANCH_ROW_HEIGHT }}>
+        <svg
+          className="absolute inset-0 pointer-events-none"
+          width="100%"
+          height="100%"
+          viewBox={`0 0 100 ${n}`}
+          preserveAspectRatio="none"
+        >
+          {/* Central trunk, draws downward first */}
+          <motion.path
+            d={`M 50 0 L 50 ${n}`}
+            vectorEffect="non-scaling-stroke"
+            fill="none"
+            stroke="#E8570C"
+            strokeOpacity={0.35}
+            strokeWidth={1.2}
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          />
+          {projects.map((p, i) => {
+            const midY = i + 0.5
+            const side = i % 2 === 0 ? -1 : 1
+            const endX = 50 + side * 20
+            const d = `M 50 ${midY} C ${50 + side * 9} ${midY}, ${endX - side * 5} ${midY}, ${endX} ${midY}`
+            return (
+              <motion.path
+                key={p.title}
+                d={d}
+                vectorEffect="non-scaling-stroke"
+                fill="none"
+                stroke="#E8570C"
+                strokeOpacity={0.55}
+                strokeWidth={1.5}
+                strokeLinecap="round"
+                initial={{ pathLength: 0, opacity: 0 }}
+                animate={{ pathLength: 1, opacity: 1 }}
+                transition={{ duration: 0.3, delay: 0.45 + i * 0.06, ease: [0.22, 1, 0.36, 1] }}
+              />
+            )
+          })}
+        </svg>
+
+        {projects.map((p, i) => {
+          const midY = i + 0.5
+          const side = i % 2 === 0 ? -1 : 1
+          const offsetPct = 100 - (50 + side * 20)
+          return (
+            <motion.button
+              key={p.title}
+              onClick={() => onSelect(i)}
+              className={`absolute flex items-center gap-1.5 ${side < 0 ? 'flex-row-reverse text-right' : 'text-left'}`}
+              style={{
+                top: `${(midY / n) * 100}%`,
+                [side < 0 ? 'right' : 'left']: `${offsetPct}%`,
+                transform: 'translateY(-50%)',
+                maxWidth: '44%',
+              }}
+              initial={{ opacity: 0, y: -6, scale: 0.85 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ delay: 0.45 + i * 0.06 + 0.12, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <span className="rounded-full flex-shrink-0" style={{ width: 6, height: 6, background: '#E8570C' }} />
+              <span
+                className="text-[0.7rem] font-medium truncate"
+                style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}
+              >
+                {p.title.length > 22 ? `${p.title.slice(0, 20)}…` : p.title}
+              </span>
+            </motion.button>
+          )
+        })}
+      </div>
+    )
+  }
 
   return (
     <div className="relative w-full" style={{ height: n * BRANCH_ROW_HEIGHT }}>
@@ -344,7 +437,6 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                 background: 'linear-gradient(155deg, #3A2F26, #120D08)',
                 padding: isCompact ? '14px 14px 18px' : '20px 20px 26px',
                 transform: 'rotateX(2.5deg)',
-                transformStyle: 'preserve-3d',
                 boxShadow: [
                   '0 36px 70px rgba(0,0,0,0.6)',
                   '0 0 0 1.5px rgba(232,87,12,0.4)',
