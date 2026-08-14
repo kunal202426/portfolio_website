@@ -4,6 +4,7 @@ import { Menu, X } from 'lucide-react'
 import { ThemeSwitch } from './ThemeSwitch'
 import { LimelightNav } from './LimelightNav'
 import { useTheme } from '../providers/ThemeProvider'
+import { useLenis } from '../providers/LenisProvider'
 
 const navItems = [
   { label: 'About', href: '#about' },
@@ -25,6 +26,7 @@ export const Navbar = () => {
   const scrollLockUntilRef = useRef(0)
   const sectionRatioRef = useRef<Record<string, number>>({})
   const { resolvedTheme } = useTheme()
+  const lenis = useLenis()
 
   const isDark = resolvedTheme === 'dark'
   const limelightItems = useMemo(
@@ -165,27 +167,24 @@ export const Navbar = () => {
     setIsMobileMenuOpen(false)
 
     const runScroll = () => {
-      const target = document.querySelector(href)
+      const target = document.querySelector<HTMLElement>(href)
 
-      if (target) {
-        // Get element position relative to document
-        const elementTop = target.getBoundingClientRect().top + window.pageYOffset - 80
-        
-        // Use simple scroll - this should always work
-        window.scrollTo({
-          top: elementTop,
-          behavior: 'smooth'
-        })
-        
-        // Fallback for older browsers
-        setTimeout(() => {
-          if (Math.abs(window.pageYOffset - elementTop) > 50) {
-            window.scrollTo(0, elementTop)
-          }
-        }, 1000)
-      } else {
+      if (!target) {
         // Last resort - try direct hash navigation
         window.location.hash = href
+        return
+      }
+
+      if (lenis) {
+        // Lenis owns scroll position via its own continuous rAF loop, so a
+        // native window.scrollTo() here gets fought/overridden the very next
+        // frame - that fight is what made nav clicks occasionally land on
+        // the wrong section. Routing through Lenis's own API keeps its
+        // internal state in sync with the actual destination.
+        lenis.scrollTo(target, { offset: -80, duration: 1.1 })
+      } else {
+        const elementTop = target.getBoundingClientRect().top + window.pageYOffset - 80
+        window.scrollTo({ top: elementTop, behavior: 'smooth' })
       }
     }
 
