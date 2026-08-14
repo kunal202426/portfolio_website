@@ -88,7 +88,7 @@ const ScreenshotStack = ({ screenshots, title }: { screenshots: string[]; title:
                   return next
                 })
               }
-              className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
+              className="absolute inset-0 w-full h-full object-contain transition-opacity duration-700"
               style={{ opacity: shot === i ? 1 : 0 }}
             />
           )
@@ -105,6 +105,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
   const isDark = resolvedTheme === 'dark'
   const screenRef = useRef<HTMLDivElement>(null)
   const [screenWidth, setScreenWidth] = useState(560)
+  const wheelCooldownRef = useRef(false)
 
   useEffect(() => {
     if (projects.length === 0) return
@@ -136,6 +137,20 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
     } else if (info.offset.x > SWIPE_DISTANCE_THRESHOLD || info.velocity.x > SWIPE_VELOCITY_THRESHOLD) {
       prev()
     }
+  }
+
+  // Two-finger trackpad swipe (fires as horizontal wheel deltas, not a
+  // pointer drag) — cooldown stops one continuous gesture from paging
+  // through several projects at once.
+  const handleWheel = (e: React.WheelEvent) => {
+    if (wheelCooldownRef.current) return
+    if (Math.abs(e.deltaX) < 18 || Math.abs(e.deltaX) < Math.abs(e.deltaY)) return
+    wheelCooldownRef.current = true
+    if (e.deltaX > 0) next()
+    else prev()
+    window.setTimeout(() => {
+      wheelCooldownRef.current = false
+    }, 550)
   }
 
   const project = projects[index]
@@ -175,6 +190,15 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
             className="w-full flex flex-col items-center relative"
             style={{ maxWidth: 620, perspective: 1400 }}
           >
+            {/* Tumbleweed rolls just behind/beneath the set — subtle background
+                texture, not a separate standalone element. Untouched component,
+                only its mount point and opacity changed. */}
+            <div className="absolute inset-0 pointer-events-none" style={{ opacity: 0.65, zIndex: 0 }}>
+              <div className="pointer-events-auto">
+                <GithubTumbleweed />
+              </div>
+            </div>
+
             {/* Ambient rim glow — keeps the set separated from the page background
                 at any brightness/theme, not just relying on the bezel's own contrast */}
             <div
@@ -255,6 +279,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
               {/* Screen */}
               <div
                 ref={screenRef}
+                onWheel={handleWheel}
                 className="relative w-full overflow-hidden"
                 style={{
                   aspectRatio: '16 / 10',
@@ -316,6 +341,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                           <div className="pointer-events-auto pt-1">
                             <BrutalButton
                               tone="on-dark"
+                              onPointerDown={(e) => e.stopPropagation()}
                               onClick={(e) => {
                                 e.stopPropagation()
                                 const targetUrl = project.liveUrl || project.githubUrl
@@ -377,6 +403,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                         </div>
                         <BrutalButton
                           tone="on-dark"
+                          onPointerDown={(e) => e.stopPropagation()}
                           onClick={(e) => {
                             e.stopPropagation()
                             const targetUrl = project.liveUrl || project.githubUrl
@@ -439,9 +466,6 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
             ))}
           </div>
         </div>
-
-        {/* Tumbleweed rolls across the open background here, outside and behind the TV — untouched, same component as elsewhere */}
-        <GithubTumbleweed />
       </div>
     </section>
   )
