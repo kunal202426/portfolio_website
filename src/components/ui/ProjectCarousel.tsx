@@ -141,13 +141,15 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
 
   // Two-finger trackpad swipe (fires as horizontal wheel deltas, not a
   // pointer drag) — cooldown stops one continuous gesture from paging
-  // through several projects at once.
+  // through several projects at once. Only the rightward direction is
+  // handled: the leftward one doubles as Windows' browser back/reload
+  // gesture, so we leave it alone entirely and let the OS handle it.
   const handleWheel = (e: React.WheelEvent) => {
     if (wheelCooldownRef.current) return
-    if (Math.abs(e.deltaX) < 18 || Math.abs(e.deltaX) < Math.abs(e.deltaY)) return
+    if (Math.abs(e.deltaX) < Math.abs(e.deltaY)) return
+    if (e.deltaX <= 18) return
     wheelCooldownRef.current = true
-    if (e.deltaX > 0) next()
-    else prev()
+    next()
     window.setTimeout(() => {
       wheelCooldownRef.current = false
     }, 550)
@@ -185,11 +187,33 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
         </p>
 
         <div className="flex flex-col items-center w-full">
-          {/* TV set */}
-          <div
-            className="w-full flex flex-col items-center relative"
-            style={{ maxWidth: 620, perspective: 1400 }}
-          >
+          {/* Arrow row — arrows only show on laptop/desktop (md+); phones use
+              drag/swipe on the screen itself instead. */}
+          <div className="w-full flex items-center justify-center gap-3 lg:gap-5">
+            <button
+              onClick={prev}
+              aria-label="Previous project"
+              className="hidden md:flex items-center justify-center flex-shrink-0 transition-transform hover:scale-110"
+              style={{
+                width: 44,
+                height: 44,
+                borderRadius: '50%',
+                border: '2px solid rgba(232, 87, 12, 0.4)',
+                background: isDark ? 'linear-gradient(145deg, #1A1510, #0E0E0B)' : 'linear-gradient(145deg, #FFFFFF, #F5F0E8)',
+                boxShadow: isDark ? '0 4px 12px rgba(0,0,0,0.5)' : '0 4px 12px rgba(0,0,0,0.1)',
+                color: '#E8570C',
+                fontSize: 18,
+                fontWeight: 700,
+              }}
+            >
+              ←
+            </button>
+
+            {/* TV set */}
+            <div
+              className="w-full flex flex-col items-center relative"
+              style={{ maxWidth: 620, perspective: 1400 }}
+            >
             {/* Tumbleweed rolls just behind/beneath the set — subtle background
                 texture, not a separate standalone element. Untouched component,
                 only its mount point and opacity changed. */}
@@ -312,10 +336,14 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                     {hasShots ? (
                       <>
                         <ScreenshotStack screenshots={project.screenshots!} title={project.title} />
-                        {/* Bottom info overlay */}
+                        {/* Bottom info overlay — bottom padding leaves room for the
+                            separately-floating action button below (see comment above it) */}
                         <div
-                          className="absolute inset-x-0 bottom-0 flex flex-col items-center text-center gap-2 px-3 pb-3 pt-10 pointer-events-none"
-                          style={{ background: 'linear-gradient(to top, rgba(10,8,6,0.92) 10%, rgba(10,8,6,0.55) 55%, transparent 100%)' }}
+                          className="absolute inset-x-0 bottom-0 flex flex-col items-center text-center gap-2 px-3 pt-10 pointer-events-none"
+                          style={{
+                            paddingBottom: isCompact ? 48 : 56,
+                            background: 'linear-gradient(to top, rgba(10,8,6,0.92) 10%, rgba(10,8,6,0.55) 55%, transparent 100%)',
+                          }}
                         >
                           <h3
                             className="font-display font-bold leading-tight px-2 pointer-events-none"
@@ -337,19 +365,6 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                                 {tag}
                               </span>
                             ))}
-                          </div>
-                          <div className="pointer-events-auto pt-1">
-                            <BrutalButton
-                              tone="on-dark"
-                              onPointerDown={(e) => e.stopPropagation()}
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                const targetUrl = project.liveUrl || project.githubUrl
-                                if (targetUrl) window.open(targetUrl, '_blank', 'noopener,noreferrer')
-                              }}
-                            >
-                              {project.liveUrl ? 'View Live' : project.githubUrl ? 'View Code' : 'Explore'}
-                            </BrutalButton>
                           </div>
                         </div>
                       </>
@@ -390,7 +405,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                         >
                           {project.description}
                         </p>
-                        <div className="flex flex-wrap gap-1.5 justify-center px-2 mb-3">
+                        <div className="flex flex-wrap gap-1.5 justify-center px-2" style={{ marginBottom: isCompact ? 44 : 52 }}>
                           {project.tags.slice(0, isCompact ? 3 : 4).map((tag) => (
                             <span
                               key={tag}
@@ -401,17 +416,6 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                             </span>
                           ))}
                         </div>
-                        <BrutalButton
-                          tone="on-dark"
-                          onPointerDown={(e) => e.stopPropagation()}
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            const targetUrl = project.liveUrl || project.githubUrl
-                            if (targetUrl) window.open(targetUrl, '_blank', 'noopener,noreferrer')
-                          }}
-                        >
-                          {project.liveUrl ? 'View Live' : project.githubUrl ? 'View Code' : 'Explore'}
-                        </BrutalButton>
                       </div>
                     )}
                   </motion.div>
@@ -422,6 +426,28 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                   className="absolute inset-0 pointer-events-none z-20"
                   style={{ background: 'linear-gradient(115deg, rgba(255,255,255,0.07) 0%, transparent 30%)' }}
                 />
+
+                {/* Action button — deliberately OUTSIDE the draggable AnimatePresence
+                    subtree above. framer-motion's `drag` listener is attached natively
+                    directly to that ancestor, so it fires before any React-level
+                    stopPropagation on a descendant button ever gets a chance to run;
+                    structurally isolating the button here is what actually makes it
+                    reliably clickable regardless of the drag gesture. */}
+                <div
+                  className="absolute inset-x-0 bottom-0 flex justify-center pb-3 pt-8 z-30 pointer-events-none"
+                  style={{ background: 'linear-gradient(to top, rgba(10,8,6,0.88) 25%, transparent 100%)' }}
+                >
+                  <BrutalButton
+                    tone="on-dark"
+                    className="pointer-events-auto"
+                    onClick={() => {
+                      const targetUrl = project.liveUrl || project.githubUrl
+                      if (targetUrl) window.open(targetUrl, '_blank', 'noopener,noreferrer')
+                    }}
+                  >
+                    {project.liveUrl ? 'View Live' : project.githubUrl ? 'View Code' : 'Explore'}
+                  </BrutalButton>
+                </div>
               </div>
             </div>
 
@@ -445,9 +471,29 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                 background: 'linear-gradient(90deg, transparent, rgba(212,165,116,0.25), transparent)',
               }}
             />
+            </div>
+
+            <button
+              onClick={next}
+              aria-label="Next project"
+              className="hidden md:flex items-center justify-center flex-shrink-0 transition-transform hover:scale-110"
+              style={{
+                width: 44,
+                height: 44,
+                borderRadius: '50%',
+                border: '2px solid rgba(232, 87, 12, 0.4)',
+                background: isDark ? 'linear-gradient(145deg, #1A1510, #0E0E0B)' : 'linear-gradient(145deg, #FFFFFF, #F5F0E8)',
+                boxShadow: isDark ? '0 4px 12px rgba(0,0,0,0.5)' : '0 4px 12px rgba(0,0,0,0.1)',
+                color: '#E8570C',
+                fontSize: 18,
+                fontWeight: 700,
+              }}
+            >
+              →
+            </button>
           </div>
 
-          {/* Dot indicators replace the old arrow buttons — click to jump, or swipe the screen */}
+          {/* Dot indicators — click to jump, or use the arrows/swipe */}
           <div className="flex items-center gap-2 mt-6" role="tablist" aria-label="Select project">
             {projects.map((p, i) => (
               <button
