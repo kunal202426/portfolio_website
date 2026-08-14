@@ -50,6 +50,81 @@ const screenVariants: Variants = {
   }),
 }
 
+// One row of vertical space per project node in the "All Projects" branch view.
+const BRANCH_ROW_HEIGHT = 44
+// How far across (in viewBox %) the branch lines reach before meeting their node.
+const BRANCH_END_X = 74
+
+// Bezier branch lines fan out from the TV toward a stacked list of project
+// nodes — same "draw the path in" beat as the Experience section's timeline,
+// but forking into N paths instead of one continuous line. Each line and its
+// node stagger in together so the reveal reads left-to-right.
+const AllProjectsBranch = ({
+  projects,
+  isDark,
+  onSelect,
+}: {
+  projects: Project[]
+  isDark: boolean
+  onSelect: (index: number) => void
+}) => {
+  const n = projects.length
+  const startY = n / 2
+
+  return (
+    <div className="relative w-full" style={{ height: n * BRANCH_ROW_HEIGHT }}>
+      <svg
+        className="absolute inset-0 pointer-events-none"
+        width="100%"
+        height="100%"
+        viewBox={`0 0 100 ${n}`}
+        preserveAspectRatio="none"
+      >
+        {projects.map((p, i) => {
+          const endY = i + 0.5
+          const d = `M 0 ${startY} C 40 ${startY}, 32 ${endY}, ${BRANCH_END_X} ${endY}`
+          return (
+            <motion.path
+              key={p.title}
+              d={d}
+              vectorEffect="non-scaling-stroke"
+              fill="none"
+              stroke="#E8570C"
+              strokeOpacity={0.55}
+              strokeWidth={1.5}
+              strokeLinecap="round"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{ pathLength: 1, opacity: 1 }}
+              transition={{ duration: 0.5, delay: i * 0.055, ease: [0.22, 1, 0.36, 1] }}
+            />
+          )
+        })}
+      </svg>
+
+      {projects.map((p, i) => (
+        <motion.button
+          key={p.title}
+          onClick={() => onSelect(i)}
+          className="absolute flex items-center gap-2 text-left"
+          style={{ top: `${((i + 0.5) / n) * 100}%`, left: `${BRANCH_END_X}%`, transform: 'translateY(-50%)' }}
+          initial={{ opacity: 0, x: 14, scale: 0.85 }}
+          animate={{ opacity: 1, x: 0, scale: 1 }}
+          transition={{ delay: i * 0.055 + 0.28, duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+          whileHover={{ x: 4 }}
+        >
+          <span className="rounded-full flex-shrink-0" style={{ width: 6, height: 6, background: '#E8570C' }} />
+          <span
+            className="text-xs font-medium whitespace-nowrap"
+            style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}
+          >
+            {p.title.length > 30 ? `${p.title.slice(0, 28)}…` : p.title}
+          </span>
+        </motion.button>
+      ))}
+    </div>
+  )
+}
+
 const ScreenshotStack = ({ screenshots, title }: { screenshots: string[]; title: string }) => {
   const [shot, setShot] = useState(0)
   const [broken, setBroken] = useState<boolean[]>(() => screenshots.map(() => false))
@@ -101,6 +176,7 @@ const ScreenshotStack = ({ screenshots, title }: { screenshots: string[]; title:
 export const ProjectCarousel = memo(function ProjectCarousel({ projects }: ProjectCarouselProps) {
   const [index, setIndex] = useState(0)
   const [direction, setDirection] = useState(1)
+  const [allView, setAllView] = useState(false)
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme === 'dark'
   const screenRef = useRef<HTMLDivElement>(null)
@@ -180,38 +256,63 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
 
       <div className="relative z-10 w-full px-3 md:px-6">
         <p
-          className="text-xs uppercase tracking-[0.15em] mb-5 md:mb-7 font-bold text-center"
+          className="text-xs uppercase tracking-[0.15em] mb-3 font-bold text-center"
           style={{ color: isDark ? '#9B8B70' : '#6B5D4A' }}
         >
           FEATURED PROJECTS
         </p>
 
-        <div className="flex flex-col items-center w-full">
-          {/* Arrow row — arrows only show on laptop/desktop (md+); phones use
-              drag/swipe on the screen itself instead. */}
-          <div className="w-full flex items-center justify-center gap-3 lg:gap-5">
-            <button
-              onClick={prev}
-              aria-label="Previous project"
-              className="hidden md:flex items-center justify-center flex-shrink-0 transition-transform hover:scale-110"
-              style={{
-                width: 44,
-                height: 44,
-                borderRadius: '50%',
-                border: '2px solid rgba(232, 87, 12, 0.4)',
-                background: isDark ? 'linear-gradient(145deg, #1A1510, #0E0E0B)' : 'linear-gradient(145deg, #FFFFFF, #F5F0E8)',
-                boxShadow: isDark ? '0 4px 12px rgba(0,0,0,0.5)' : '0 4px 12px rgba(0,0,0,0.1)',
-                color: '#E8570C',
-                fontSize: 18,
-                fontWeight: 700,
-              }}
-            >
-              ←
-            </button>
+        <div className="flex justify-center mb-4 md:mb-6">
+          <button
+            onClick={() => setAllView((v) => !v)}
+            className="text-xs font-bold uppercase tracking-widest transition-colors"
+            style={{
+              padding: '7px 16px',
+              borderRadius: 999,
+              border: `1.5px solid ${allView ? '#E8570C' : 'rgba(232,87,12,0.4)'}`,
+              background: allView ? 'rgba(232,87,12,0.16)' : 'transparent',
+              color: '#E8570C',
+            }}
+          >
+            {allView ? '✕ Close' : 'All Projects'}
+          </button>
+        </div>
 
-            {/* TV set */}
-            <div
-              className="w-full flex flex-col items-center relative"
+        <div className="flex flex-col items-center w-full">
+          {/* Arrow row — arrows only show on laptop/desktop (md+) and only in
+              single-project mode; phones use drag/swipe on the screen itself,
+              and in All Projects mode navigation is by clicking a branch node. */}
+          <div
+            className={`w-full flex gap-3 lg:gap-5 ${allView ? 'flex-col md:flex-row items-center md:items-start justify-center md:justify-start' : 'items-center justify-center'}`}
+          >
+            {!allView && (
+              <button
+                onClick={prev}
+                aria-label="Previous project"
+                className="hidden md:flex items-center justify-center flex-shrink-0 transition-transform hover:scale-110"
+                style={{
+                  width: 44,
+                  height: 44,
+                  borderRadius: '50%',
+                  border: '2px solid rgba(232, 87, 12, 0.4)',
+                  background: isDark ? 'linear-gradient(145deg, #1A1510, #0E0E0B)' : 'linear-gradient(145deg, #FFFFFF, #F5F0E8)',
+                  boxShadow: isDark ? '0 4px 12px rgba(0,0,0,0.5)' : '0 4px 12px rgba(0,0,0,0.1)',
+                  color: '#E8570C',
+                  fontSize: 18,
+                  fontWeight: 700,
+                }}
+              >
+                ←
+              </button>
+            )}
+
+            {/* TV set — actual width (not just a visual scale) shrinks when All
+                Projects mode opens, so the flex row genuinely reflows and makes
+                room for the branch view beside it rather than leaving a gap. */}
+            <motion.div
+              className="flex flex-col items-center relative flex-shrink-0"
+              animate={{ width: allView ? 260 : '100%' }}
+              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
               style={{ maxWidth: 620, perspective: 1400 }}
             >
             {/* Tumbleweed rolls just behind/beneath the set — subtle background
@@ -336,12 +437,10 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                     {hasShots ? (
                       <>
                         <ScreenshotStack screenshots={project.screenshots!} title={project.title} />
-                        {/* Bottom info overlay — bottom padding leaves room for the
-                            separately-floating action button below (see comment above it) */}
+                        {/* Bottom info overlay */}
                         <div
-                          className="absolute inset-x-0 bottom-0 flex flex-col items-center text-center gap-2 px-3 pt-10 pointer-events-none"
+                          className="absolute inset-x-0 bottom-0 flex flex-col items-center text-center gap-2 px-3 pb-3 pt-10 pointer-events-none"
                           style={{
-                            paddingBottom: isCompact ? 48 : 56,
                             background: 'linear-gradient(to top, rgba(10,8,6,0.92) 10%, rgba(10,8,6,0.55) 55%, transparent 100%)',
                           }}
                         >
@@ -405,7 +504,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                         >
                           {project.description}
                         </p>
-                        <div className="flex flex-wrap gap-1.5 justify-center px-2" style={{ marginBottom: isCompact ? 44 : 52 }}>
+                        <div className="flex flex-wrap gap-1.5 justify-center px-2 mb-1">
                           {project.tags.slice(0, isCompact ? 3 : 4).map((tag) => (
                             <span
                               key={tag}
@@ -426,28 +525,32 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                   className="absolute inset-0 pointer-events-none z-20"
                   style={{ background: 'linear-gradient(115deg, rgba(255,255,255,0.07) 0%, transparent 30%)' }}
                 />
+              </div>
 
-                {/* Action button — deliberately OUTSIDE the draggable AnimatePresence
-                    subtree above. framer-motion's `drag` listener is attached natively
-                    directly to that ancestor, so it fires before any React-level
-                    stopPropagation on a descendant button ever gets a chance to run;
-                    structurally isolating the button here is what actually makes it
-                    reliably clickable regardless of the drag gesture. */}
-                <div
-                  className="absolute inset-x-0 bottom-0 flex justify-center pb-3 pt-8 z-30 pointer-events-none"
-                  style={{ background: 'linear-gradient(to top, rgba(10,8,6,0.88) 25%, transparent 100%)' }}
+              {/* Action button — lives in the bezel/frame below the screen, not
+                  inside it. It was still getting swallowed there because that
+                  whole area has a wheel handler and hosts the drag-gesture
+                  surface; moving it to the frame puts it in a completely
+                  different part of the DOM that neither of those touch at all.
+                  The recessed socket sells the "physical TV button" feel. */}
+              <div
+                className="w-full flex justify-center"
+                style={{
+                  marginTop: isCompact ? 12 : 16,
+                  padding: isCompact ? '8px' : '10px',
+                  borderRadius: 12,
+                  boxShadow: 'inset 0 2px 5px rgba(0,0,0,0.55), inset 0 -1px 0 rgba(255,255,255,0.05)',
+                }}
+              >
+                <BrutalButton
+                  tone="on-dark"
+                  onClick={() => {
+                    const targetUrl = project.liveUrl || project.githubUrl
+                    if (targetUrl) window.open(targetUrl, '_blank', 'noopener,noreferrer')
+                  }}
                 >
-                  <BrutalButton
-                    tone="on-dark"
-                    className="pointer-events-auto"
-                    onClick={() => {
-                      const targetUrl = project.liveUrl || project.githubUrl
-                      if (targetUrl) window.open(targetUrl, '_blank', 'noopener,noreferrer')
-                    }}
-                  >
-                    {project.liveUrl ? 'View Live' : project.githubUrl ? 'View Code' : 'Explore'}
-                  </BrutalButton>
-                </div>
+                  {project.liveUrl ? 'View Live' : project.githubUrl ? 'View Code' : 'Explore'}
+                </BrutalButton>
               </div>
             </div>
 
@@ -471,28 +574,45 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                 background: 'linear-gradient(90deg, transparent, rgba(212,165,116,0.25), transparent)',
               }}
             />
-            </div>
+            </motion.div>
 
-            <button
-              onClick={next}
-              aria-label="Next project"
-              className="hidden md:flex items-center justify-center flex-shrink-0 transition-transform hover:scale-110"
-              style={{
-                width: 44,
-                height: 44,
-                borderRadius: '50%',
-                border: '2px solid rgba(232, 87, 12, 0.4)',
-                background: isDark ? 'linear-gradient(145deg, #1A1510, #0E0E0B)' : 'linear-gradient(145deg, #FFFFFF, #F5F0E8)',
-                boxShadow: isDark ? '0 4px 12px rgba(0,0,0,0.5)' : '0 4px 12px rgba(0,0,0,0.1)',
-                color: '#E8570C',
-                fontSize: 18,
-                fontWeight: 700,
-              }}
-            >
-              →
-            </button>
+            {allView && (
+              <div className="flex-1 min-w-0 pt-2">
+                <AllProjectsBranch
+                  projects={projects}
+                  isDark={isDark}
+                  onSelect={(i) => {
+                    goTo(i)
+                    setAllView(false)
+                  }}
+                />
+              </div>
+            )}
+
+            {!allView && (
+              <button
+                onClick={next}
+                aria-label="Next project"
+                className="hidden md:flex items-center justify-center flex-shrink-0 transition-transform hover:scale-110"
+                style={{
+                  width: 44,
+                  height: 44,
+                  borderRadius: '50%',
+                  border: '2px solid rgba(232, 87, 12, 0.4)',
+                  background: isDark ? 'linear-gradient(145deg, #1A1510, #0E0E0B)' : 'linear-gradient(145deg, #FFFFFF, #F5F0E8)',
+                  boxShadow: isDark ? '0 4px 12px rgba(0,0,0,0.5)' : '0 4px 12px rgba(0,0,0,0.1)',
+                  color: '#E8570C',
+                  fontSize: 18,
+                  fontWeight: 700,
+                }}
+              >
+                →
+              </button>
+            )}
           </div>
 
+          {!allView && (
+          <>
           {/* Dot indicators — click to jump, or use the arrows/swipe */}
           <div className="flex items-center gap-2 mt-6" role="tablist" aria-label="Select project">
             {projects.map((p, i) => (
@@ -511,6 +631,8 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
               />
             ))}
           </div>
+          </>
+          )}
         </div>
       </div>
     </section>
