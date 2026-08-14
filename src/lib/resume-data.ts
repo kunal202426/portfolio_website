@@ -82,6 +82,7 @@ export const resumeData = {
       category: 'ml',
       liveUrl: 'https://ysil.vercel.app/',
       githubUrl: 'https://github.com/kunal202426',
+      screenshots: ['/projects/stock-prediction/1.jpg', '/projects/stock-prediction/2.jpg'],
       achievements: [
         'Architected a hybrid ML ensemble - LSTM + LightGBM with FinBERT NLP sentiment analysis and technical indicators.',
         'Built automated ETL and feature engineering pipelines with model retraining workflows.',
@@ -100,6 +101,7 @@ export const resumeData = {
       starred: true,
       category: 'dev',
       liveUrl: 'https://sim-city-alpha.vercel.app/',
+      screenshots: ['/projects/cityflow/1.jpg', '/projects/cityflow/2.jpg'],
       achievements: [
         'Designed a multi-variable simulation engine across fleet size, surge pricing, weather, time-of-day demand curves, and zone-level demand weighting to generate continuous KPI data streams.',
         'Built live Recharts dashboards with rolling time-series windows for average wait time, congestion index, fleet utilization, and revenue, updated at fixed intervals for trend analysis.',
@@ -120,6 +122,7 @@ export const resumeData = {
       starred: true,
       category: 'ml',
       githubUrl: 'https://github.com/kunal202426/CodeGraph-Intelligence',
+      screenshots: ['/projects/codegraph/1.jpg', '/projects/codegraph/2.jpg'],
       achievements: [
         'Building a semantic code intelligence platform that maps repository structure into queryable knowledge graphs.',
         'Serves as persistent memory layer for AI coding agents with vector-based semantic search and context retrieval.',
@@ -138,6 +141,7 @@ export const resumeData = {
       category: 'dev',
       liveUrl: 'https://system-design-simulator-weld.vercel.app/',
       githubUrl: 'https://github.com/kunal202426',
+      screenshots: ['/projects/system-design-simulator/1.jpg', '/projects/system-design-simulator/2.jpg'],
       achievements: [
         'Built a full-stack distributed systems simulator using React (ReactFlow), FastAPI, and WebSockets.',
         'Modeled failure scenarios via M/M/1 queueing theory, chaos engineering, and probabilistic fault injection (node crashes, latency spikes, traffic surges).',
@@ -206,6 +210,7 @@ export const resumeData = {
       category: 'dev',
       liveUrl: 'https://job-hunt-pro.vercel.app/',
       githubUrl: 'https://github.com/kunal202426',
+      screenshots: ['/projects/jobhuntpro/1.jpg', '/projects/jobhuntpro/2.jpg'],
       achievements: [
         'Built LinkedIn job scraper with AI-powered cold email generator for automated outreach.',
         'Multi-user SaaS architecture with per-user credential isolation and admin dashboard.',
@@ -240,6 +245,7 @@ export const resumeData = {
       category: 'design',
       liveUrl: 'https://www.levitatehyperloop.com/',
       githubUrl: 'https://github.com/kunal202426',
+      screenshots: ['/projects/levitate-hyperloop/1.jpg', '/projects/levitate-hyperloop/2.jpg'],
       achievements: [
         'Designed and deployed a 3D interactive, fully responsive website in Three.js and React.',
         'Optimized rendering and performance for global accessibility with real-time hardware data integration.',
