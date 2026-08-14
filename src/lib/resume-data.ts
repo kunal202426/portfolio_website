@@ -333,12 +333,14 @@ export const resumeData = {
       issuer: 'Citi',
       year: 2026,
       description: 'Job simulation covering software engineering practices, system design, and technology infrastructure within a global banking environment.',
+      logo: '/cert-logos/citi.svg',
     },
     {
       title: 'McKinsey Forward Program',
       issuer: 'McKinsey & Company',
       year: 2026,
       description: 'Future-skills program covering problem-solving, digital fluency, communication, and leadership frameworks used by McKinsey consultants.',
+      logo: '/cert-logos/mckinsey.svg',
     },
     {
       title: 'Data Analytics - Skill Up',
@@ -346,12 +348,14 @@ export const resumeData = {
       year: 2026,
       description:
         '9-week program, 98% (874/895 modules) - Python, NumPy, Pandas, EDA, SQL, Power BI, Tableau, Excel, Web Scraping; capstone projects in end-to-end data analysis and web scraping integration.',
+      logo: '/cert-logos/geeksforgeeks.svg',
     },
     {
       title: 'Data Analytics Job Simulation',
       issuer: 'Deloitte Australia',
       year: 2025,
       description: 'Hands-on simulation covering data analysis, forensic technology, and business insights, modeled on real Deloitte client engagements.',
+      logo: '/cert-logos/deloitte.svg',
     },
     {
       title: 'Blockchain Developer Certification',
@@ -359,12 +363,14 @@ export const resumeData = {
       year: 2025,
       description:
         'Blockchain fundamentals, smart contract development, Hyperledger Fabric, and DApp architecture.',
+      logo: '/cert-logos/ibm.svg',
     },
     {
       title: 'Full Stack Web Development (MERN)',
       issuer: 'Apna College',
       year: 2024,
       description: 'Built and deployed multiple production full-stack web applications end-to-end.',
+      logo: '/cert-logos/apna-college.png',
     },
   ],
 }

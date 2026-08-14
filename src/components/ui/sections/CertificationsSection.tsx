@@ -168,16 +168,26 @@ export const CertificationsSection = () => {
                   boxShadow: isDark ? '0 4px 16px rgba(0,0,0,0.3)' : '0 4px 16px rgba(232,87,12,0.1)',
                 }}
               >
-                <span
-                  className="text-[10px] font-mono font-bold uppercase tracking-widest px-2 py-0.5 rounded-full w-fit"
-                  style={{
-                    background: 'rgba(232,87,12,0.15)',
-                    color: '#E8570C',
-                    border: '1px solid rgba(232,87,12,0.3)',
-                  }}
-                >
-                  {cert.year}
-                </span>
+                <div className="flex items-center justify-between gap-2">
+                  <span
+                    className="text-[10px] font-mono font-bold uppercase tracking-widest px-2 py-0.5 rounded-full w-fit"
+                    style={{
+                      background: 'rgba(232,87,12,0.15)',
+                      color: '#E8570C',
+                      border: '1px solid rgba(232,87,12,0.3)',
+                    }}
+                  >
+                    {cert.year}
+                  </span>
+                  {cert.logo && (
+                    <div
+                      className="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0 overflow-hidden"
+                      style={{ background: '#FFFFFF', border: '1px solid rgba(212, 165, 116, 0.3)' }}
+                    >
+                      <img src={cert.logo} alt="" className="w-full h-full object-contain p-1" />
+                    </div>
+                  )}
+                </div>
                 <p className="text-xs font-bold leading-tight" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
                   {cert.title}
                 </p>
@@ -193,8 +203,20 @@ export const CertificationsSection = () => {
             {resumeData.certifications.map((cert, index) => (
               <div
                 key={`cert-${index}`}
-                className="w-full transition-transform duration-300 hover:-translate-y-1"
+                className="relative w-full transition-transform duration-300 hover:-translate-y-1"
               >
+                {cert.logo && (
+                  <div
+                    className="absolute -top-3 -right-3 z-10 w-10 h-10 rounded-full flex items-center justify-center overflow-hidden"
+                    style={{
+                      background: '#FFFFFF',
+                      border: '1.5px solid rgba(232, 87, 12, 0.4)',
+                      boxShadow: '0 4px 10px rgba(0,0,0,0.15)',
+                    }}
+                  >
+                    <img src={cert.logo} alt="" className="w-full h-full object-contain p-1.5" />
+                  </div>
+                )}
                 <div
                   className="rounded-xl p-4 transition-all duration-300"
                   style={{
