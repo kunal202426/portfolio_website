@@ -32,8 +32,8 @@ const AchievementCard = memo(function AchievementCard({ item, isDark }: { item: 
           <div
             className="w-11 h-11 rounded-xl flex items-center justify-center text-white flex-shrink-0 overflow-hidden"
             style={{
-              background: item.logo ? (isDark ? '#F0EBE0' : '#FFFFFF') : 'linear-gradient(145deg, #D4A574, #9B8B70)',
-              border: item.logo ? `1px solid ${isDark ? 'rgba(212, 165, 116, 0.3)' : 'rgba(212, 165, 116, 0.35)'}` : 'none',
+              background: item.logo ? '#1A1208' : 'linear-gradient(145deg, #D4A574, #9B8B70)',
+              border: item.logo ? '1px solid rgba(212, 165, 116, 0.3)' : 'none',
             }}
           >
             {item.logo ? (
