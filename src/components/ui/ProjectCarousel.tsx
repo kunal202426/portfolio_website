@@ -87,6 +87,13 @@ const AllProjectsBranch = ({
   const narrow = useIsNarrow()
 
   if (narrow) {
+    // Single column, fixed-left trunk — the same pattern the Experience
+    // section's own mobile timeline uses (left-4, cards in one column to
+    // the right) rather than alternating sides. The earlier zigzag design
+    // anchored left-side boxes with only a `maxWidth` guess, which broke
+    // down for longer titles and spilled past the screen edge. Anchoring
+    // with left+right instead makes the browser compute the real width,
+    // so text truncates inside its box instead of overflowing it.
     return (
       <div className="relative w-full" style={{ height: n * BRANCH_ROW_HEIGHT }}>
         <svg
@@ -96,9 +103,9 @@ const AllProjectsBranch = ({
           viewBox={`0 0 100 ${n}`}
           preserveAspectRatio="none"
         >
-          {/* Central trunk, draws downward first */}
+          {/* Trunk, draws downward first */}
           <motion.path
-            d={`M 50 0 L 50 ${n}`}
+            d={`M 6 0 L 6 ${n}`}
             vectorEffect="non-scaling-stroke"
             fill="none"
             stroke="#E8570C"
@@ -110,9 +117,7 @@ const AllProjectsBranch = ({
           />
           {projects.map((p, i) => {
             const midY = i + 0.5
-            const side = i % 2 === 0 ? -1 : 1
-            const endX = 50 + side * 20
-            const d = `M 50 ${midY} C ${50 + side * 9} ${midY}, ${endX - side * 5} ${midY}, ${endX} ${midY}`
+            const d = `M 6 ${midY} L 13 ${midY}`
             return (
               <motion.path
                 key={p.title}
@@ -125,48 +130,38 @@ const AllProjectsBranch = ({
                 strokeLinecap="round"
                 initial={{ pathLength: 0, opacity: 0 }}
                 animate={{ pathLength: 1, opacity: 1 }}
-                transition={{ duration: 0.3, delay: 0.45 + i * 0.06, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.25, delay: 0.4 + i * 0.055, ease: [0.22, 1, 0.36, 1] }}
               />
             )
           })}
         </svg>
 
-        {projects.map((p, i) => {
-          const midY = i + 0.5
-          const side = i % 2 === 0 ? -1 : 1
-          const offsetPct = 100 - (50 + side * 20)
-          return (
-            <motion.button
-              key={p.title}
-              onClick={() => onSelect(i)}
-              className={`absolute flex items-center gap-1.5 ${side < 0 ? 'flex-row-reverse text-right' : 'text-left'}`}
+        {projects.map((p, i) => (
+          <motion.button
+            key={p.title}
+            onClick={() => onSelect(i)}
+            className="absolute flex items-center gap-2 text-left"
+            style={{ top: `${((i + 0.5) / n) * 100}%`, left: '15%', right: '2%', transform: 'translateY(-50%)' }}
+            initial={{ opacity: 0, x: -8, scale: 0.9 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            transition={{ delay: 0.4 + i * 0.055 + 0.12, duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <span className="rounded-full flex-shrink-0" style={{ width: 6, height: 6, background: '#E8570C' }} />
+            <span
+              className="text-[0.72rem] font-medium truncate flex-1 min-w-0"
               style={{
-                top: `${(midY / n) * 100}%`,
-                [side < 0 ? 'right' : 'left']: `${offsetPct}%`,
-                transform: 'translateY(-50%)',
-                maxWidth: '44%',
+                color: isDark ? '#F0EBE0' : '#1A1208',
+                background: isDark ? 'rgba(232,87,12,0.14)' : 'rgba(232,87,12,0.1)',
+                border: '1px solid rgba(232,87,12,0.4)',
+                borderRadius: 6,
+                padding: '6px 10px',
+                boxShadow: isDark ? '0 2px 6px rgba(0,0,0,0.35)' : '0 2px 6px rgba(0,0,0,0.08)',
               }}
-              initial={{ opacity: 0, y: -6, scale: 0.85 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ delay: 0.45 + i * 0.06 + 0.12, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             >
-              <span className="rounded-full flex-shrink-0" style={{ width: 6, height: 6, background: '#E8570C' }} />
-              <span
-                className="text-[0.7rem] font-medium truncate"
-                style={{
-                  color: isDark ? '#F0EBE0' : '#1A1208',
-                  background: isDark ? 'rgba(232,87,12,0.14)' : 'rgba(232,87,12,0.1)',
-                  border: '1px solid rgba(232,87,12,0.4)',
-                  borderRadius: 6,
-                  padding: '5px 8px',
-                  boxShadow: isDark ? '0 2px 6px rgba(0,0,0,0.35)' : '0 2px 6px rgba(0,0,0,0.08)',
-                }}
-              >
-                {p.title.length > 22 ? `${p.title.slice(0, 20)}…` : p.title}
-              </span>
-            </motion.button>
-          )
-        })}
+              {p.title}
+            </span>
+          </motion.button>
+        ))}
       </div>
     )
   }
