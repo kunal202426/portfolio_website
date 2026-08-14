@@ -176,12 +176,12 @@ export const HeroSection = () => {
 
             <div className="overflow-hidden mb-6">
               <p className="hero-word text-xl md:text-2xl lg:text-3xl font-light" style={{ color: '#D4C4A8' }}>
-                Full-Stack Developer & ML Engineer
+                Software Engineer & ML Engineer
               </p>
             </div>
 
             <p className="hero-subtitle text-base md:text-lg max-w-2xl mx-auto leading-relaxed" style={{ color: '#FFFFFF' }}>
-              I build scalable backend systems, machine learning pipelines, and real-time applications - with production experience across full-stack development, distributed systems, and blockchain engineering.
+              I build scalable backend systems, machine learning pipelines, and real-time applications - with production experience across full-stack development and blockchain engineering.
             </p>
           </div>
         </motion.div>

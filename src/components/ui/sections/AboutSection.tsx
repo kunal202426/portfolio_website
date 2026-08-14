@@ -23,8 +23,8 @@ export const AboutSection = () => {
   const lastScrollY = useRef(0)
 
   const stats = [
-    { label: 'Years Coding', value: '3+' },
-    { label: 'Projects Built', value: '20+' },
+    { label: 'Years Coding', value: '2+' },
+    { label: 'Projects Built', value: '30+' },
     { label: 'Teams Led', value: '3' },
   ]
 
@@ -125,7 +125,7 @@ export const AboutSection = () => {
             {/* Bio */}
             <div className="space-y-4 mb-8">
               <p className="text-lg leading-relaxed transition-colors duration-500" style={{ color: isDark ? '#D4C4A8' : '#4A3C2A' }}>
-                I'm a Full-Stack Developer focused on backend engineering, machine learning, and real-time data systems. My work centers on designing scalable architectures that perform reliably under production-level load.
+                I'm a Software Engineer focused on backend engineering, machine learning, and real-time data systems. My work centers on designing scalable architectures that perform reliably under production-level load.
               </p>
               <p className="text-lg leading-relaxed transition-colors duration-500" style={{ color: isDark ? '#D4C4A8' : '#4A3C2A' }}>
                 Currently building production features at YES Securities (YES Bank) as a Full Stack Developer Intern, while completing my B.Tech in Computer Science &amp; Engineering at VIT. I also work on independent software projects, competitive engineering challenges, and UI/UX design.
