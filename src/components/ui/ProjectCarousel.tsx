@@ -153,7 +153,14 @@ const AllProjectsBranch = ({
               <span className="rounded-full flex-shrink-0" style={{ width: 6, height: 6, background: '#E8570C' }} />
               <span
                 className="text-[0.7rem] font-medium truncate"
-                style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}
+                style={{
+                  color: isDark ? '#F0EBE0' : '#1A1208',
+                  background: isDark ? 'rgba(232,87,12,0.14)' : 'rgba(232,87,12,0.1)',
+                  border: '1px solid rgba(232,87,12,0.4)',
+                  borderRadius: 6,
+                  padding: '5px 8px',
+                  boxShadow: isDark ? '0 2px 6px rgba(0,0,0,0.35)' : '0 2px 6px rgba(0,0,0,0.08)',
+                }}
               >
                 {p.title.length > 22 ? `${p.title.slice(0, 20)}…` : p.title}
               </span>
@@ -208,7 +215,14 @@ const AllProjectsBranch = ({
           <span className="rounded-full flex-shrink-0" style={{ width: 6, height: 6, background: '#E8570C' }} />
           <span
             className="text-xs font-medium whitespace-nowrap"
-            style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}
+            style={{
+              color: isDark ? '#F0EBE0' : '#1A1208',
+              background: isDark ? 'rgba(232,87,12,0.14)' : 'rgba(232,87,12,0.1)',
+              border: '1px solid rgba(232,87,12,0.4)',
+              borderRadius: 6,
+              padding: '6px 10px',
+              boxShadow: isDark ? '0 2px 6px rgba(0,0,0,0.35)' : '0 2px 6px rgba(0,0,0,0.08)',
+            }}
           >
             {p.title.length > 30 ? `${p.title.slice(0, 28)}…` : p.title}
           </span>

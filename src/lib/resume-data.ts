@@ -215,6 +215,7 @@ export const resumeData = {
       featured: false,
       category: 'ml',
       githubUrl: 'https://github.com/kunal202426',
+      screenshots: ['/projects/eye-tracking-inference/1.jpg'],
       achievements: [
         'Implemented Kalman smoothing, temporal voting ensemble, and calibration improvements for robust inference without model retraining.',
         'Conducting webcam domain adaptation research to bridge the gap between training data and real-world USB webcam deployment.',
@@ -231,6 +232,7 @@ export const resumeData = {
       featured: false,
       category: 'blockchain',
       githubUrl: 'https://github.com/kunal202426/Autonomous-agent-marketplace',
+      screenshots: ['/projects/agent-marketplace/1.jpg'],
       achievements: [
         'Built hybrid AI + blockchain system separating off-chain execution from on-chain trust and settlement.',
         'Implements blockchain-based escrow for verifiable, trustless payment coordination between autonomous agents.',
@@ -247,6 +249,7 @@ export const resumeData = {
       featured: false,
       category: 'blockchain',
       githubUrl: 'https://github.com/kunal202426',
+      screenshots: ['/projects/fertilizer-subsidy/1.jpg'],
       achievements: [
         'Built a DApp for tamper-proof subsidy allocation using Ethereum smart contracts (Solidity) and Web3.js.',
         'Implemented React + MetaMask frontend with on-chain redemption logic and event-driven audit trails.',
