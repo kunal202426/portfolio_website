@@ -13,6 +13,7 @@ interface AchievementCardData {
   badges: string[]
   year: string
   link?: string
+  logo?: string
 }
 
 const AchievementCard = memo(function AchievementCard({ item, isDark }: { item: AchievementCardData; isDark: boolean }) {
@@ -29,12 +30,17 @@ const AchievementCard = memo(function AchievementCard({ item, isDark }: { item: 
       <div className="p-4 md:p-5">
         <div className="flex items-start gap-3 min-w-0">
           <div
-            className="w-11 h-11 rounded-xl flex items-center justify-center text-white flex-shrink-0"
+            className="w-11 h-11 rounded-xl flex items-center justify-center text-white flex-shrink-0 overflow-hidden"
             style={{
-              background: 'linear-gradient(145deg, #D4A574, #9B8B70)',
+              background: item.logo ? (isDark ? '#F0EBE0' : '#FFFFFF') : 'linear-gradient(145deg, #D4A574, #9B8B70)',
+              border: item.logo ? `1px solid ${isDark ? 'rgba(212, 165, 116, 0.3)' : 'rgba(212, 165, 116, 0.35)'}` : 'none',
             }}
           >
-            <Award className="w-5 h-5" />
+            {item.logo ? (
+              <img src={item.logo} alt="" className="w-full h-full object-contain p-1.5" />
+            ) : (
+              <Award className="w-5 h-5" />
+            )}
           </div>
 
           <div className="min-w-0 flex-1">
@@ -114,6 +120,7 @@ export const CertificationsSection = () => {
     badges: ['Achievement'],
     year: String(achievement.year),
     link: achievement.url,
+    logo: achievement.logo,
   })), [])
 
   return (

@@ -317,12 +317,14 @@ export const resumeData = {
       year: 2025,
       description: 'Secured six awards across engineering, design, and technical presentation - representing VIT Vellore.',
       url: 'https://www.ghciitm.com/',
+      logo: '/GHC-logo.png',
     },
     {
       title: 'National Semi-Finalist - Flipkart GRiD 7.0',
       year: 2025,
       description: 'Advanced to national semi-finals in a highly competitive real-world software engineering challenge.',
       url: 'https://www.flipkartcareers.com/flipkart/grid',
+      logo: '/flipkart-com-logo.png',
     },
   ],
   certifications: [
