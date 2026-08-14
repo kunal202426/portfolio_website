@@ -10,6 +10,7 @@ gsap.registerPlugin(ScrollTrigger)
 
 export const ExperienceSection = () => {
   const containerRef = useRef<HTMLElement>(null)
+  const timelineRef = useRef<HTMLDivElement>(null)
   const svgRef = useRef<SVGSVGElement>(null)
   const pathRef = useRef<SVGPathElement>(null)
   const experiences = useMemo(() => [...resumeData.experience].sort((a, b) => b.year - a.year), [])
@@ -18,9 +19,10 @@ export const ExperienceSection = () => {
 
   useEffect(() => {
     const section = containerRef.current
+    const timelineElement = timelineRef.current
     const svgElement = svgRef.current
     const pathElement = pathRef.current
-    if (!section || !svgElement || !pathElement) return
+    if (!section || !timelineElement || !svgElement || !pathElement) return
 
     const isTouchViewport =
       window.matchMedia('(pointer: coarse)').matches ||
@@ -83,7 +85,7 @@ export const ExperienceSection = () => {
         let pathLength = setPathDash()
 
         ScrollTrigger.create({
-          trigger: section,
+          trigger: timelineElement,
           start: timelineStart,
           end: timelineEnd,
           invalidateOnRefresh: true,
@@ -102,7 +104,7 @@ export const ExperienceSection = () => {
           strokeDashoffset: 0,
           ease: 'none',
           scrollTrigger: {
-            trigger: section,
+            trigger: timelineElement,
             start: timelineStart,
             end: timelineEnd,
             scrub: true,
@@ -167,7 +169,7 @@ export const ExperienceSection = () => {
         </div>
 
         {/* Timeline */}
-        <div className="relative">
+        <div ref={timelineRef} className="relative">
           {/* Wavy Timeline Path SVG */}
           <svg
             ref={svgRef}
@@ -240,7 +242,6 @@ export const ExperienceSection = () => {
                           src={exp.logo}
                           alt={exp.company}
                           className="w-full h-full object-contain"
-                          loading="lazy"
                           decoding="async"
                         />
                       </div>
