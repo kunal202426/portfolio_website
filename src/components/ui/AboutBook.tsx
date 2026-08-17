@@ -1,26 +1,32 @@
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { motion } from 'framer-motion'
 
-const BIO_PARAGRAPHS = [
-  "I'm a Software Engineer focused on backend engineering, machine learning, and real-time data systems. My work centers on designing scalable architectures that perform reliably under production-level load.",
-  "Currently building production features at YES Securities (YES Bank) as a Full Stack Developer Intern, while completing my B.Tech in Computer Science & Engineering at VIT. I also work on independent software projects, competitive engineering challenges, and UI/UX design.",
-]
+interface AboutBookProps {
+  /** Cover art: a photo instead of the plain title cover. */
+  image?: string
+  imageAlt?: string
+  coverLabel: string
+  coverTitle: ReactNode
+  coverSubtitle?: string
+  pageLabel: string
+  children: ReactNode
+}
 
 // Adapted from a Framer "Book" reference: the cover swings open on its
-// spine to reveal a page underneath. The reference showed a title/author
-// on that page - here it's the bio text that used to sit beside it.
-export const AboutBook = () => {
+// spine to reveal a page underneath instead of the reference's title/author,
+// each of ours holds a different piece of the "about me" content.
+export const AboutBook = ({ image, imageAlt, coverLabel, coverTitle, coverSubtitle, pageLabel, children }: AboutBookProps) => {
   const [open, setOpen] = useState(false)
 
   return (
     <div
-      style={{ perspective: 1600, width: '100%', maxWidth: 320, aspectRatio: '0.7 / 1', margin: '0 auto', cursor: 'pointer' }}
+      style={{ perspective: 1600, width: '100%', maxWidth: 220, aspectRatio: '0.7 / 1', cursor: 'pointer' }}
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
       onClick={() => setOpen((o) => !o)}
       role="button"
       tabIndex={0}
-      aria-label="About Kunal - hover or tap to open"
+      aria-label={`${coverTitle} - hover or tap to open`}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault()
@@ -36,11 +42,11 @@ export const AboutBook = () => {
             inset: 0,
             background: '#FAF5F2',
             borderRadius: 10,
-            padding: '13% 9%',
+            padding: '11% 8%',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
-            gap: 14,
+            gap: 10,
             overflowY: 'auto',
             boxShadow: '0 20px 50px rgba(0,0,0,0.35)',
           }}
@@ -48,7 +54,7 @@ export const AboutBook = () => {
           <p
             style={{
               fontFamily: "'Space Mono', monospace",
-              fontSize: 11,
+              fontSize: 10,
               fontWeight: 700,
               letterSpacing: '0.14em',
               textTransform: 'uppercase',
@@ -56,13 +62,9 @@ export const AboutBook = () => {
               margin: 0,
             }}
           >
-            About Kunal
+            {pageLabel}
           </p>
-          {BIO_PARAGRAPHS.map((paragraph, i) => (
-            <p key={i} style={{ fontSize: 13, lineHeight: 1.65, color: '#4A3C2A', margin: 0 }}>
-              {paragraph}
-            </p>
-          ))}
+          {children}
         </div>
 
         {/* Cover - swings open on its left edge */}
@@ -73,33 +75,60 @@ export const AboutBook = () => {
             transformOrigin: 'left center',
             transformStyle: 'preserve-3d',
             borderRadius: 10,
-            background: 'linear-gradient(150deg, var(--accent-primary), #7A3524)',
+            background: image ? '#1A1510' : 'linear-gradient(150deg, var(--accent-primary), #7A3524)',
             boxShadow: '0 25px 50px rgba(0,0,0,0.4)',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            justifyContent: 'center',
+            justifyContent: image ? 'flex-end' : 'center',
             textAlign: 'center',
-            padding: '10%',
+            padding: image ? 0 : '10%',
+            overflow: 'hidden',
           }}
           animate={{ rotateY: open ? -100 : 0 }}
           transition={{ type: 'spring', bounce: 0, duration: 0.6 }}
         >
-          <span
-            className="spec-label"
-            style={{ color: 'rgba(245,240,232,0.7)', marginBottom: 14, opacity: 1 }}
-          >
-            Software Engineer
-          </span>
-          <h3 className="font-display" style={{ fontSize: 'clamp(30px, 6vw, 42px)', color: '#F5F0E8', margin: 0, lineHeight: 1.05 }}>
-            Kunal
-            <br />
-            Mathur
-          </h3>
-          <div style={{ width: 40, height: 2, background: 'rgba(245,240,232,0.5)', margin: '18px 0' }} />
-          <span className="spec-label" style={{ color: 'rgba(245,240,232,0.5)', opacity: 1 }}>
-            A Field Notebook
-          </span>
+          {image ? (
+            <>
+              <img
+                src={image}
+                alt={imageAlt ?? ''}
+                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 18%' }}
+              />
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: 'linear-gradient(to top, rgba(10,8,6,0.85) 0%, rgba(10,8,6,0.1) 45%, transparent 70%)',
+                }}
+              />
+              <div style={{ position: 'relative', padding: '10% 8%', width: '100%' }}>
+                <p className="spec-label" style={{ color: 'rgba(245,240,232,0.7)', marginBottom: 4, opacity: 1 }}>
+                  {coverLabel}
+                </p>
+                <h3 className="font-display" style={{ fontSize: 'clamp(18px, 4vw, 22px)', color: '#F5F0E8', margin: 0, lineHeight: 1.05 }}>
+                  {coverTitle}
+                </h3>
+              </div>
+            </>
+          ) : (
+            <>
+              <span className="spec-label" style={{ color: 'rgba(245,240,232,0.7)', marginBottom: 12, opacity: 1 }}>
+                {coverLabel}
+              </span>
+              <h3 className="font-display" style={{ fontSize: 'clamp(20px, 4vw, 26px)', color: '#F5F0E8', margin: 0, lineHeight: 1.1 }}>
+                {coverTitle}
+              </h3>
+              {coverSubtitle && (
+                <>
+                  <div style={{ width: 32, height: 2, background: 'rgba(245,240,232,0.5)', margin: '14px 0' }} />
+                  <span className="spec-label" style={{ color: 'rgba(245,240,232,0.5)', opacity: 1 }}>
+                    {coverSubtitle}
+                  </span>
+                </>
+              )}
+            </>
+          )}
         </motion.div>
       </div>
     </div>

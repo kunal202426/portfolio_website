@@ -9,23 +9,23 @@ import { AboutBook } from '../AboutBook'
 
 gsap.registerPlugin(ScrollTrigger)
 
+const stats = [
+  { label: 'Years Coding', value: '2+' },
+  { label: 'Projects Built', value: '30+' },
+  { label: 'Teams Led', value: '3' },
+]
+
 export const AboutSection = () => {
   const containerRef = useRef<HTMLElement>(null)
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme !== 'light'
-
-  const stats = [
-    { label: 'Years Coding', value: '2+' },
-    { label: 'Projects Built', value: '30+' },
-    { label: 'Teams Led', value: '3' },
-  ]
 
   useEffect(() => {
     if (!containerRef.current) return
 
     const ctx = gsap.context(() => {
       gsap.from('.about-content', {
-        y: 60,
+        y: 40,
         opacity: 0,
         duration: 1,
         ease: 'power3.out',
@@ -46,18 +46,6 @@ export const AboutSection = () => {
           start: 'top 60%'
         }
       })
-
-      gsap.from('.stat-item', {
-        y: 30,
-        opacity: 0,
-        duration: 0.6,
-        stagger: 0.1,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: '.stats-container',
-          start: 'top 80%'
-        }
-      })
     }, containerRef)
 
     return () => ctx.revert()
@@ -73,61 +61,79 @@ export const AboutSection = () => {
       {/* Decorative */}
       <div className="absolute top-20 left-10 w-40 h-40 rounded-full opacity-20" style={{ background: 'radial-gradient(circle, var(--accent-primary) 0%, transparent 70%)' }} />
 
-      <div className="max-w-6xl mx-auto relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          {/* Left Column */}
-          <div className="about-content">
-            {/* Section Tag */}
-            <span className="inline-flex items-center gap-2 text-sm uppercase tracking-[0.2em] font-medium mb-4" style={{ color: 'var(--accent-primary)' }}>
-              <User size={16} />
-              About Me
-            </span>
+      <div className="max-w-5xl mx-auto relative z-10">
+        {/* Section Tag */}
+        <div className="about-content text-center mb-14">
+          <span className="inline-flex items-center gap-2 text-sm uppercase tracking-[0.2em] font-medium" style={{ color: 'var(--accent-primary)' }}>
+            <User size={16} />
+            About Me
+          </span>
+        </div>
 
-            {/* Heading */}
-            <h2 className="text-4xl md:text-5xl font-display font-bold mb-6 leading-tight transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
+        {/* Three books - hover/tap each to open it */}
+        <div className="about-visual flex flex-wrap items-start justify-center gap-6 md:gap-8 mb-14">
+          <AboutBook
+            image="/kunal-photo.jpg"
+            imageAlt="Kunal Mathur"
+            coverLabel="Kunal Mathur"
+            coverTitle="Software Engineer"
+            pageLabel="Say Hello"
+          >
+            <h4 className="font-display" style={{ fontSize: 17, lineHeight: 1.2, color: '#1A1208', margin: 0 }}>
               I build systems,
               <br />
-              <span style={{ color: 'var(--accent-primary)' }}>not just applications.</span>
-            </h2>
+              <span style={{ color: '#BF5B3D' }}>not just applications.</span>
+            </h4>
+          </AboutBook>
 
-            {/* Stats */}
-            <div
-              className="stats-container grid grid-cols-3 gap-4 mb-8 py-8"
-              style={{ borderTop: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.2)' : 'rgba(212, 165, 116, 0.4)'}`, borderBottom: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.2)' : 'rgba(212, 165, 116, 0.4)'}` }}
-            >
+          <AboutBook
+            coverLabel="Chapter One"
+            coverTitle="By The Numbers"
+            coverSubtitle="Snapshot"
+            pageLabel="At A Glance"
+          >
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {stats.map((stat) => (
-                <div key={stat.label} className="stat-item text-center">
-                  <div className="text-3xl font-bold mb-2" style={{ color: 'var(--accent-primary)' }}>{stat.value}</div>
-                  <div className="text-xs uppercase tracking-widest transition-colors duration-500" style={{ color: isDark ? '#9B8B70' : '#9B8B70' }}>{stat.label}</div>
+                <div key={stat.label} style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+                  <span style={{ fontSize: 20, fontWeight: 700, color: '#BF5B3D' }}>{stat.value}</span>
+                  <span style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#8A7860' }}>{stat.label}</span>
                 </div>
               ))}
             </div>
+          </AboutBook>
 
+          <AboutBook
+            coverLabel="Chapter Two"
+            coverTitle="The Work"
+            coverSubtitle="Bio"
+            pageLabel="About Kunal"
+          >
+            <p style={{ fontSize: 12.5, lineHeight: 1.6, color: '#4A3C2A', margin: 0 }}>
+              I'm a Software Engineer focused on backend engineering, machine learning, and real-time data systems. My work centers on designing scalable architectures that perform reliably under production-level load.
+            </p>
+            <p style={{ fontSize: 12.5, lineHeight: 1.6, color: '#4A3C2A', margin: 0 }}>
+              Currently building production features at YES Securities (YES Bank) as a Full Stack Developer Intern, while completing my B.Tech in Computer Science &amp; Engineering at VIT.
+            </p>
+          </AboutBook>
+        </div>
 
-            {/* CTA Button — top padding clears the bouncer above, bottom padding clears the hanger dangling below */}
-            <div className="flex flex-wrap gap-5 pt-14 pb-16 md:pb-8">
-              <div className="relative inline-flex">
-                <KeycapButton href="#projects" label="View My Work" icon="→" tone="orange" size="wide" />
-                <KeycapCharacter
-                  variant="bouncer"
-                  className="pointer-events-none absolute"
-                  style={{ left: '50%', bottom: 'calc(100% - 8px)', transform: 'translateX(-50%)', zIndex: 5 }}
-                />
-              </div>
-              <div className="relative inline-flex">
-                <KeycapButton href="#contact" label="Let's Talk" icon="✉" tone="cream" size="wide" />
-                <KeycapCharacter
-                  variant="hanger"
-                  className="pointer-events-none absolute"
-                  style={{ left: '50%', top: 'calc(100% - 8px)', transform: 'translateX(-50%)', zIndex: 5 }}
-                />
-              </div>
-            </div>
+        {/* CTA Button — top padding clears the bouncer above, bottom padding clears the hanger dangling below */}
+        <div className="about-content flex flex-wrap gap-5 justify-center pt-14 pb-8">
+          <div className="relative inline-flex">
+            <KeycapButton href="#projects" label="View My Work" icon="→" tone="orange" size="wide" />
+            <KeycapCharacter
+              variant="bouncer"
+              className="pointer-events-none absolute"
+              style={{ left: '50%', bottom: 'calc(100% - 8px)', transform: 'translateX(-50%)', zIndex: 5 }}
+            />
           </div>
-
-          {/* Right Column - Book (hover/tap opens to reveal the bio) */}
-          <div className="about-visual flex items-center justify-center">
-            <AboutBook />
+          <div className="relative inline-flex">
+            <KeycapButton href="#contact" label="Let's Talk" icon="✉" tone="cream" size="wide" />
+            <KeycapCharacter
+              variant="hanger"
+              className="pointer-events-none absolute"
+              style={{ left: '50%', top: 'calc(100% - 8px)', transform: 'translateX(-50%)', zIndex: 5 }}
+            />
           </div>
         </div>
       </div>
