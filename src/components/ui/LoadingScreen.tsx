@@ -20,7 +20,7 @@ export const LoadingScreen = ({ onLoadComplete }: LoadingScreenProps) => {
 
   useEffect(() => {
     const controls = animate(countValue, 100, {
-      duration: 1.1,
+      duration: 2.2,
       ease: [0.12, 0.23, 0.5, 1],
       onUpdate: (v) => setDisplayCount(Math.round(v)),
     })
@@ -29,8 +29,8 @@ export const LoadingScreen = ({ onLoadComplete }: LoadingScreenProps) => {
 
   useEffect(() => {
     const startedAt = performance.now()
-    const minimumVisibleMs = 650
-    const fallbackMaxWaitMs = 1600
+    const minimumVisibleMs = 2400
+    const fallbackMaxWaitMs = 3200
     const exitDurationMs = 650
 
     let done = false
