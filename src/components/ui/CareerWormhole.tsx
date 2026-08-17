@@ -255,10 +255,15 @@ export const CareerWormhole = ({ cards, scrollLengthVh = 220 }: CareerWormholePr
       texture.offset.y = scrollPercent * 2
 
       const maxDistance = 16
+      // Narrow (phone) viewports leave little margin around a fixed-width
+      // card, so the same world-space wall offset that reads fine on
+      // desktop pushes the card visibly off-center there - pull cards in
+      // closer to the tube's centerline on narrow screens instead.
+      const isNarrowViewport = container.offsetWidth < 640
       cardsData.forEach((card) => {
         if (!card.el) return
         const cardPos3D = curve.getPointAt(card.progress)
-        const wallDistance = 1.05
+        const wallDistance = isNarrowViewport ? 0.45 : 1.05
         cardPos3D.x += Math.cos(card.angle) * wallDistance
         cardPos3D.y += Math.sin(card.angle) * wallDistance
         const wp = cardPos3D.clone()

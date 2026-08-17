@@ -34,10 +34,10 @@ export const EducationSection = () => {
   }, [])
 
   return (
-    <section 
+    <section
       ref={containerRef}
-      id="education" 
-      className="relative w-full py-24 px-6 overflow-hidden transition-colors duration-500"
+      id="education"
+      className="relative w-full py-10 md:py-16 px-6 overflow-hidden transition-colors duration-500"
       style={{ backgroundColor: isDark ? 'var(--bg-primary)' : '#FFFBF5' }}
     >
       {/* Decorative */}
@@ -45,8 +45,8 @@ export const EducationSection = () => {
 
       <div className="max-w-5xl mx-auto relative z-10">
         {/* Header */}
-        <div className="mb-16">
-          <span className="inline-flex items-center gap-2 text-sm uppercase tracking-[0.2em] font-medium mb-4" style={{ color: '#D4A574' }}>
+        <div className="mb-6 md:mb-10">
+          <span className="inline-flex items-center gap-2 text-sm uppercase tracking-[0.2em] font-medium mb-3" style={{ color: '#D4A574' }}>
             <GraduationCap size={16} />
             Education
           </span>
@@ -55,8 +55,13 @@ export const EducationSection = () => {
           </h2>
         </div>
 
-        {/* Education Cards */}
-        <div className="space-y-6">
+        {/* Education Cards - the section as a whole is scroll-scaled away
+            (see App.tsx's educationCertRef transform) as the Certifications
+            section slides up over it. That transform only completes partway
+            through the scroll, so cards taller than the viewport risk being
+            covered before ever fully showing - keep this tight, especially
+            on mobile where the two-column layout below stacks into one. */}
+        <div className="space-y-3 md:space-y-5">
           {resumeData.education.map((edu, index) => (
             <motion.div
               key={index}

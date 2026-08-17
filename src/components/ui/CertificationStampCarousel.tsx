@@ -216,7 +216,9 @@ function StampCard({
           )}
         </div>
 
-        {/* Caption strip, like an engraved stamp title */}
+        {/* Caption strip, like an engraved stamp title - certificate name
+            first so it's clear which credential this is before opening it,
+            issuer underneath in the original mono label style. */}
         <div
           style={{
             borderTop: `1px solid ${accent}55`,
@@ -224,14 +226,33 @@ function StampCard({
             textAlign: 'center',
           }}
         >
+          <div
+            style={{
+              fontFamily: "'Big Shoulders Display', sans-serif",
+              fontWeight: 700,
+              fontSize: 11,
+              lineHeight: 1.25,
+              letterSpacing: '0.01em',
+              textTransform: 'uppercase',
+              color: '#1A1208',
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              marginBottom: 3,
+            }}
+          >
+            {stamp.title}
+          </div>
           <span
             style={{
               fontFamily: "'Space Mono', monospace",
               fontWeight: 700,
-              fontSize: 10,
+              fontSize: 9,
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
               color: '#4A3C2A',
+              opacity: 0.75,
             }}
           >
             {stamp.caption.split('·')[0].trim()}
