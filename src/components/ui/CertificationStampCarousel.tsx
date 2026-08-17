@@ -345,31 +345,15 @@ export function CertificationStampCarousel({ stamps, isDark }: { stamps: StampIt
   const pointerNormXRef = useRef(0)
   const tiltTargetRef = useRef(0)
   const hoverRef = useRef(false)
-  const wheelIdleTimeout = useRef<number>()
 
   useEffect(() => setMounted(true), [])
 
-  // Trackpad two-finger swipe: a horizontal wheel gesture spins the ring
-  // directly, same as a pointer drag. data-lenis-prevent keeps Lenis (the
-  // sitewide smooth-scroll lib) from swallowing the event before it gets
-  // here; the horizontal/vertical check below still lets a vertical swipe
-  // scroll the page normally.
-  useEffect(() => {
-    const el = rootRef.current
-    if (!el) return
-    const handleWheel = (event: WheelEvent) => {
-      if (Math.abs(event.deltaX) <= Math.abs(event.deltaY)) return
-      event.preventDefault()
-      draggingRef.current = true
-      angle.set(angle.get() - event.deltaX * 0.35)
-      if (wheelIdleTimeout.current) window.clearTimeout(wheelIdleTimeout.current)
-      wheelIdleTimeout.current = window.setTimeout(() => {
-        draggingRef.current = false
-      }, 150)
-    }
-    el.addEventListener('wheel', handleWheel, { passive: false })
-    return () => el.removeEventListener('wheel', handleWheel)
-  }, [angle])
+  // A wheel listener here (for two-finger trackpad rotate) needed
+  // data-lenis-prevent to keep Lenis from also treating the same gesture as
+  // a page scroll - but that disables Lenis's smooth scroll for the whole
+  // region, so scrolling past this section on an ordinary wheel/trackpad
+  // dropped to jerky native scroll and felt like it was fighting the rest
+  // of the page. Dropped in favor of drag/click/arrows only.
 
   useEffect(() => {
     const node = rootRef.current
@@ -529,7 +513,6 @@ export function CertificationStampCarousel({ stamps, isDark }: { stamps: StampIt
         ref={rootRef}
         role="group"
         aria-roledescription="3D stamp carousel"
-        data-lenis-prevent
         style={{ position: 'relative', overflow: 'hidden', userSelect: 'none', touchAction: 'pan-y', height: 440 }}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
@@ -764,7 +747,7 @@ export function CertificationStampCarousel({ stamps, isDark }: { stamps: StampIt
       </div>
 
       <p className="spec-label" style={{ color: isDark ? '#F0EBE0' : '#1A1208', opacity: 0.4, textAlign: 'center', margin: '10px 0 4px' }}>
-        Drag, scroll, or click a stamp to open it
+        Drag or click a stamp to open it
       </p>
     </div>
   )
