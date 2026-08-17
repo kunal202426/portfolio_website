@@ -15,7 +15,8 @@ export const ExperienceSection = () => {
       experiences.map((exp) => ({
         caption: exp.company,
         title: exp.title,
-        description: exp.achievements[0] ?? `${exp.period} · ${exp.location}`,
+        description: `${exp.period} · ${exp.location}`,
+        details: exp.achievements,
       })),
     [experiences],
   )
@@ -23,7 +24,7 @@ export const ExperienceSection = () => {
   return (
     <section
       id="experience"
-      className="relative w-full py-24 overflow-hidden transition-colors duration-500"
+      className="relative w-full py-24 transition-colors duration-500"
       style={{
         backgroundColor: isDark ? 'var(--bg-primary)' : '#F5F0E8',
       }}

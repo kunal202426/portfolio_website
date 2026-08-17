@@ -1,10 +1,13 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { Sparkles } from 'lucide-react'
 import * as THREE from 'three'
 
 export interface WormholeCard {
   caption: string
   title: string
   description: string
+  details?: string[]
 }
 
 interface CareerWormholeProps {
@@ -12,11 +15,111 @@ interface CareerWormholeProps {
   scrollLengthVh?: number
 }
 
+// The outer (ref'd) element's transform/opacity/zIndex are driven
+// imperatively by the render loop every frame for the 3D projection, so the
+// hover-reveal has to live on an inner wrapper instead - React/framer-motion
+// only ever touch that inner tree, never the outer positioned box.
+function WormholeCardEl({ card, cardRef }: { card: WormholeCard; cardRef: (node: HTMLDivElement | null) => void }) {
+  const [hovered, setHovered] = useState(false)
+
+  return (
+    <div
+      ref={cardRef}
+      style={{
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        width: 280,
+        opacity: 0,
+        pointerEvents: 'auto',
+        willChange: 'transform, opacity',
+      }}
+    >
+      <div
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        onClick={() => setHovered((h) => !h)}
+        style={{
+          background: 'rgba(255, 255, 255, 0.06)',
+          border: '1px solid rgba(255, 255, 255, 0.18)',
+          borderRadius: 14,
+          backdropFilter: 'blur(16px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(16px) saturate(180%)',
+          padding: 24,
+          color: '#fff',
+          boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
+          cursor: card.details?.length ? 'pointer' : 'default',
+        }}
+      >
+        <span
+          style={{
+            display: 'block',
+            marginBottom: 8,
+            fontFamily: "'Space Mono', monospace",
+            fontSize: 10,
+            fontWeight: 700,
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
+            color: 'var(--accent-glow)',
+          }}
+        >
+          {card.caption}
+        </span>
+        <h3 className="font-display" style={{ margin: '0 0 12px', fontSize: 22, color: '#fff' }}>
+          {card.title}
+        </h3>
+        <p style={{ margin: 0, fontSize: 13, lineHeight: 1.55, color: 'rgba(255,255,255,0.8)' }}>{card.description}</p>
+
+        {card.details && card.details.length > 0 && (
+          <>
+            <AnimatePresence initial={false}>
+              {hovered && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                  style={{ overflow: 'hidden' }}
+                >
+                  <ul style={{ margin: '14px 0 0', padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    {card.details.map((line, i) => (
+                      <li key={i} style={{ display: 'flex', gap: 8, fontSize: 12.5, lineHeight: 1.5, color: 'rgba(255,255,255,0.75)' }}>
+                        <span style={{ flexShrink: 0, color: 'var(--accent-glow)' }}>▸</span>
+                        <span>{line}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+              )}
+            </AnimatePresence>
+            {!hovered && (
+              <p
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  margin: '12px 0 0',
+                  fontSize: 11,
+                  color: 'var(--accent-glow)',
+                  opacity: 0.85,
+                }}
+              >
+                <Sparkles size={11} />
+                Hover for highlights
+              </p>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  )
+}
+
 // Adapted from a Framer "Wormhole" reference: a sticky scroll-jacked 3D
 // tunnel (Three.js tube geometry + a procedural grid texture) that the
 // camera flies through as the page scrolls, with glass cards positioned
 // along the tube walls and projected onto the 2D screen every frame.
-export const CareerWormhole = ({ cards, scrollLengthVh = 320 }: CareerWormholeProps) => {
+export const CareerWormhole = ({ cards, scrollLengthVh = 220 }: CareerWormholeProps) => {
   const trackRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const cardRefs = useRef<(HTMLDivElement | null)[]>([])
@@ -173,46 +276,7 @@ export const CareerWormhole = ({ cards, scrollLengthVh = 320 }: CareerWormholePr
         <div ref={containerRef} style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }} />
         <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', perspective: 1000 }}>
           {cards.map((card, i) => (
-            <div
-              key={card.title}
-              ref={(node) => { cardRefs.current[i] = node }}
-              style={{
-                position: 'absolute',
-                left: 0,
-                top: 0,
-                background: 'rgba(255, 255, 255, 0.06)',
-                border: '1px solid rgba(255, 255, 255, 0.18)',
-                borderRadius: 14,
-                backdropFilter: 'blur(16px) saturate(180%)',
-                WebkitBackdropFilter: 'blur(16px) saturate(180%)',
-                padding: 24,
-                width: 280,
-                color: '#fff',
-                boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
-                opacity: 0,
-                pointerEvents: 'auto',
-                willChange: 'transform, opacity',
-              }}
-            >
-              <span
-                style={{
-                  display: 'block',
-                  marginBottom: 8,
-                  fontFamily: "'Space Mono', monospace",
-                  fontSize: 10,
-                  fontWeight: 700,
-                  letterSpacing: '0.12em',
-                  textTransform: 'uppercase',
-                  color: 'var(--accent-glow)',
-                }}
-              >
-                {card.caption}
-              </span>
-              <h3 className="font-display" style={{ margin: '0 0 12px', fontSize: 22, color: '#fff' }}>
-                {card.title}
-              </h3>
-              <p style={{ margin: 0, fontSize: 13, lineHeight: 1.55, color: 'rgba(255,255,255,0.8)' }}>{card.description}</p>
-            </div>
+            <WormholeCardEl key={card.title} card={card} cardRef={(node) => { cardRefs.current[i] = node }} />
           ))}
         </div>
       </div>

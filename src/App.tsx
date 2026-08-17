@@ -54,8 +54,8 @@ function AppContent() {
   const isDark = resolvedTheme !== 'light'
 
   return (
-    <div 
-      className="w-full overflow-x-hidden transition-colors duration-500" 
+    <div
+      className="w-full transition-colors duration-500"
       style={{ 
         backgroundColor: isDark ? 'var(--bg-primary)' : '#F5F0E8', 
         color: isDark ? '#F0EBE0' : '#1A1208' 

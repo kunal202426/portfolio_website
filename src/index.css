@@ -127,6 +127,10 @@ body {
 
 html {
   scroll-behavior: auto;
+  /* Horizontal-overflow protection lives here (not on a wrapper div) so it
+     doesn't also force overflow-y non-visible via the CSS overflow-x/y
+     coupling rule, which breaks position: sticky for every descendant. */
+  overflow-x: hidden;
 }
 
 html.lenis,
@@ -166,12 +170,19 @@ body {
   letter-spacing: -0.01em;
 }
 
-/* Brush accent for hero name + primary section headings */
+/* Brush accent for hero name + primary section headings. Rock Salt's tall
+   ascenders/loops exceed a tight line-height (Tailwind's text-4xl/5xl force
+   line-height:1), so its top edge visually clips into whatever sits above -
+   line-height and top padding here give the glyphs room to actually fit. */
 .font-brush {
   font-family: var(--font-brush);
   font-weight: 400;
   letter-spacing: 0;
   text-transform: none;
+  /* !important: Tailwind's text-4xl/5xl utilities also set line-height,
+     same specificity, and win on source order alone otherwise. */
+  line-height: 1.35 !important;
+  padding-top: 0.15em;
 }
 
 /* Small technical spec-label accents (retro-industrial motif) */
