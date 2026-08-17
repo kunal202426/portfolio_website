@@ -27,9 +27,9 @@ export const HangingThemeSwitch = () => {
     return () => mq.removeEventListener('change', update)
   }, [])
 
-  const knobSize = isMobile ? 34 : 42
-  const stringLength = isMobile ? 34 : 52
-  const threshold = isMobile ? 30 : 42
+  const knobSize = isMobile ? 40 : 62
+  const stringLength = isMobile ? 36 : 58
+  const threshold = isMobile ? 32 : 50
   const anchorX = knobSize / 2 + 4
 
   const x = useMotionValue(0)
@@ -87,8 +87,8 @@ export const HangingThemeSwitch = () => {
           height: knobSize,
           borderRadius: '50%',
           background: 'var(--bg-card)',
-          border: '2px solid var(--accent-primary)',
-          boxShadow: '0 8px 20px rgba(0,0,0,0.25)',
+          border: '3px solid var(--accent-primary)',
+          boxShadow: '0 10px 26px rgba(0,0,0,0.3)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
