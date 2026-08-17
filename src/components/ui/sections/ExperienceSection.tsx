@@ -196,6 +196,16 @@ export const ExperienceSection = () => {
         })
     }
 
+    // The listeners above each try to catch one specific cause of stale
+    // trigger positions (images, fonts, resize) - in practice something
+    // upstream (other sections' async content, a slow device, whatever)
+    // still slips through inconsistently across devices/loads. Rather than
+    // chase the exact cause, brute-force it: keep re-refreshing on a fixed
+    // schedule for the first few seconds so it self-corrects regardless of
+    // what was slow to settle.
+    const safetyNetDelays = [300, 800, 1500, 3000]
+    const safetyNetTimers = safetyNetDelays.map((delay) => window.setTimeout(refreshScroll, delay))
+
     const ctx = gsap.context(() => {
       if (isTouchViewport) {
         let pathLength = setPathDash()
@@ -248,6 +258,7 @@ export const ExperienceSection = () => {
 
     return () => {
       window.removeEventListener('load', refreshScroll)
+      safetyNetTimers.forEach((timer) => window.clearTimeout(timer))
       if (postLayoutRefreshFrameA !== null) {
         cancelAnimationFrame(postLayoutRefreshFrameA)
       }
