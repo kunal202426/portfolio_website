@@ -658,10 +658,11 @@ export function CertificationStampCarousel({ stamps, isDark }: { stamps: StampIt
                             <h3
                               style={{
                                 margin: 0,
-                                fontSize: viewportNarrow ? 24 : 28,
+                                fontSize: viewportNarrow ? 20 : 24,
                                 lineHeight: 1.15,
                                 fontFamily: "'Big Shoulders Display', sans-serif",
                                 textTransform: 'uppercase',
+                                overflowWrap: 'break-word',
                                 ...texturedInk(titleColor, 1, true),
                               }}
                             >
@@ -680,9 +681,11 @@ export function CertificationStampCarousel({ stamps, isDark }: { stamps: StampIt
                               alt={openStampData.image.alt ?? openStampData.title}
                               draggable={false}
                               style={{
-                                height: viewportNarrow ? 100 : 130,
-                                width: 'auto',
+                                height: viewportNarrow ? 80 : 100,
+                                width: viewportNarrow ? 90 : 120,
+                                maxWidth: '38%',
                                 objectFit: 'contain',
+                                objectPosition: 'right center',
                                 flexShrink: 0,
                                 marginTop: -18,
                                 marginRight: -14,
