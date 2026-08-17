@@ -192,7 +192,7 @@ export const CertificationsSection = () => {
             Certifications
           </h3>
 
-          <CertificationCarousel3D certifications={resumeData.certifications} />
+          <CertificationCarousel3D certifications={resumeData.certifications} isDark={isDark} />
         </div>
       </div>
     </section>

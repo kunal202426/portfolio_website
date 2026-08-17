@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, useMotionValue, animate, type PanInfo } from 'framer-motion'
 import { Award } from 'lucide-react'
 import { resumeData } from '../../lib/resume-data'
@@ -6,9 +6,9 @@ import { resumeData } from '../../lib/resume-data'
 type Certification = (typeof resumeData.certifications)[number]
 
 const ACCENTS = ['#BF5B3D', '#D4A574', '#B8860B', '#C85A3A', '#8B6F47', '#A67C52']
-const SPRING = { type: 'spring' as const, stiffness: 45, damping: 16, mass: 1.2 }
+const SPRING = { type: 'spring' as const, stiffness: 50, damping: 18, mass: 1 }
 
-function CertFace({ cert, accent }: { cert: Certification; accent: string }) {
+function CertFace({ cert, accent, isDark }: { cert: Certification; accent: string; isDark: boolean }) {
   return (
     <div
       style={{
@@ -16,11 +16,9 @@ function CertFace({ cert, accent }: { cert: Certification; accent: string }) {
         inset: 0,
         borderRadius: 20,
         overflow: 'hidden',
-        background: 'rgba(20, 16, 11, 0.94)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
-        border: `1px solid ${accent}40`,
-        boxShadow: `0 10px 40px rgba(0,0,0,0.5), 0 0 30px ${accent}25`,
+        background: isDark ? 'rgba(26, 21, 16, 0.96)' : '#FFFFFF',
+        border: `1px solid ${accent}45`,
+        boxShadow: `0 10px 30px rgba(0,0,0,${isDark ? 0.45 : 0.14}), 0 0 18px ${accent}20`,
         display: 'flex',
         flexDirection: 'column',
       }}
@@ -36,7 +34,7 @@ function CertFace({ cert, accent }: { cert: Certification; accent: string }) {
           justifyContent: 'center',
         }}
       >
-        <span className="spec-label" style={{ position: 'absolute', top: 14, left: 16, opacity: 0.65, color: '#F0EBE0' }}>
+        <span className="spec-label" style={{ position: 'absolute', top: 14, left: 16, opacity: 0.65, color: isDark ? '#F0EBE0' : '#1A1208' }}>
           Cert. {cert.year}
         </span>
         <div
@@ -64,14 +62,14 @@ function CertFace({ cert, accent }: { cert: Certification; accent: string }) {
         <p className="spec-label" style={{ color: accent, marginBottom: 8, opacity: 0.9 }}>
           {cert.issuer}
         </p>
-        <h3 className="font-display" style={{ fontSize: 19, color: '#F0EBE0', margin: '0 0 10px', lineHeight: 1.1 }}>
+        <h3 className="font-display" style={{ fontSize: 19, color: isDark ? '#F0EBE0' : '#1A1208', margin: '0 0 10px', lineHeight: 1.1 }}>
           {cert.title}
         </h3>
         <p
           style={{
             fontSize: 13,
             lineHeight: 1.6,
-            color: 'rgba(240, 235, 224, 0.6)',
+            color: isDark ? 'rgba(240, 235, 224, 0.6)' : 'rgba(74, 60, 42, 0.75)',
             margin: 0,
             overflow: 'hidden',
             display: '-webkit-box',
@@ -86,7 +84,7 @@ function CertFace({ cert, accent }: { cert: Certification; accent: string }) {
   )
 }
 
-function NavArrow({ direction, onClick }: { direction: 'left' | 'right'; onClick: () => void }) {
+function NavArrow({ direction, onClick, isDark }: { direction: 'left' | 'right'; onClick: () => void; isDark: boolean }) {
   const sideStyle = direction === 'left' ? { left: 0 } : { right: 0 }
   return (
     <button
@@ -100,9 +98,9 @@ function NavArrow({ direction, onClick }: { direction: 'left' | 'right'; onClick
         width: 40,
         height: 40,
         borderRadius: '50%',
-        background: 'rgba(255,255,255,0.06)',
-        border: '1px solid rgba(255,255,255,0.15)',
-        color: '#F0EBE0',
+        background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(26,18,8,0.05)',
+        border: `1px solid ${isDark ? 'rgba(255,255,255,0.15)' : 'rgba(26,18,8,0.15)'}`,
+        color: isDark ? '#F0EBE0' : '#1A1208',
         cursor: 'pointer',
         display: 'flex',
         alignItems: 'center',
@@ -124,17 +122,20 @@ function NavArrow({ direction, onClick }: { direction: 'left' | 'right'; onClick
 }
 
 // 3D octagonal-cylinder carousel. Arrows/dots step one card at a time;
-// dragging (mouse or touch) freely spins the cylinder and snaps to the
-// nearest face on release, instead of only responding to the arrows.
-export const CertificationCarousel3D = ({ certifications }: { certifications: Certification[] }) => {
+// a trackpad two-finger swipe (native wheel deltaX) or a mouse/touch
+// drag freely spins the cylinder and snaps to the nearest face when
+// the gesture ends, instead of only responding to the arrows.
+export const CertificationCarousel3D = ({ certifications, isDark }: { certifications: Certification[]; isDark: boolean }) => {
   const totalCards = Math.min(certifications.length, 8)
   const anglePerCard = 360 / totalCards
-  const cardDepth = 380
+  const cardDepth = 260
 
   const rotation = useMotionValue(0)
   const [activeIndex, setActiveIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const trackRef = useRef<HTMLDivElement>(null)
+  const wheelSnapTimeout = useRef<number>()
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768)
@@ -142,6 +143,12 @@ export const CertificationCarousel3D = ({ certifications }: { certifications: Ce
     window.addEventListener('resize', check)
     return () => window.removeEventListener('resize', check)
   }, [])
+
+  const snapToNearest = () => {
+    const steps = Math.round(rotation.get() / anglePerCard)
+    animate(rotation, steps * anglePerCard, SPRING)
+    setActiveIndex((((-steps) % totalCards) + totalCards) % totalCards)
+  }
 
   const rotateTo = (index: number) => {
     setActiveIndex((prev) => {
@@ -168,12 +175,32 @@ export const CertificationCarousel3D = ({ certifications }: { certifications: Ce
     return () => clearInterval(timer)
   }, [isPaused, isMobile, totalCards, anglePerCard, rotation])
 
+  // Trackpad two-finger swipe: a horizontal wheel gesture spins the
+  // cylinder directly, snapping to the nearest card once it settles.
+  useEffect(() => {
+    const el = trackRef.current
+    if (!el || isMobile) return
+
+    const handleWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return
+      e.preventDefault()
+      setIsPaused(true)
+      rotation.set(rotation.get() - e.deltaX * 0.5)
+      if (wheelSnapTimeout.current) window.clearTimeout(wheelSnapTimeout.current)
+      wheelSnapTimeout.current = window.setTimeout(() => {
+        snapToNearest()
+        setIsPaused(false)
+      }, 150)
+    }
+
+    el.addEventListener('wheel', handleWheel, { passive: false })
+    return () => el.removeEventListener('wheel', handleWheel)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMobile, anglePerCard, totalCards])
+
   const handlePanEnd = (_event: unknown, _info: PanInfo) => {
+    snapToNearest()
     setIsPaused(false)
-    const current = rotation.get()
-    const steps = Math.round(current / anglePerCard)
-    animate(rotation, steps * anglePerCard, SPRING)
-    setActiveIndex((((-steps) % totalCards) + totalCards) % totalCards)
   }
 
   const faceAngles = Array.from({ length: totalCards }, (_, i) => i * anglePerCard)
@@ -192,7 +219,7 @@ export const CertificationCarousel3D = ({ certifications }: { certifications: Ce
       >
         {certifications.slice(0, totalCards).map((cert, i) => (
           <div key={cert.title} style={{ position: 'relative', flexShrink: 0, width: 250, height: 360, scrollSnapAlign: 'center' }}>
-            <CertFace cert={cert} accent={ACCENTS[i % ACCENTS.length]} />
+            <CertFace cert={cert} accent={ACCENTS[i % ACCENTS.length]} isDark={isDark} />
           </div>
         ))}
       </div>
@@ -205,8 +232,8 @@ export const CertificationCarousel3D = ({ certifications }: { certifications: Ce
         position: 'relative',
         width: '100%',
         borderRadius: 24,
-        background: '#0E0E0B',
-        overflow: 'hidden',
+        background: isDark ? '#12100B' : '#FDF9F2',
+        border: `1px solid ${isDark ? 'rgba(212,165,116,0.15)' : 'rgba(191,91,61,0.15)'}`,
         padding: '48px 20px 40px',
         display: 'flex',
         flexDirection: 'column',
@@ -220,14 +247,20 @@ export const CertificationCarousel3D = ({ certifications }: { certifications: Ce
         style={{
           position: 'absolute',
           inset: 0,
-          opacity: 0.04,
+          borderRadius: 24,
+          overflow: 'hidden',
+          opacity: isDark ? 0.04 : 0.03,
           pointerEvents: 'none',
-          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.5) 1px, transparent 1px)',
+          backgroundImage: `radial-gradient(circle, ${isDark ? 'rgba(255,255,255,0.5)' : 'rgba(26,18,8,0.6)'} 1px, transparent 1px)`,
           backgroundSize: '24px 24px',
         }}
       />
 
-      <div style={{ position: 'relative', width: '100%', maxWidth: 1000, height: 440, perspective: 1300, perspectiveOrigin: '50% 50%' }}>
+      <div
+        ref={trackRef}
+        data-lenis-prevent
+        style={{ position: 'relative', width: '100%', maxWidth: 1000, height: 500, perspective: 1800, perspectiveOrigin: '50% 50%' }}
+      >
         <motion.div
           onPanStart={() => setIsPaused(true)}
           onPan={(_event, info) => rotation.set(rotation.get() + info.delta.x * 0.35)}
@@ -259,16 +292,16 @@ export const CertificationCarousel3D = ({ certifications }: { certifications: Ce
                 backfaceVisibility: 'hidden',
               }}
             >
-              <CertFace cert={cert} accent={ACCENTS[i % ACCENTS.length]} />
+              <CertFace cert={cert} accent={ACCENTS[i % ACCENTS.length]} isDark={isDark} />
             </div>
           ))}
         </motion.div>
 
-        <NavArrow direction="left" onClick={goPrev} />
-        <NavArrow direction="right" onClick={goNext} />
+        <NavArrow direction="left" onClick={goPrev} isDark={isDark} />
+        <NavArrow direction="right" onClick={goNext} isDark={isDark} />
       </div>
 
-      <div style={{ display: 'flex', gap: 8, marginTop: 24, position: 'relative', zIndex: 10 }}>
+      <div style={{ display: 'flex', gap: 8, marginTop: 20, position: 'relative', zIndex: 10 }}>
         {Array.from({ length: totalCards }).map((_, i) => (
           <button
             key={i}
@@ -281,15 +314,15 @@ export const CertificationCarousel3D = ({ certifications }: { certifications: Ce
               border: 'none',
               cursor: 'pointer',
               padding: 0,
-              background: i === activeIndex ? ACCENTS[i % ACCENTS.length] : 'rgba(255,255,255,0.15)',
+              background: i === activeIndex ? ACCENTS[i % ACCENTS.length] : isDark ? 'rgba(255,255,255,0.15)' : 'rgba(26,18,8,0.15)',
               transition: 'all 0.35s ease',
             }}
           />
         ))}
       </div>
 
-      <p className="spec-label" style={{ color: '#F0EBE0', opacity: 0.4, marginTop: 16 }}>
-        Drag to rotate — or use the arrows
+      <p className="spec-label" style={{ color: isDark ? '#F0EBE0' : '#1A1208', opacity: 0.4, marginTop: 14 }}>
+        Swipe, drag, or use the arrows
       </p>
     </div>
   )
