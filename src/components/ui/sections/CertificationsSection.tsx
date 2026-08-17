@@ -107,7 +107,7 @@ export const CertificationsSection = () => {
 
         {/* One runner, between the two lists, sitting back in the
             background rather than one per section. */}
-        <RunningCharacter size={110} duration={9} opacity={0.16} />
+        <RunningCharacter size={190} duration={9} opacity={0.65} />
 
         {/* Achievements */}
         <TiltIn tilt={5}>
