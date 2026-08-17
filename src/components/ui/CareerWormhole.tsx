@@ -24,15 +24,19 @@ const CARD_HEIGHT = 220
 // inverting that integral is what actually produces that slowdown: cost is
 // high near a card, so a given stretch of raw scroll only advances t a
 // little there, and the reverse (t advances a lot per scroll) where cost is
-// low, in between cards.
-function buildDwellEasing(cardProgresses: number[], strength = 0.72, width = 0.07) {
+// low, in between cards. The dip is asymmetric - wide on approach so the
+// slowdown is felt well before the card arrives, narrower on the way out so
+// it picks back up quickly once you've passed it.
+function buildDwellEasing(cardProgresses: number[], strength = 0.86, approachWidth = 0.16, exitWidth = 0.08) {
   const STEPS = 400
   const cost = new Float32Array(STEPS + 1)
   for (let i = 0; i <= STEPS; i++) {
     const t = i / STEPS
     let dip = 0
     for (const p of cardProgresses) {
-      const d = (t - p) / width
+      const raw = t - p
+      const width = raw < 0 ? approachWidth : exitWidth
+      const d = raw / width
       dip = Math.max(dip, Math.exp(-d * d))
     }
     const speed = 1 - strength * dip
