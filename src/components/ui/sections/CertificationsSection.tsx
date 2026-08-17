@@ -97,7 +97,7 @@ export const CertificationsSection = () => {
 
         {/* Education */}
         <TiltIn tilt={-5}>
-          <div id="education" className="mb-20">
+          <div id="education">
             <h3 className="text-2xl font-display font-bold mb-8 text-center transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
               Academic Journey
             </h3>
@@ -106,7 +106,8 @@ export const CertificationsSection = () => {
         </TiltIn>
 
         {/* One runner, between the two lists, sitting back in the
-            background rather than one per section. */}
+            background rather than one per section - its own height is the
+            only gap between them, no extra margin stacked on top of it. */}
         <RunningCharacter size={190} duration={9} opacity={0.65} />
 
         {/* Achievements */}

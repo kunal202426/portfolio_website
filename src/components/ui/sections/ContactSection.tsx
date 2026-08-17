@@ -165,26 +165,10 @@ export const ContactSection = () => {
           </div>
         </div>
 
-        {/* Laptop + lottie */}
-        <div className="grid md:grid-cols-2 gap-8 items-center mb-12 md:mb-14">
+        {/* Laptop */}
+        <div className="flex justify-center items-center mb-12 md:mb-14">
           <motion.div
-            className="flex justify-center items-center order-1"
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <DotLottieReact
-              src="/animations/girl-with-books.lottie"
-              loop
-              autoplay
-              className="w-full max-w-[260px] sm:max-w-[320px] md:max-w-[460px]"
-              style={{ height: 'auto' }}
-            />
-          </motion.div>
-
-          <motion.div
-            className="laptop-container flex justify-center items-center order-2"
+            className="laptop-container flex justify-center items-center"
             style={{ perspective: '2000px', perspectiveOrigin: '50% 50%', rotateX: smoothTiltX, rotateY: smoothTiltY }}
             onMouseMove={handleLaptopMove}
             onMouseLeave={resetLaptopTilt}
@@ -444,7 +428,27 @@ export const ContactSection = () => {
 
         {/* Contact Info - Below Laptop */}
         <div className="max-w-3xl mx-auto mb-16 md:mb-20">
-          <h3 className="font-display text-xl md:text-2xl font-bold mb-5 md:mb-7 text-center" style={{ color: '#F5F0E8' }}>
+          {/* Sits right on top of the heading below it - pulled down with a
+              negative margin so the books visually rest on the text's top
+              edge instead of floating as a separate block above it. */}
+          <motion.div
+            className="flex justify-center"
+            style={{ marginBottom: -18 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <DotLottieReact
+              src="/animations/girl-with-books.lottie"
+              loop
+              autoplay
+              className="w-full max-w-[220px] sm:max-w-[260px] md:max-w-[300px]"
+              style={{ height: 'auto' }}
+            />
+          </motion.div>
+
+          <h3 className="font-display text-xl md:text-2xl font-bold mb-5 md:mb-7 text-center relative" style={{ color: '#F5F0E8', zIndex: 1 }}>
             Contact Information
           </h3>
 
