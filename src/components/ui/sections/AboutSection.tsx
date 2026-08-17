@@ -118,8 +118,8 @@ export const AboutSection = () => {
           </AboutBook>
         </div>
 
-        {/* CTA Button — top padding clears the bouncer above */}
-        <div className="about-content flex flex-wrap items-center gap-5 justify-center pt-14 pb-8">
+        {/* CTA Button — top padding clears the bouncer above, bottom padding clears the hanger dangling below */}
+        <div className="about-content flex flex-wrap items-center gap-5 justify-center pt-14 pb-16 md:pb-8">
           <div className="relative inline-flex">
             <KeycapButton href="#projects" label="View My Work" icon="→" tone="orange" size="wide" />
             <KeycapCharacter
@@ -128,7 +128,14 @@ export const AboutSection = () => {
               style={{ left: '50%', bottom: 'calc(100% - 8px)', transform: 'translateX(-50%)', zIndex: 5 }}
             />
           </div>
-          <EyeFollowButton href="#contact" label="Let's Talk" />
+          <div className="relative inline-flex">
+            <EyeFollowButton href="#contact" label="Let's Talk" />
+            <KeycapCharacter
+              variant="hanger"
+              className="pointer-events-none absolute"
+              style={{ left: '50%', top: 'calc(100% - 8px)', transform: 'translateX(-50%)', zIndex: 5 }}
+            />
+          </div>
         </div>
       </div>
     </section>
