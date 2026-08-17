@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
-import { ThemeSwitch } from './ThemeSwitch'
+import { HangingThemeSwitch } from './HangingThemeSwitch'
 import { LimelightNav } from './LimelightNav'
 import { useTheme } from '../providers/ThemeProvider'
 import { useLenis } from '../providers/LenisProvider'
@@ -237,13 +237,15 @@ export const Navbar = () => {
           </div>
 
           {/* Right side - Theme Switch */}
-          <div className="hidden md:flex items-center">
-            <ThemeSwitch />
+          <div className="hidden md:flex items-start" style={{ alignSelf: 'flex-start', paddingTop: 6 }}>
+            <HangingThemeSwitch />
           </div>
 
           {/* Mobile: Theme Toggle & Menu Button */}
           <div className="md:hidden flex items-center gap-3">
-            <ThemeSwitch />
+            <div style={{ alignSelf: 'flex-start', paddingTop: 6 }}>
+              <HangingThemeSwitch />
+            </div>
             <motion.button
               style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
