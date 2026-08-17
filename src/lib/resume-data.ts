@@ -214,7 +214,7 @@ export const resumeData = {
       color: '#FF3CAC',
       featured: false,
       category: 'ml',
-      githubUrl: 'https://github.com/kunal202426',
+      githubUrl: 'https://github.com/kunal202426/Eye-tracking-model',
       screenshots: ['/projects/eye-tracking-inference/1.jpg'],
       achievements: [
         'Implemented Kalman smoothing, temporal voting ensemble, and calibration improvements for robust inference without model retraining.',
@@ -248,7 +248,7 @@ export const resumeData = {
       color: '#9D97FF',
       featured: false,
       category: 'blockchain',
-      githubUrl: 'https://github.com/kunal202426',
+      githubUrl: 'https://github.com/kunal202426/Fertilizer-subsidy',
       screenshots: ['/projects/fertilizer-subsidy/1.jpg'],
       achievements: [
         'Built a DApp for tamper-proof subsidy allocation using Ethereum smart contracts (Solidity) and Web3.js.',

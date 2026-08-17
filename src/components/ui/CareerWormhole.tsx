@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { Sparkles } from 'lucide-react'
 import * as THREE from 'three'
 
@@ -15,12 +15,20 @@ interface CareerWormholeProps {
   scrollLengthVh?: number
 }
 
+const CARD_HEIGHT = 220
+
 // The outer (ref'd) element's transform/opacity/zIndex are driven
 // imperatively by the render loop every frame for the 3D projection, so the
 // hover-reveal has to live on an inner wrapper instead - React/framer-motion
 // only ever touch that inner tree, never the outer positioned box.
+//
+// The reveal itself is the original peel-away: the front card (company/
+// title/period) sits over an achievements panel and slides down + rotates
+// clear on hover, like a note peeling off a photo, instead of a plain
+// accordion - ported over from the old vertical-timeline ExperienceCard.
 function WormholeCardEl({ card, cardRef }: { card: WormholeCard; cardRef: (node: HTMLDivElement | null) => void }) {
   const [hovered, setHovered] = useState(false)
+  const hasDetails = !!card.details?.length
 
   return (
     <div
@@ -40,76 +48,103 @@ function WormholeCardEl({ card, cardRef }: { card: WormholeCard; cardRef: (node:
         onMouseLeave={() => setHovered(false)}
         onClick={() => setHovered((h) => !h)}
         style={{
-          background: 'rgba(255, 255, 255, 0.06)',
-          border: '1px solid rgba(255, 255, 255, 0.18)',
+          position: 'relative',
+          height: CARD_HEIGHT,
           borderRadius: 14,
-          backdropFilter: 'blur(16px) saturate(180%)',
-          WebkitBackdropFilter: 'blur(16px) saturate(180%)',
-          padding: 24,
-          color: '#fff',
-          boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
-          cursor: card.details?.length ? 'pointer' : 'default',
+          overflow: 'hidden',
+          boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.12)',
+          cursor: hasDetails ? 'pointer' : 'default',
         }}
       >
-        <span
+        {/* Back: achievements panel, always present underneath */}
+        <div
           style={{
-            display: 'block',
-            marginBottom: 8,
-            fontFamily: "'Space Mono', monospace",
-            fontSize: 10,
-            fontWeight: 700,
-            letterSpacing: '0.12em',
-            textTransform: 'uppercase',
-            color: 'var(--accent-glow)',
+            position: 'absolute',
+            inset: 0,
+            padding: 22,
+            overflowY: 'auto',
+            background: 'rgba(10, 9, 16, 0.94)',
+            border: '1px solid rgba(255, 255, 255, 0.14)',
           }}
         >
-          {card.caption}
-        </span>
-        <h3 className="font-display" style={{ margin: '0 0 12px', fontSize: 22, color: '#fff' }}>
-          {card.title}
-        </h3>
-        <p style={{ margin: 0, fontSize: 13, lineHeight: 1.55, color: 'rgba(255,255,255,0.8)' }}>{card.description}</p>
+          <span
+            style={{
+              display: 'block',
+              marginBottom: 10,
+              fontFamily: "'Space Mono', monospace",
+              fontSize: 10,
+              fontWeight: 700,
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              color: 'var(--accent-glow)',
+            }}
+          >
+            {card.caption} highlights
+          </span>
+          <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {card.details?.map((line, i) => (
+              <li key={i} style={{ display: 'flex', gap: 8, fontSize: 12.5, lineHeight: 1.5, color: 'rgba(255,255,255,0.82)' }}>
+                <span style={{ flexShrink: 0, color: 'var(--accent-glow)' }}>▸</span>
+                <span>{line}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
 
-        {card.details && card.details.length > 0 && (
-          <>
-            <AnimatePresence initial={false}>
-              {hovered && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                  style={{ overflow: 'hidden' }}
-                >
-                  <ul style={{ margin: '14px 0 0', padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8 }}>
-                    {card.details.map((line, i) => (
-                      <li key={i} style={{ display: 'flex', gap: 8, fontSize: 12.5, lineHeight: 1.5, color: 'rgba(255,255,255,0.75)' }}>
-                        <span style={{ flexShrink: 0, color: 'var(--accent-glow)' }}>▸</span>
-                        <span>{line}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-              )}
-            </AnimatePresence>
-            {!hovered && (
-              <p
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 6,
-                  margin: '12px 0 0',
-                  fontSize: 11,
-                  color: 'var(--accent-glow)',
-                  opacity: 0.85,
-                }}
-              >
-                <Sparkles size={11} />
-                Hover for highlights
-              </p>
-            )}
-          </>
-        )}
+        {/* Front: slides fully clear on reveal, clipped by the container's
+            overflow:hidden so it reads as peeling away rather than overlapping. */}
+        <motion.div
+          animate={{ y: hovered ? '108%' : 0, rotate: hovered ? 3 : 0 }}
+          transition={{ type: 'spring', stiffness: 260, damping: 26 }}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            padding: 22,
+            transformOrigin: 'center',
+            background: hovered ? 'var(--accent-primary)' : 'rgba(255, 255, 255, 0.13)',
+            backdropFilter: 'blur(18px) saturate(180%)',
+            WebkitBackdropFilter: 'blur(18px) saturate(180%)',
+            border: `1px solid ${hovered ? 'transparent' : 'rgba(255, 255, 255, 0.32)'}`,
+            transition: 'background-color 0.2s ease, border-color 0.2s ease',
+            color: '#fff',
+          }}
+        >
+          <span
+            style={{
+              display: 'block',
+              marginBottom: 8,
+              fontFamily: "'Space Mono', monospace",
+              fontSize: 10,
+              fontWeight: 700,
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              color: hovered ? 'rgba(255,255,255,0.85)' : 'var(--accent-glow)',
+            }}
+          >
+            {card.caption}
+          </span>
+          <h3 className="font-display" style={{ margin: '0 0 12px', fontSize: 22, color: '#fff' }}>
+            {card.title}
+          </h3>
+          <p style={{ margin: 0, fontSize: 13, lineHeight: 1.55, color: 'rgba(255,255,255,0.85)' }}>{card.description}</p>
+
+          {hasDetails && (
+            <p
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+                margin: '14px 0 0',
+                fontSize: 11,
+                color: hovered ? 'rgba(255,255,255,0.85)' : 'var(--accent-glow)',
+                opacity: 0.9,
+              }}
+            >
+              <Sparkles size={11} />
+              Hover to see highlights
+            </p>
+          )}
+        </motion.div>
       </div>
     </div>
   )
@@ -219,23 +254,28 @@ export const CareerWormhole = ({ cards, scrollLengthVh = 220 }: CareerWormholePr
       texture.offset.x += tunnelSpeed
       texture.offset.y = scrollPercent * 2
 
+      const maxDistance = 16
       cardsData.forEach((card) => {
         if (!card.el) return
         const cardPos3D = curve.getPointAt(card.progress)
-        const wallDistance = 1.2
+        const wallDistance = 1.05
         cardPos3D.x += Math.cos(card.angle) * wallDistance
         cardPos3D.y += Math.sin(card.angle) * wallDistance
         const wp = cardPos3D.clone()
         wp.project(camera)
         const distance = camera.position.distanceTo(cardPos3D)
 
-        if (wp.z < 1 && distance < 14 && distance > 0.4) {
+        if (wp.z < 1 && distance < maxDistance && distance > 0.3) {
           const currentWidth = container.offsetWidth
           const currentHeight = container.offsetHeight
           const x = (wp.x * 0.5 + 0.5) * currentWidth
           const y = (-(wp.y * 0.5) + 0.5) * currentHeight
-          const scale = Math.max(0, 1 - distance / 14)
-          card.el.style.opacity = String(scale * 1.4)
+          // Floors both scale and opacity so a card is still legible well
+          // before it's right on top of the camera, instead of only
+          // resolving into something readable for the last instant.
+          const proximity = Math.min(Math.max(1 - distance / maxDistance, 0), 1)
+          const scale = 0.55 + proximity * 0.6
+          card.el.style.opacity = String(Math.min(proximity * 1.8, 1))
           card.el.style.transform = `translate3d(-50%, -50%, 0px) translate3d(${x}px, ${y}px, 0px) scale(${scale})`
           card.el.style.zIndex = String(Math.round((1 - wp.z) * 100))
         } else {
