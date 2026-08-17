@@ -126,123 +126,71 @@ const ExperienceCard = ({ exp, isDark }: { exp: Experience; isDark: boolean }) =
 
 export const ExperienceSection = () => {
   const containerRef = useRef<HTMLElement>(null)
-  const timelineRef = useRef<HTMLDivElement>(null)
-  const svgRef = useRef<SVGSVGElement>(null)
-  const pathRef = useRef<SVGPathElement>(null)
-  const experiences = useMemo(() => [...resumeData.experience].sort((a, b) => b.year - a.year), [])
+  const graphRef = useRef<HTMLDivElement>(null)
+  const graphFillRef = useRef<HTMLDivElement>(null)
+  const nodeRefs = useRef<(HTMLDivElement | null)[]>([])
+  // Oldest first, so the line reads left -> right as a career progression.
+  const experiences = useMemo(() => [...resumeData.experience].sort((a, b) => a.year - b.year), [])
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme !== 'light'
 
+  // The vertical wavy line used GSAP ScrollTrigger's cached trigger
+  // positions, which needed refreshing whenever layout changed elsewhere on
+  // the page - that's what made it inconsistent (fine on some loads/devices,
+  // broken on others, until something forced a recalculation). This graph
+  // line instead recomputes progress from a fresh getBoundingClientRect() on
+  // every scroll frame, so there's nothing to cache and nothing to go stale.
   useEffect(() => {
-    const section = containerRef.current
-    const timelineElement = timelineRef.current
-    const svgElement = svgRef.current
-    const pathElement = pathRef.current
-    if (!section || !timelineElement || !svgElement || !pathElement) return
+    const track = graphRef.current
+    const fill = graphFillRef.current
+    if (!track || !fill) return
+
+    let frame: number | null = null
+
+    const update = () => {
+      frame = null
+      const rect = track.getBoundingClientRect()
+      const viewportH = window.innerHeight
+      const startLine = viewportH * 0.85
+      const endLine = viewportH * 0.35
+      const total = rect.height + (startLine - endLine)
+      const scrolled = startLine - rect.top
+      const progress = total > 0 ? Math.min(1, Math.max(0, scrolled / total)) : 0
+
+      fill.style.transform = `scaleX(${progress})`
+
+      nodeRefs.current.forEach((node, i) => {
+        if (!node) return
+        const nodeProgress = experiences.length > 1 ? i / (experiences.length - 1) : 0
+        const active = progress >= nodeProgress - 0.02
+        node.style.backgroundColor = active ? 'var(--accent-primary)' : 'var(--bg-card)'
+        node.style.transform = active ? 'scale(1.15)' : 'scale(1)'
+      })
+    }
+
+    const onScrollOrResize = () => {
+      if (frame === null) frame = requestAnimationFrame(update)
+    }
+
+    update()
+    window.addEventListener('scroll', onScrollOrResize, { passive: true })
+    window.addEventListener('resize', onScrollOrResize)
+    return () => {
+      window.removeEventListener('scroll', onScrollOrResize)
+      window.removeEventListener('resize', onScrollOrResize)
+      if (frame !== null) cancelAnimationFrame(frame)
+    }
+  }, [experiences.length])
+
+  useEffect(() => {
+    if (!containerRef.current) return
 
     const isTouchViewport =
       window.matchMedia('(pointer: coarse)').matches ||
       window.matchMedia('(max-width: 1023px)').matches
-
-    // On small/touch screens, keep the timeline synced to viewport center.
-    const timelineStart = isTouchViewport ? 'top center' : 'top center'
-    const timelineEnd = isTouchViewport ? 'bottom center' : 'bottom center'
     const cardsStart = isTouchViewport ? 'top 74%' : 'top 60%'
 
-    const setPathDash = () => {
-      const pathLength = pathElement.getTotalLength()
-      pathElement.setAttribute('stroke-dasharray', String(pathLength))
-      pathElement.setAttribute('stroke-dashoffset', String(pathLength))
-      return pathLength
-    }
-
-    const refreshScroll = () => ScrollTrigger.refresh()
-
-    const imageElements = Array.from(section.querySelectorAll('img'))
-    const imageLoadHandler = () => refreshScroll()
-
-    let postLayoutRefreshFrameA: number | null = null
-    let postLayoutRefreshFrameB: number | null = null
-
-    imageElements.forEach((img) => {
-      if (!img.complete) {
-        img.addEventListener('load', imageLoadHandler, { once: true })
-        img.addEventListener('error', imageLoadHandler, { once: true })
-      }
-    })
-
-    let resizeObserver: ResizeObserver | null = null
-    if ('ResizeObserver' in window) {
-      resizeObserver = new ResizeObserver(() => {
-        refreshScroll()
-      })
-      resizeObserver.observe(section)
-    }
-
-    window.addEventListener('load', refreshScroll)
-
-    // Cached assets can skip image/load callbacks; force a post-layout refresh cycle.
-    postLayoutRefreshFrameA = requestAnimationFrame(() => {
-      postLayoutRefreshFrameB = requestAnimationFrame(() => {
-        refreshScroll()
-      })
-    })
-
-    if ('fonts' in document) {
-      ;(document as Document & { fonts?: { ready: Promise<unknown> } }).fonts?.ready
-        .then(() => refreshScroll())
-        .catch(() => {
-          // Ignore font readiness errors; a regular refresh is already scheduled.
-        })
-    }
-
-    // The listeners above each try to catch one specific cause of stale
-    // trigger positions (images, fonts, resize) - in practice something
-    // upstream (other sections' async content, a slow device, whatever)
-    // still slips through inconsistently across devices/loads. Rather than
-    // chase the exact cause, brute-force it: keep re-refreshing on a fixed
-    // schedule for the first few seconds so it self-corrects regardless of
-    // what was slow to settle.
-    const safetyNetDelays = [300, 800, 1500, 3000]
-    const safetyNetTimers = safetyNetDelays.map((delay) => window.setTimeout(refreshScroll, delay))
-
     const ctx = gsap.context(() => {
-      if (isTouchViewport) {
-        let pathLength = setPathDash()
-
-        ScrollTrigger.create({
-          trigger: timelineElement,
-          start: timelineStart,
-          end: timelineEnd,
-          invalidateOnRefresh: true,
-          onRefresh: (self) => {
-            pathLength = setPathDash()
-            pathElement.setAttribute('stroke-dashoffset', String(pathLength * (1 - self.progress)))
-          },
-          onUpdate: (self) => {
-            pathElement.setAttribute('stroke-dashoffset', String(pathLength * (1 - self.progress)))
-          },
-        })
-      } else {
-        setPathDash()
-
-        gsap.to(pathElement, {
-          strokeDashoffset: 0,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: timelineElement,
-            start: timelineStart,
-            end: timelineEnd,
-            scrub: true,
-            invalidateOnRefresh: true,
-            onRefresh: () => {
-              setPathDash()
-            },
-          },
-        })
-      }
-
-      // Stagger cards
       gsap.from('.exp-card', {
         y: 60,
         opacity: 0,
@@ -250,30 +198,19 @@ export const ExperienceSection = () => {
         stagger: 0.2,
         ease: 'power3.out',
         scrollTrigger: {
-          trigger: section,
+          trigger: containerRef.current,
           start: cardsStart,
         }
       })
-    }, section)
+    }, containerRef)
 
-    return () => {
-      window.removeEventListener('load', refreshScroll)
-      safetyNetTimers.forEach((timer) => window.clearTimeout(timer))
-      if (postLayoutRefreshFrameA !== null) {
-        cancelAnimationFrame(postLayoutRefreshFrameA)
-      }
-      if (postLayoutRefreshFrameB !== null) {
-        cancelAnimationFrame(postLayoutRefreshFrameB)
-      }
-      if (resizeObserver) resizeObserver.disconnect()
-      ctx.revert()
-    }
+    return () => ctx.revert()
   }, [])
 
   return (
-    <section 
+    <section
       ref={containerRef}
-      id="experience" 
+      id="experience"
       className="relative w-full py-24 px-6 overflow-hidden transition-colors duration-500"
       style={{
         backgroundColor: isDark ? 'var(--bg-primary)' : '#F5F0E8',
@@ -295,57 +232,39 @@ export const ExperienceSection = () => {
           </h2>
         </div>
 
-        {/* Timeline */}
-        <div ref={timelineRef} className="relative">
-          {/* Wavy Timeline Path SVG */}
-          <svg
-            ref={svgRef}
-            className="absolute left-4 md:left-1/2 top-0 bottom-0 w-8 pointer-events-none overflow-visible"
-            viewBox="0 0 32 1080"
-            preserveAspectRatio="none"
-            style={{
-              transform: 'translateX(-50%)',
-              height: '100%',
-            }}
-          >
-            {/* Smooth curved serpentine path */}
-            <path
-              ref={pathRef}
-              className="timeline-path"
-              d={`M 16 0 C 16 60, 0 60, 0 120 C 0 180, 16 180, 16 240 C 16 300, 0 300, 0 360 C 0 420, 16 420, 16 480 C 16 540, 0 540, 0 600 C 0 660, 16 660, 16 720 C 16 780, 0 780, 0 840 C 0 900, 16 900, 16 960 C 16 1020, 0 1020, 0 1080`}
-              stroke={isDark ? 'white' : 'black'}
-              strokeWidth="3"
-              fill="none"
-              strokeLinecap="round"
-              style={{
-                willChange: 'stroke-dashoffset',
-                filter: isDark
-                  ? 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.3))'
-                  : 'drop-shadow(0 0 8px rgba(0, 0, 0, 0.2))'
-              }}
-            />
-          </svg>
-
-          {/* Experience Items */}
-          {experiences.map((exp, index) => (
+        {/* Horizontal progress graph - fills left to right as the section scrolls by */}
+        <div ref={graphRef} className="relative mb-16 px-4 hidden sm:block">
+          <div className="relative h-1 rounded-full" style={{ background: 'rgba(var(--accent-primary-rgb), 0.15)' }}>
             <div
-              key={exp.company}
-              className={`exp-card relative mb-12 pl-16 md:pl-0 ${
-                index % 2 === 0 ? 'md:mr-auto md:pr-16 md:w-1/2' : 'md:ml-auto md:pl-16 md:w-1/2'
-              }`}
-            >
-              {/* Timeline Dot */}
-              <motion.div
-                className="absolute left-0 md:left-1/2 top-6 w-8 h-8 rounded-full flex items-center justify-center md:-ml-4 pointer-events-none z-0"
-                style={{ backgroundColor: 'var(--accent-primary)' }}
-                whileHover={{ scale: 1.2, boxShadow: '0 0 20px rgba(var(--accent-primary-rgb), 0.5)' }}
-              >
-                <div className="w-2 h-2 rounded-full" style={{ backgroundColor: isDark ? 'var(--bg-primary)' : '#F5F0E8' }} />
-              </motion.div>
-
-              <div className="relative z-10">
-                <ExperienceCard exp={exp} isDark={isDark} />
+              ref={graphFillRef}
+              className="absolute inset-0 rounded-full"
+              style={{ background: 'var(--accent-primary)', transformOrigin: 'left', transform: 'scaleX(0)' }}
+            />
+          </div>
+          <div className="flex justify-between -mt-[7px]">
+            {experiences.map((exp, i) => (
+              <div key={exp.company} className="flex flex-col items-center" style={{ width: 120 }}>
+                <div
+                  ref={(node) => { nodeRefs.current[i] = node }}
+                  className="w-4 h-4 rounded-full border-2 transition-transform duration-200"
+                  style={{ borderColor: 'var(--accent-primary)', backgroundColor: 'var(--bg-card)' }}
+                />
+                <span
+                  className="mt-2 text-[11px] font-medium uppercase tracking-wide text-center transition-colors duration-500"
+                  style={{ color: isDark ? '#9B8B70' : '#4A3C2A' }}
+                >
+                  {exp.company}
+                </span>
               </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Experience Items */}
+        <div className="space-y-8 max-w-3xl mx-auto">
+          {experiences.map((exp) => (
+            <div key={exp.company} className="exp-card relative">
+              <ExperienceCard exp={exp} isDark={isDark} />
             </div>
           ))}
         </div>
