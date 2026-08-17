@@ -51,7 +51,7 @@ export const ResumeSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h2 className="font-display text-4xl md:text-5xl font-bold mb-4 transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
+          <h2 className="font-brush text-4xl md:text-5xl mb-4 transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
             Professional Background
           </h2>
           <p className="text-lg max-w-xl mx-auto transition-colors duration-500" style={{ color: isDark ? '#D4C4A8' : '#4A3C2A' }}>

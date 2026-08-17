@@ -269,7 +269,7 @@ export const ExperienceSection = () => {
             <Briefcase size={16} />
             Experience
           </span>
-          <h2 className="font-display text-4xl md:text-5xl font-bold transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
+          <h2 className="font-brush text-4xl md:text-5xl transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
             Career Journey
           </h2>
         </div>

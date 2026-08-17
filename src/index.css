@@ -27,6 +27,7 @@
     --font-display: 'Big Shoulders Display', sans-serif;
     --font-body: 'Inter', system-ui, sans-serif;
     --font-mono: 'Space Mono', 'Fira Code', monospace;
+    --font-brush: 'Rock Salt', cursive;
 
     /* Legacy variables for existing components */
     --heading: var(--font-display);
@@ -132,6 +133,14 @@ body {
   line-height: 0.88;
   font-weight: 800;
   letter-spacing: -0.01em;
+}
+
+/* Brush accent for hero name + primary section headings */
+.font-brush {
+  font-family: var(--font-brush);
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 /* Small technical spec-label accents (retro-industrial motif) */

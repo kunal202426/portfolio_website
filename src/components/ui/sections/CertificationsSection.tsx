@@ -240,7 +240,7 @@ export const CertificationsSection = () => {
             <Award size={16} />
             Certifications
           </span>
-          <h2 className="font-display text-4xl md:text-5xl font-bold transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
+          <h2 className="font-brush text-4xl md:text-5xl transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
             Professional Credentials
           </h2>
         </div>

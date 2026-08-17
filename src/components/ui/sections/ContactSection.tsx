@@ -158,7 +158,7 @@ export const ContactSection = () => {
           <span className="text-sm uppercase tracking-[0.2em] font-medium mb-4 block" style={{ color: '#BF5B3D' }}>
             Let's Connect
           </span>
-          <h2 className="font-display text-4xl md:text-6xl font-bold mb-6" style={{ color: '#F5F0E8' }}>
+          <h2 className="font-brush text-4xl md:text-6xl mb-6" style={{ color: '#F5F0E8' }}>
             Get in Touch
           </h2>
           <p className="text-lg max-w-xl mx-auto mb-4" style={{ color: '#D4C4A8' }}>

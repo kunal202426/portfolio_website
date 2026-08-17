@@ -50,7 +50,7 @@ export const EducationSection = () => {
             <GraduationCap size={16} />
             Education
           </span>
-          <h2 className="font-display text-4xl md:text-5xl font-bold transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
+          <h2 className="font-brush text-4xl md:text-5xl transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
             Academic Journey
           </h2>
         </div>

@@ -200,7 +200,7 @@ export const TechMarquee = () => {
       <div className="relative">
         {/* Section Label */}
         <div className="text-center mb-12">
-          <h2 className="font-display text-2xl mb-2 transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
+          <h2 className="font-brush text-3xl mb-2 transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
             Technologies & Tools
           </h2>
           <div className="w-16 h-px mx-auto" style={{ backgroundColor: '#BF5B3D' }} />

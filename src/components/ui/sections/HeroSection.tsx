@@ -164,7 +164,7 @@ export const HeroSection = () => {
           }}
         >
           <div className="text-center max-w-5xl mx-auto">
-            <h1 className="hero-name font-display mb-8 leading-[0.9]" style={{ fontSize: 'clamp(3rem, 12vw, 9rem)', color: '#F0EBE0', fontWeight: 700 }}>
+            <h1 className="hero-name font-brush mb-8 leading-[0.95]" style={{ fontSize: 'clamp(2.5rem, 10vw, 7.5rem)', color: '#F0EBE0', fontWeight: 400 }}>
               {resumeData.personal.name.split(' ').map((word, i) => (
                 <div key={i} className="block overflow-hidden">
                   <span className="name-word block">
