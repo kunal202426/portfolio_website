@@ -8,6 +8,7 @@ export interface WormholeCard {
   title: string
   description: string
   details?: string[]
+  logo?: string
 }
 
 interface CareerWormholeProps {
@@ -108,20 +109,39 @@ function WormholeCardEl({ card, cardRef }: { card: WormholeCard; cardRef: (node:
             color: '#fff',
           }}
         >
-          <span
-            style={{
-              display: 'block',
-              marginBottom: 8,
-              fontFamily: "'Space Mono', monospace",
-              fontSize: 10,
-              fontWeight: 700,
-              letterSpacing: '0.12em',
-              textTransform: 'uppercase',
-              color: open ? 'rgba(255,255,255,0.85)' : 'var(--accent-glow)',
-            }}
-          >
-            {card.caption}
-          </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+            {card.logo && (
+              <div
+                style={{
+                  flexShrink: 0,
+                  width: 32,
+                  height: 32,
+                  borderRadius: 8,
+                  background: '#fff',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  overflow: 'hidden',
+                  padding: 4,
+                }}
+              >
+                <img src={card.logo} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+              </div>
+            )}
+            <span
+              style={{
+                display: 'block',
+                fontFamily: "'Space Mono', monospace",
+                fontSize: 10,
+                fontWeight: 700,
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                color: open ? 'rgba(255,255,255,0.85)' : 'var(--accent-glow)',
+              }}
+            >
+              {card.caption}
+            </span>
+          </div>
           <h3 className="font-display" style={{ margin: '0 0 12px', fontSize: 22, color: '#fff' }}>
             {card.title}
           </h3>

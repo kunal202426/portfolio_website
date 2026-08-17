@@ -428,12 +428,12 @@ export const ContactSection = () => {
 
         {/* Contact Info - Below Laptop */}
         <div className="max-w-3xl mx-auto mb-16 md:mb-20">
-          {/* Sits right on top of the heading below it - pulled down with a
-              negative margin so the books visually rest on the text's top
-              edge instead of floating as a separate block above it. */}
+          {/* Sits right on top of the box below it - pulled down with a
+              negative margin so the books visually rest on the box's top
+              edge/border instead of floating as a separate block above it. */}
           <motion.div
-            className="flex justify-center"
-            style={{ marginBottom: -18 }}
+            className="flex justify-center relative"
+            style={{ marginBottom: -30, zIndex: 1 }}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
@@ -448,56 +448,64 @@ export const ContactSection = () => {
             />
           </motion.div>
 
-          <h3 className="font-display text-xl md:text-2xl font-bold mb-5 md:mb-7 text-center relative" style={{ color: '#F5F0E8', zIndex: 1 }}>
-            Contact Information
-          </h3>
+          <div
+            className="rounded-2xl p-6 md:p-8"
+            style={{
+              backgroundColor: 'rgba(245, 240, 232, 0.04)',
+              border: '1px solid rgba(245, 240, 232, 0.1)',
+            }}
+          >
+            <h3 className="font-display text-xl md:text-2xl font-bold mb-5 md:mb-7 text-center" style={{ color: '#F5F0E8' }}>
+              Contact Information
+            </h3>
 
-          <div className="grid sm:grid-cols-2 gap-4 md:gap-5">
-            <motion.a
-              href={`mailto:${resumeData.personal.email}`}
-              className="flex items-center gap-4 p-4 rounded-xl transition-all group"
-              style={{ backgroundColor: 'rgba(245, 240, 232, 0.05)' }}
-              whileHover={{ y: -4, backgroundColor: 'rgba(var(--accent-primary-rgb), 0.1)' }}
-            >
-              <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--accent-primary)' }}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5F0E8" strokeWidth="2">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                  <polyline points="22,6 12,13 2,6" />
-                </svg>
-              </div>
-              <div className="min-w-0">
-                <p className="text-sm" style={{ color: '#9B8B70' }}>Email</p>
-                <p className="font-medium break-all" style={{ color: '#F5F0E8' }}>{resumeData.personal.email}</p>
-              </div>
-            </motion.a>
+            <div className="grid sm:grid-cols-2 gap-4 md:gap-5">
+              <motion.a
+                href={`mailto:${resumeData.personal.email}`}
+                className="flex items-center gap-4 p-4 rounded-xl transition-all group"
+                style={{ backgroundColor: 'rgba(245, 240, 232, 0.05)' }}
+                whileHover={{ y: -4, backgroundColor: 'rgba(var(--accent-primary-rgb), 0.1)' }}
+              >
+                <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--accent-primary)' }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5F0E8" strokeWidth="2">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                    <polyline points="22,6 12,13 2,6" />
+                  </svg>
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm" style={{ color: '#9B8B70' }}>Email</p>
+                  <p className="font-medium break-all" style={{ color: '#F5F0E8' }}>{resumeData.personal.email}</p>
+                </div>
+              </motion.a>
 
-            <motion.a
-              href={`tel:${resumeData.personal.phone}`}
-              className="flex items-center gap-4 p-4 rounded-xl transition-all group"
-              style={{ backgroundColor: 'rgba(245, 240, 232, 0.05)' }}
-              whileHover={{ y: -4, backgroundColor: 'rgba(var(--accent-primary-rgb), 0.1)' }}
-            >
-              <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#D4A574' }}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A1208" strokeWidth="2">
-                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                </svg>
-              </div>
-              <div>
-                <p className="text-sm" style={{ color: '#9B8B70' }}>Phone</p>
-                <p className="font-medium" style={{ color: '#F5F0E8' }}>{resumeData.personal.phone}</p>
-              </div>
-            </motion.a>
+              <motion.a
+                href={`tel:${resumeData.personal.phone}`}
+                className="flex items-center gap-4 p-4 rounded-xl transition-all group"
+                style={{ backgroundColor: 'rgba(245, 240, 232, 0.05)' }}
+                whileHover={{ y: -4, backgroundColor: 'rgba(var(--accent-primary-rgb), 0.1)' }}
+              >
+                <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#D4A574' }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A1208" strokeWidth="2">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-sm" style={{ color: '#9B8B70' }}>Phone</p>
+                  <p className="font-medium" style={{ color: '#F5F0E8' }}>{resumeData.personal.phone}</p>
+                </div>
+              </motion.a>
 
-            <div className="sm:col-span-2 flex items-center gap-4 p-4 rounded-xl" style={{ backgroundColor: 'rgba(245, 240, 232, 0.05)' }}>
-              <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(245, 240, 232, 0.1)' }}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5F0E8" strokeWidth="2">
-                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                  <circle cx="12" cy="10" r="3" />
-                </svg>
-              </div>
-              <div>
-                <p className="text-sm" style={{ color: '#9B8B70' }}>Location</p>
-                <p className="font-medium" style={{ color: '#F5F0E8' }}>India</p>
+              <div className="sm:col-span-2 flex items-center gap-4 p-4 rounded-xl" style={{ backgroundColor: 'rgba(245, 240, 232, 0.05)' }}>
+                <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(245, 240, 232, 0.1)' }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5F0E8" strokeWidth="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                    <circle cx="12" cy="10" r="3" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-sm" style={{ color: '#9B8B70' }}>Location</p>
+                  <p className="font-medium" style={{ color: '#F5F0E8' }}>India</p>
+                </div>
               </div>
             </div>
           </div>
