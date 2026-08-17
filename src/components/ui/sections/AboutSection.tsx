@@ -79,11 +79,14 @@ export const AboutSection = () => {
             coverTitle="Software Engineer"
             pageLabel="Say Hello"
           >
-            <h4 className="font-display" style={{ fontSize: 17, lineHeight: 1.2, color: '#1A1208', margin: 0 }}>
+            <h4 className="font-display" style={{ fontSize: 16, lineHeight: 1.2, color: '#1A1208', margin: 0 }}>
               I build systems,
               <br />
               <span style={{ color: '#BF5B3D' }}>not just applications.</span>
             </h4>
+            <p style={{ fontSize: 12, lineHeight: 1.55, color: '#4A3C2A', margin: 0 }}>
+              Currently building production features at YES Securities (YES Bank) as a Full Stack Developer Intern, while completing my B.Tech in Computer Science &amp; Engineering at VIT.
+            </p>
           </AboutBook>
 
           <AboutBook
@@ -108,11 +111,8 @@ export const AboutSection = () => {
             coverSubtitle="Bio"
             pageLabel="About Kunal"
           >
-            <p style={{ fontSize: 12.5, lineHeight: 1.6, color: '#4A3C2A', margin: 0 }}>
+            <p style={{ fontSize: 13, lineHeight: 1.65, color: '#4A3C2A', margin: 0 }}>
               I'm a Software Engineer focused on backend engineering, machine learning, and real-time data systems. My work centers on designing scalable architectures that perform reliably under production-level load.
-            </p>
-            <p style={{ fontSize: 12.5, lineHeight: 1.6, color: '#4A3C2A', margin: 0 }}>
-              Currently building production features at YES Securities (YES Bank) as a Full Stack Developer Intern, while completing my B.Tech in Computer Science &amp; Engineering at VIT.
             </p>
           </AboutBook>
         </div>
