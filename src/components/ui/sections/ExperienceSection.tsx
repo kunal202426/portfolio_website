@@ -10,104 +10,111 @@ gsap.registerPlugin(ScrollTrigger)
 
 type Experience = (typeof resumeData.experience)[number]
 
-// Front shows just the essentials (who/what/when); the achievement bullets
-// only appear once you actually engage with the card — hover on desktop,
-// tap on touch devices — via a 3D flip rather than sitting there by default.
+// Front card (company/title/period) sits on top of the achievements panel
+// at rest. Engaging the card — hover on desktop, tap on touch — slides the
+// front card down and rotates it away like a note peeling off a photo,
+// revealing the highlights underneath instead of a plain 3D flip.
 const ExperienceCard = ({ exp, isDark }: { exp: Experience; isDark: boolean }) => {
-  const [flipped, setFlipped] = useState(false)
+  const [revealed, setRevealed] = useState(false)
 
   return (
     <div
-      className="relative"
-      style={{ perspective: 1200 }}
-      onMouseEnter={() => setFlipped(true)}
-      onMouseLeave={() => setFlipped(false)}
-      onClick={() => setFlipped((f) => !f)}
+      className="relative rounded-xl"
+      style={{ minHeight: 196, overflow: 'hidden' }}
+      onMouseEnter={() => setRevealed(true)}
+      onMouseLeave={() => setRevealed(false)}
+      onClick={() => setRevealed((r) => !r)}
     >
-      <motion.div
-        className="relative cursor-pointer"
-        animate={{ rotateY: flipped ? 180 : 0 }}
-        transition={{ duration: 0.6, ease: [0.4, 0.2, 0.2, 1] }}
-        style={{ transformStyle: 'preserve-3d' }}
+      {/* Back: achievements panel, always present underneath */}
+      <div
+        className="absolute inset-0 p-6 rounded-xl overflow-y-auto"
+        style={{
+          backgroundColor: 'var(--bg-secondary)',
+          border: '1px solid rgba(var(--accent-primary-rgb), 0.3)',
+        }}
       >
-        {/* Front */}
-        <div
-          className="p-6 rounded-xl shadow-lg transition-colors duration-500"
-          style={{
-            backgroundColor: isDark ? 'var(--bg-card)' : '#FFFBF5',
-            border: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.2)' : 'rgba(212, 165, 116, 0.3)'}`,
-            backfaceVisibility: 'hidden',
-            minHeight: 196,
-          }}
-        >
-          <div className="flex flex-wrap items-start justify-between gap-2 mb-4">
-            <div className="flex gap-3 items-start flex-1">
-              {exp.logo && (
-                <div
-                  className="w-14 h-14 rounded-lg flex-shrink-0 flex items-center justify-center p-2"
-                  style={{ backgroundColor: '#2A2420' }}
-                >
-                  <img
-                    src={exp.logo}
-                    alt={exp.company}
-                    className="w-full h-full object-contain"
-                    decoding="async"
-                  />
-                </div>
-              )}
-              <div>
-                <h3 className="font-display font-bold text-xl transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
-                  {exp.company}
-                </h3>
-                <p className="font-medium" style={{ color: 'var(--accent-primary)' }}>{exp.title}</p>
+        <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: 'var(--accent-primary)' }}>
+          {exp.company} highlights
+        </p>
+        <ul className="space-y-2.5">
+          {exp.achievements.map((achievement, i) => (
+            <li
+              key={i}
+              className="text-sm flex gap-3 leading-relaxed"
+              style={{ color: isDark ? '#D4C4A8' : '#4A3C2A' }}
+            >
+              <span className="flex-shrink-0 mt-1" style={{ color: 'var(--accent-primary)' }}>▸</span>
+              <span>{achievement}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Front: peels down + rotates away on reveal. backgroundColor is a
+          plain CSS transition (not the animate prop) since framer-motion
+          can't interpolate between two var(...) color references. */}
+      <motion.div
+        className="absolute inset-0 p-6 rounded-xl shadow-lg cursor-pointer"
+        animate={{ y: revealed ? '38%' : 0, rotate: revealed ? 6 : 0 }}
+        transition={{ type: 'spring', stiffness: 260, damping: 26 }}
+        style={{
+          transformOrigin: 'top left',
+          backgroundColor: revealed ? 'var(--accent-primary)' : 'var(--bg-card)',
+          transition: 'background-color 0.2s ease, border-color 0.2s ease',
+          border: `1px solid ${revealed ? 'transparent' : 'rgba(var(--accent-primary-rgb), 0.25)'}`,
+        }}
+      >
+        <div className="flex flex-wrap items-start justify-between gap-2 mb-4">
+          <div className="flex gap-3 items-start flex-1">
+            {exp.logo && (
+              <div
+                className="w-14 h-14 rounded-lg flex-shrink-0 flex items-center justify-center p-2"
+                style={{ backgroundColor: '#2A2420' }}
+              >
+                <img
+                  src={exp.logo}
+                  alt={exp.company}
+                  className="w-full h-full object-contain"
+                  decoding="async"
+                />
               </div>
-            </div>
-            <div className="flex flex-col items-end gap-1">
-              <span className="flex items-center gap-1 text-xs font-medium transition-colors duration-500" style={{ color: isDark ? '#D4C4A8' : '#4A3C2A' }}>
-                <Calendar size={12} />
-                {exp.period}
-              </span>
-              <span className="flex items-center gap-1 text-xs transition-colors duration-500" style={{ color: isDark ? '#9B8B70' : '#9B8B70' }}>
-                <MapPin size={12} />
-                {exp.location}
-              </span>
+            )}
+            <div>
+              <h3
+                className="font-display font-bold text-xl transition-colors duration-200"
+                style={{ color: revealed ? '#F5F0E8' : isDark ? '#F0EBE0' : '#1A1208' }}
+              >
+                {exp.company}
+              </h3>
+              <p className="font-medium transition-colors duration-200" style={{ color: revealed ? '#F5F0E8' : 'var(--accent-primary)' }}>
+                {exp.title}
+              </p>
             </div>
           </div>
-
-          <div
-            className="flex items-center gap-1.5 text-xs font-medium mt-8"
-            style={{ color: 'var(--accent-primary)', opacity: 0.75 }}
-          >
-            <Sparkles size={12} />
-            Hover to see highlights
+          <div className="flex flex-col items-end gap-1">
+            <span
+              className="flex items-center gap-1 text-xs font-medium transition-colors duration-200"
+              style={{ color: revealed ? 'rgba(245, 240, 232, 0.85)' : isDark ? '#D4C4A8' : '#4A3C2A' }}
+            >
+              <Calendar size={12} />
+              {exp.period}
+            </span>
+            <span
+              className="flex items-center gap-1 text-xs transition-colors duration-200"
+              style={{ color: revealed ? 'rgba(245, 240, 232, 0.7)' : '#9B8B70' }}
+            >
+              <MapPin size={12} />
+              {exp.location}
+            </span>
           </div>
         </div>
 
-        {/* Back */}
         <div
-          className="absolute inset-0 p-6 rounded-xl shadow-lg overflow-y-auto"
-          style={{
-            backgroundColor: isDark ? 'var(--bg-card)' : '#FFFBF5',
-            border: '1px solid rgba(var(--accent-primary-rgb), 0.45)',
-            backfaceVisibility: 'hidden',
-            transform: 'rotateY(180deg)',
-          }}
+          className="flex items-center gap-1.5 text-xs font-medium mt-8 transition-colors duration-200"
+          style={{ color: revealed ? 'rgba(245, 240, 232, 0.8)' : 'var(--accent-primary)', opacity: revealed ? 1 : 0.75 }}
         >
-          <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: 'var(--accent-primary)' }}>
-            {exp.company} highlights
-          </p>
-          <ul className="space-y-2.5">
-            {exp.achievements.map((achievement, i) => (
-              <li
-                key={i}
-                className="text-sm flex gap-3 leading-relaxed"
-                style={{ color: isDark ? '#D4C4A8' : '#4A3C2A' }}
-              >
-                <span className="flex-shrink-0 mt-1" style={{ color: 'var(--accent-primary)' }}>▸</span>
-                <span>{achievement}</span>
-              </li>
-            ))}
-          </ul>
+          <Sparkles size={12} />
+          Hover to see highlights
         </div>
       </motion.div>
     </div>
