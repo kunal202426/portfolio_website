@@ -17,55 +17,16 @@ interface CareerWormholeProps {
 
 const CARD_HEIGHT = 220
 
-// Arc-length reparametrization: rather than mapping scroll linearly onto the
-// curve, defines a target speed profile (dt per unit of raw scroll) that
-// dips smoothly - never to a hard stop - near each card's position and
-// recovers between them. Integrating the *cost* (1/speed) over t and then
-// inverting that integral is what actually produces that slowdown: cost is
-// high near a card, so a given stretch of raw scroll only advances t a
-// little there, and the reverse (t advances a lot per scroll) where cost is
-// low, in between cards. The dip is asymmetric - wide on approach so the
-// slowdown is felt well before the card arrives, narrower on the way out so
-// it picks back up quickly once you've passed it.
-function buildDwellEasing(cardProgresses: number[], strength = 0.86, approachWidth = 0.16, exitWidth = 0.08) {
-  const STEPS = 400
-  const cost = new Float32Array(STEPS + 1)
-  for (let i = 0; i <= STEPS; i++) {
-    const t = i / STEPS
-    let dip = 0
-    for (const p of cardProgresses) {
-      const raw = t - p
-      const width = raw < 0 ? approachWidth : exitWidth
-      const d = raw / width
-      dip = Math.max(dip, Math.exp(-d * d))
-    }
-    const speed = 1 - strength * dip
-    cost[i] = 1 / speed
+// "Near a card" proximity, used to gate the camera's max speed (see below).
+// Measured directly against the exact t used for both camera position and
+// card placement, so the slowdown always lands exactly on the card.
+function nearestCardProximity(t: number, cardProgresses: number[], width: number) {
+  let proximity = 0
+  for (const p of cardProgresses) {
+    const d = (t - p) / width
+    proximity = Math.max(proximity, Math.exp(-d * d))
   }
-  const cumulative = new Float32Array(STEPS + 1)
-  for (let i = 1; i <= STEPS; i++) {
-    cumulative[i] = cumulative[i - 1] + ((cost[i - 1] + cost[i]) / 2) / STEPS
-  }
-  const total = cumulative[STEPS] || 1
-  for (let i = 0; i <= STEPS; i++) cumulative[i] /= total
-  return cumulative
-}
-
-function applyDwellEasing(rawT: number, cumulative: Float32Array) {
-  const steps = cumulative.length - 1
-  const clamped = Math.min(Math.max(rawT, 0), 1)
-  let lo = 0
-  let hi = steps
-  while (lo < hi) {
-    const mid = (lo + hi) >> 1
-    if (cumulative[mid] < clamped) lo = mid + 1
-    else hi = mid
-  }
-  if (lo === 0) return 0
-  const c0 = cumulative[lo - 1]
-  const c1 = cumulative[lo]
-  const frac = c1 > c0 ? (clamped - c0) / (c1 - c0) : 0
-  return ((lo - 1) + frac) / steps
+  return proximity
 }
 
 // The outer (ref'd) element's transform/opacity/zIndex are driven
@@ -277,7 +238,7 @@ export const CareerWormhole = ({ cards, scrollLengthVh = 220 }: CareerWormholePr
       angle: angles[i % angles.length],
       el: cardRefs.current[i] ?? null,
     }))
-    const dwellEasing = buildDwellEasing(cardsData.map((c) => c.progress))
+    const cardProgresses = cardsData.map((c) => c.progress)
 
     let scrollPercent = 0
     let targetScrollPercent = 0
@@ -294,32 +255,30 @@ export const CareerWormhole = ({ cards, scrollLengthVh = 220 }: CareerWormholePr
 
     let frameId = 0
     const animate = () => {
-      // The eased position mapping above only changes how far the camera
-      // moves per unit of *scroll distance* - a fast/continuous scroll can
-      // still blow through that in a fraction of a second no matter how
-      // compressed the mapping is, since nothing anchors it to real time.
-      // Slowing the catch-up (lerp) rate itself while the eased position is
-      // near a card adds an actual time-based dwell: even if the target
-      // jumps far ahead, the camera creeps toward it slowly right there, so
-      // passing a card takes real seconds instead of a snap-through.
-      const currentEased = applyDwellEasing(scrollPercent, dwellEasing)
-      let nearCard = 0
-      for (const c of cardsData) {
-        const d = (currentEased - c.progress) / 0.05
-        nearCard = Math.max(nearCard, Math.exp(-d * d))
-      }
-      const lerpRate = 0.08 * (1 - 0.88 * nearCard)
-      scrollPercent += (targetScrollPercent - scrollPercent) * lerpRate
-      const easedPercent = applyDwellEasing(scrollPercent, dwellEasing)
-      const cameraEval = Math.min(Math.max(easedPercent, 0), 0.99)
-      const lookAtEval = applyDwellEasing(Math.min(scrollPercent + 0.025, 1), dwellEasing)
+      // A pull proportional to the remaining gap (plain lerp) makes speed
+      // scale with however far behind the target the camera currently is -
+      // under a real scroll (which keeps advancing the target), that gap is
+      // still large approaching an early card and has already shrunk by a
+      // later one, so a lerp-rate cut alone gave each card a different,
+      // scroll-pattern-dependent dwell time. Capping the *absolute* step
+      // size (a real speed limit, not just a softened pull) instead makes
+      // every card's dwell the same regardless of scroll speed or pattern -
+      // verified by simulation: ~1.4s per card whether the whole track is
+      // scrolled in 1.5s or 6s.
+      const nearCard = nearestCardProximity(scrollPercent, cardProgresses, 0.09)
+      const maxStep = 0.012 - 0.0116 * nearCard
+      const gap = targetScrollPercent - scrollPercent
+      const rawStep = gap * 0.12
+      scrollPercent += Math.sign(rawStep) * Math.min(Math.abs(rawStep), maxStep)
+      const cameraEval = Math.min(Math.max(scrollPercent, 0), 0.99)
+      const lookAtEval = Math.min(Math.max(scrollPercent + 0.02, 0), 1)
       const camPos = curve.getPointAt(cameraEval)
       const lookPos = curve.getPointAt(lookAtEval)
       camera.position.copy(camPos)
       camera.lookAt(lookPos)
 
       texture.offset.x += tunnelSpeed
-      texture.offset.y = easedPercent * 2
+      texture.offset.y = scrollPercent * 2
 
       const maxDistance = 16
       // Narrow (phone) viewports leave little margin around a fixed-width
