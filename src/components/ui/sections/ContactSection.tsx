@@ -168,7 +168,7 @@ export const ContactSection = () => {
         {/* Laptop + lottie */}
         <div className="grid md:grid-cols-2 gap-8 items-center mb-12 md:mb-14">
           <motion.div
-            className="hidden md:flex justify-center items-center order-1"
+            className="flex justify-center items-center order-1"
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.3 }}
@@ -178,7 +178,8 @@ export const ContactSection = () => {
               src="/animations/girl-with-books.lottie"
               loop
               autoplay
-              style={{ width: '100%', maxWidth: 340, height: 'auto' }}
+              className="w-full max-w-[260px] sm:max-w-[320px] md:max-w-[460px]"
+              style={{ height: 'auto' }}
             />
           </motion.div>
 

@@ -101,10 +101,13 @@ export const CertificationsSection = () => {
             <h3 className="text-2xl font-display font-bold mb-8 text-center transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
               Academic Journey
             </h3>
-            <RunningCharacter />
             <ClickExpandList items={educationItems} isDark={isDark} />
           </div>
         </TiltIn>
+
+        {/* One runner, between the two lists, sitting back in the
+            background rather than one per section. */}
+        <RunningCharacter size={110} duration={9} opacity={0.16} />
 
         {/* Achievements */}
         <TiltIn tilt={5}>
@@ -112,7 +115,6 @@ export const CertificationsSection = () => {
             <h3 className="text-2xl font-display font-bold mb-8 text-center transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
               Notable Achievements
             </h3>
-            <RunningCharacter duration={8} />
             <ClickExpandList items={achievementItems} isDark={isDark} />
           </div>
         </TiltIn>

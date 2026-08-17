@@ -180,8 +180,50 @@ export const HeroSection = () => {
               </p>
             </div>
 
+            {/* Real subtitle is invisible here - painted instead in the
+                duplicate layer below, in front of the mountain. This one
+                only exists so the flex-centered block above it keeps the
+                same height/spacing (h1 + tagline still render for real). */}
+            <p className="hero-subtitle text-sm md:text-lg max-w-2xl mx-auto whitespace-normal md:whitespace-nowrap leading-snug" style={{ opacity: 0 }} aria-hidden="true">
+              Scalable backend systems, ML pipelines, and real-time applications.
+            </p>
+          </div>
+        </motion.div>
+
+        {/* Layer 3b: Subtitle only, duplicated in front of the mountain -
+            the front mountain's jagged silhouette was cutting straight
+            through specific words when this line lived in the z-3 layer
+            above (deliberately behind the mountain, same as the name and
+            tagline). Everything above this <p> is an invisible spacer with
+            the exact same markup, so this stays pixel-aligned with where
+            the real line would have sat, without hardcoding an offset. */}
+        <motion.div
+          className="absolute inset-0 flex items-center justify-center px-6 pointer-events-none"
+          style={{
+            y: textY,
+            opacity: textOpacity,
+            willChange: 'transform, opacity',
+            transform: 'translateZ(0)',
+            backfaceVisibility: 'hidden',
+            zIndex: 5,
+            paddingBottom: '12rem',
+          }}
+        >
+          <div className="text-center max-w-5xl mx-auto">
+            <h1 className="font-brush mb-8 leading-[0.95] invisible" style={{ fontSize: 'clamp(2.5rem, 10vw, 7.5rem)', fontWeight: 400 }} aria-hidden="true">
+              {resumeData.personal.name.split(' ').map((word, i) => (
+                <div key={i} className="block">
+                  {word}
+                </div>
+              ))}
+            </h1>
+            <div className="overflow-hidden mb-6">
+              <p className="text-xl md:text-2xl lg:text-3xl font-light invisible" aria-hidden="true">
+                Software Engineer & ML Engineer
+              </p>
+            </div>
             <p
-              className="hero-subtitle text-sm md:text-lg max-w-2xl mx-auto whitespace-normal md:whitespace-nowrap leading-snug"
+              className="text-sm md:text-lg max-w-2xl mx-auto whitespace-normal md:whitespace-nowrap leading-snug"
               style={{ color: '#FFFFFF', textShadow: '0 2px 14px rgba(0, 0, 0, 0.65), 0 1px 4px rgba(0, 0, 0, 0.85)' }}
             >
               Scalable backend systems, ML pipelines, and real-time applications.

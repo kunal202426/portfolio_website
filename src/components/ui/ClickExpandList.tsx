@@ -8,6 +8,7 @@ export interface ClickExpandItem {
   subtitle: string
   badge: string
   description?: string
+  bullets?: string[]
   meta?: { icon: 'calendar' | 'map'; label: string }[]
   url?: string
 }
@@ -97,6 +98,16 @@ export const ClickExpandList = ({ items, isDark }: { items: ClickExpandItem[]; i
                       <p className="text-sm leading-relaxed" style={{ margin: '0 0 10px', color: isDark ? '#D4C4A8' : '#4A3C2A' }}>
                         {item.description}
                       </p>
+                    )}
+                    {item.bullets && item.bullets.length > 0 && (
+                      <ul style={{ margin: '0 0 10px', padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 6 }}>
+                        {item.bullets.map((line, bi) => (
+                          <li key={bi} className="text-sm leading-relaxed flex gap-2" style={{ color: isDark ? '#D4C4A8' : '#4A3C2A' }}>
+                            <span style={{ flexShrink: 0, color: 'var(--accent-primary)' }}>▸</span>
+                            <span>{line}</span>
+                          </li>
+                        ))}
+                      </ul>
                     )}
                     <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
                       {item.meta?.map((m, mi) => (
