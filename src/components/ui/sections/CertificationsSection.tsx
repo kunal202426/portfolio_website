@@ -5,6 +5,7 @@ import { resumeData } from '../../../lib/resume-data'
 import { useTheme } from '../../providers/ThemeProvider'
 import { CertificationStampCarousel, type StampItem } from '../CertificationStampCarousel'
 import { ClickExpandList, type ClickExpandItem } from '../ClickExpandList'
+import { RunningCharacter } from '../RunningCharacter'
 
 // Each sub-section tilts and settles into place as it scrolls into view -
 // a "teda sa" (slightly crooked -> straightens out) transition between
@@ -100,6 +101,7 @@ export const CertificationsSection = () => {
             <h3 className="text-2xl font-display font-bold mb-8 text-center transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
               Academic Journey
             </h3>
+            <RunningCharacter />
             <ClickExpandList items={educationItems} isDark={isDark} />
           </div>
         </TiltIn>
@@ -110,6 +112,7 @@ export const CertificationsSection = () => {
             <h3 className="text-2xl font-display font-bold mb-8 text-center transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
               Notable Achievements
             </h3>
+            <RunningCharacter duration={8} />
             <ClickExpandList items={achievementItems} isDark={isDark} />
           </div>
         </TiltIn>

@@ -2,6 +2,7 @@ import { useRef, useEffect, useState, type MouseEvent } from 'react'
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { DotLottieReact } from '@lottiefiles/dotlottie-react'
 import { resumeData } from '../../../lib/resume-data'
 import { useTheme } from '../../providers/ThemeProvider'
 
@@ -164,10 +165,25 @@ export const ContactSection = () => {
           </div>
         </div>
 
-        {/* Laptop */}
-        <div className="flex justify-center items-center mb-12 md:mb-14">
+        {/* Laptop + lottie */}
+        <div className="grid md:grid-cols-2 gap-8 items-center mb-12 md:mb-14">
           <motion.div
-            className="laptop-container flex justify-center items-center"
+            className="hidden md:flex justify-center items-center order-1"
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <DotLottieReact
+              src="/animations/girl-with-books.lottie"
+              loop
+              autoplay
+              style={{ width: '100%', maxWidth: 340, height: 'auto' }}
+            />
+          </motion.div>
+
+          <motion.div
+            className="laptop-container flex justify-center items-center order-2"
             style={{ perspective: '2000px', perspectiveOrigin: '50% 50%', rotateX: smoothTiltX, rotateY: smoothTiltY }}
             onMouseMove={handleLaptopMove}
             onMouseLeave={resetLaptopTilt}
