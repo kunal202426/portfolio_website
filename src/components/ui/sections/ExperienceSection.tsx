@@ -59,7 +59,7 @@ const ExperienceCard = ({ exp, isDark }: { exp: Experience; isDark: boolean }) =
                 <h3 className="font-display font-bold text-xl transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
                   {exp.company}
                 </h3>
-                <p className="font-medium" style={{ color: '#1FA971' }}>{exp.title}</p>
+                <p className="font-medium" style={{ color: '#BF5B3D' }}>{exp.title}</p>
               </div>
             </div>
             <div className="flex flex-col items-end gap-1">
@@ -76,7 +76,7 @@ const ExperienceCard = ({ exp, isDark }: { exp: Experience; isDark: boolean }) =
 
           <div
             className="flex items-center gap-1.5 text-xs font-medium mt-8"
-            style={{ color: '#1FA971', opacity: 0.75 }}
+            style={{ color: '#BF5B3D', opacity: 0.75 }}
           >
             <Sparkles size={12} />
             Hover to see highlights
@@ -88,12 +88,12 @@ const ExperienceCard = ({ exp, isDark }: { exp: Experience; isDark: boolean }) =
           className="absolute inset-0 p-6 rounded-xl shadow-lg overflow-y-auto"
           style={{
             backgroundColor: isDark ? '#1A1510' : '#FFFBF5',
-            border: '1px solid rgba(31, 169, 113, 0.45)',
+            border: '1px solid rgba(191, 91, 61, 0.45)',
             backfaceVisibility: 'hidden',
             transform: 'rotateY(180deg)',
           }}
         >
-          <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: '#1FA971' }}>
+          <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: '#BF5B3D' }}>
             {exp.company} highlights
           </p>
           <ul className="space-y-2.5">
@@ -103,7 +103,7 @@ const ExperienceCard = ({ exp, isDark }: { exp: Experience; isDark: boolean }) =
                 className="text-sm flex gap-3 leading-relaxed"
                 style={{ color: isDark ? '#D4C4A8' : '#4A3C2A' }}
               >
-                <span className="flex-shrink-0 mt-1" style={{ color: '#1FA971' }}>▸</span>
+                <span className="flex-shrink-0 mt-1" style={{ color: '#BF5B3D' }}>▸</span>
                 <span>{achievement}</span>
               </li>
             ))}
@@ -259,13 +259,13 @@ export const ExperienceSection = () => {
       }}
     >
       {/* Decorative Background */}
-      <div className="absolute top-20 right-10 w-40 h-40 rounded-full opacity-20" style={{ background: 'radial-gradient(circle, #1FA971 0%, transparent 70%)' }} />
+      <div className="absolute top-20 right-10 w-40 h-40 rounded-full opacity-20" style={{ background: 'radial-gradient(circle, #BF5B3D 0%, transparent 70%)' }} />
       <div className="absolute bottom-20 left-10 w-60 h-60 rounded-full opacity-10" style={{ background: 'radial-gradient(circle, #D4A574 0%, transparent 70%)' }} />
 
       <div className="max-w-5xl mx-auto relative z-10">
         {/* Header */}
         <div className="mb-16 text-center">
-          <span className="inline-flex items-center gap-2 text-sm uppercase tracking-[0.2em] font-medium mb-4" style={{ color: '#1FA971' }}>
+          <span className="inline-flex items-center gap-2 text-sm uppercase tracking-[0.2em] font-medium mb-4" style={{ color: '#BF5B3D' }}>
             <Briefcase size={16} />
             Experience
           </span>
@@ -316,8 +316,8 @@ export const ExperienceSection = () => {
               {/* Timeline Dot */}
               <motion.div
                 className="absolute left-0 md:left-1/2 top-6 w-8 h-8 rounded-full flex items-center justify-center md:-ml-4 pointer-events-none z-0"
-                style={{ backgroundColor: '#1FA971' }}
-                whileHover={{ scale: 1.2, boxShadow: '0 0 20px rgba(31, 169, 113, 0.5)' }}
+                style={{ backgroundColor: '#BF5B3D' }}
+                whileHover={{ scale: 1.2, boxShadow: '0 0 20px rgba(191, 91, 61, 0.5)' }}
               >
                 <div className="w-2 h-2 rounded-full" style={{ backgroundColor: isDark ? '#0E0E0B' : '#F5F0E8' }} />
               </motion.div>

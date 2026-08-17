@@ -20,8 +20,8 @@ type KeycapButtonProps = BaseProps &
 
 const toneStyles: Record<KeycapTone, { base: string; top: string; label: string; icon: string }> = {
   orange: {
-    base: '#c44a20',
-    top: 'linear-gradient(145deg, #f06030, #e04820)',
+    base: '#8a4128',
+    top: 'linear-gradient(145deg, #d9825e, #bf5b3d)',
     label: '#fff',
     icon: '#fff',
   },
@@ -81,7 +81,7 @@ export const KeycapButton = ({
   const sharedClassName = [
     'relative inline-flex select-none items-center justify-center align-middle',
     'transition-[transform,filter] duration-100 ease-out',
-    'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-[#1FA971]',
+    'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-[#BF5B3D]',
     className,
   ]
     .filter(Boolean)

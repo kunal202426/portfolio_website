@@ -19,7 +19,7 @@ interface AchievementCardData {
 
 // One consistent card for all certifications, mobile and desktop alike.
 // Only the essentials (logo/title/issuer/year) sit on the face; the
-// description stays hidden behind a hover/tap reveal instead of being
+// description stays hidden behind a tap reveal instead of being
 // crammed onto the card by default.
 const CertCard = memo(function CertCard({ cert, index, isDark }: { cert: Certification; index: number; isDark: boolean }) {
   const [hovered, setHovered] = useState(false)
@@ -35,11 +35,9 @@ const CertCard = memo(function CertCard({ cert, index, isDark }: { cert: Certifi
       style={{
         minHeight: 190,
         backgroundColor: isDark ? 'rgba(26, 21, 16, 0.9)' : '#FFFFFF',
-        border: `1.5px solid ${isDark ? 'rgba(212, 165, 116, 0.25)' : 'rgba(31, 169, 113, 0.3)'}`,
-        boxShadow: isDark ? '0 8px 24px rgba(0,0,0,0.28)' : '0 8px 24px rgba(31,169,113,0.1)',
+        border: `1.5px solid ${isDark ? 'rgba(212, 165, 116, 0.25)' : 'rgba(191, 91, 61, 0.3)'}`,
+        boxShadow: isDark ? '0 8px 24px rgba(0,0,0,0.28)' : '0 8px 24px rgba(191,91,61,0.1)',
       }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
       onClick={() => setHovered((h) => !h)}
     >
       {/* Face */}
@@ -55,10 +53,10 @@ const CertCard = memo(function CertCard({ cert, index, isDark }: { cert: Certifi
         <p className="text-sm font-bold leading-snug" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
           {cert.title}
         </p>
-        <p className="text-xs font-medium" style={{ color: '#1FA971' }}>{cert.issuer}</p>
+        <p className="text-xs font-medium" style={{ color: '#BF5B3D' }}>{cert.issuer}</p>
         <span
           className="text-[10px] font-mono font-bold uppercase tracking-widest px-2 py-0.5 rounded-full"
-          style={{ background: 'rgba(31,169,113,0.12)', color: '#1FA971', border: '1px solid rgba(31,169,113,0.3)' }}
+          style={{ background: 'rgba(191,91,61,0.12)', color: '#BF5B3D', border: '1px solid rgba(191,91,61,0.3)' }}
         >
           {cert.year}
         </span>
@@ -67,7 +65,7 @@ const CertCard = memo(function CertCard({ cert, index, isDark }: { cert: Certifi
           style={{ color: '#9B8B70', opacity: 0.75 }}
         >
           <Sparkles size={10} />
-          Hover for details
+          {hovered ? 'Tap to close' : 'Tap for details'}
         </span>
       </div>
 
@@ -79,7 +77,7 @@ const CertCard = memo(function CertCard({ cert, index, isDark }: { cert: Certifi
         animate={{ opacity: hovered ? 1 : 0, y: hovered ? 0 : 10 }}
         transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
       >
-        <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: '#1FA971' }}>
+        <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: '#BF5B3D' }}>
           {cert.issuer}
         </p>
         <p className="text-sm leading-relaxed" style={{ color: isDark ? '#D4C4A8' : '#4A3C2A' }}>
@@ -106,8 +104,6 @@ const AchievementCard = memo(function AchievementCard({ item, isDark }: { item: 
         border: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.22)' : 'rgba(212, 165, 116, 0.35)'}`,
         boxShadow: isDark ? '0 10px 30px rgba(0, 0, 0, 0.28)' : '0 10px 30px rgba(26, 18, 8, 0.08)',
       }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
       onClick={() => setHovered((h) => !h)}
     >
       <div className="p-4 md:p-5">
@@ -142,7 +138,7 @@ const AchievementCard = memo(function AchievementCard({ item, isDark }: { item: 
               </span>
             </div>
 
-            <p className="text-sm font-medium break-words" style={{ color: '#1FA971' }}>
+            <p className="text-sm font-medium break-words" style={{ color: '#BF5B3D' }}>
               {item.subtitle}
             </p>
           </div>
@@ -183,7 +179,7 @@ const AchievementCard = memo(function AchievementCard({ item, isDark }: { item: 
           {!hovered && (
             <p className="flex items-center gap-1.5 text-xs font-medium mb-3" style={{ color: '#9B8B70', opacity: 0.75 }}>
               <Sparkles size={11} />
-              Hover for the story
+              Tap for the story
             </p>
           )}
 
@@ -199,7 +195,7 @@ const AchievementCard = memo(function AchievementCard({ item, isDark }: { item: 
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
               className="inline-flex items-center gap-2 mt-4 text-sm font-medium transition-transform duration-200 hover:translate-x-0.5"
-              style={{ color: '#1FA971' }}
+              style={{ color: '#BF5B3D' }}
             >
               View Source
               <ExternalLink className="w-4 h-4" />
@@ -235,12 +231,12 @@ export const CertificationsSection = () => {
       }}
     >
       {/* Decorative */}
-      <div className="absolute bottom-10 left-20 w-48 h-48 rounded-full opacity-15" style={{ background: 'radial-gradient(circle, #1FA971 0%, transparent 70%)' }} />
+      <div className="absolute bottom-10 left-20 w-48 h-48 rounded-full opacity-15" style={{ background: 'radial-gradient(circle, #BF5B3D 0%, transparent 70%)' }} />
 
       <div className="max-w-6xl mx-auto relative z-10">
         {/* Header */}
         <div className="mb-16 text-center">
-          <span className="inline-flex items-center gap-2 text-sm uppercase tracking-[0.2em] font-medium mb-4" style={{ color: '#1FA971' }}>
+          <span className="inline-flex items-center gap-2 text-sm uppercase tracking-[0.2em] font-medium mb-4" style={{ color: '#BF5B3D' }}>
             <Award size={16} />
             Certifications
           </span>

@@ -206,7 +206,7 @@ export const Navbar = () => {
           backgroundColor: isScrolled 
             ? (isDark ? 'rgba(14, 14, 11, 0.95)' : 'rgba(245, 240, 232, 0.95)')
             : (isDark ? 'rgba(14, 14, 11, 0.85)' : 'rgba(245, 240, 232, 0.85)'),
-          borderBottom: isScrolled ? '1px solid rgba(31, 169, 113, 0.15)' : '1px solid transparent',
+          borderBottom: isScrolled ? '1px solid rgba(191, 91, 61, 0.15)' : '1px solid transparent',
           height: isScrolled ? '56px' : '72px',
           willChange: 'transform',
         }}
@@ -216,7 +216,7 @@ export const Navbar = () => {
           <motion.button
             onClick={() => handleNavClick('#home')}
             className="text-2xl font-display font-bold"
-            style={{ color: '#1FA971' }}
+            style={{ color: '#BF5B3D' }}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -284,7 +284,7 @@ export const Navbar = () => {
                 backgroundColor: 'transparent',
                 touchAction: 'manipulation' // Prevents double-tap zoom on mobile
               }}
-              whileTap={{ scale: 0.95, backgroundColor: 'rgba(31, 169, 113, 0.1)' }}
+              whileTap={{ scale: 0.95, backgroundColor: 'rgba(191, 91, 61, 0.1)' }}
             >
               {item.label}
             </motion.button>

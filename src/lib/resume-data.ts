@@ -133,7 +133,7 @@ export const resumeData = {
       period: '2026',
       description: 'A real-time urban mobility analytics platform simulating fleet size, surge pricing, and weather conditions, with live dashboards visualizing demand and congestion metrics.',
       tags: ['Python', 'React', 'TypeScript', 'Recharts', 'Zustand', 'Three.js'],
-      color: '#1FA971',
+      color: '#BF5B3D',
       featured: true,
       starred: true,
       category: 'dev',

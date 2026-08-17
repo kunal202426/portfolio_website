@@ -60,7 +60,7 @@ export const TechMarquee = () => {
   }, [])
 
   const gravityPalette = [
-    '#1FA971',
+    '#BF5B3D',
     '#D4A574',
     '#2F6B9A',
     '#0F766E',
@@ -203,7 +203,7 @@ export const TechMarquee = () => {
           <h2 className="font-display text-2xl mb-2 transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
             Technologies & Tools
           </h2>
-          <div className="w-16 h-px mx-auto" style={{ backgroundColor: '#1FA971' }} />
+          <div className="w-16 h-px mx-auto" style={{ backgroundColor: '#BF5B3D' }} />
         </div>
 
         <div

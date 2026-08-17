@@ -108,7 +108,7 @@ const AllProjectsBranch = ({
             d={`M 6 0 L 6 ${n}`}
             vectorEffect="non-scaling-stroke"
             fill="none"
-            stroke="#1FA971"
+            stroke="#BF5B3D"
             strokeOpacity={0.35}
             strokeWidth={1.2}
             initial={{ pathLength: 0 }}
@@ -124,7 +124,7 @@ const AllProjectsBranch = ({
                 d={d}
                 vectorEffect="non-scaling-stroke"
                 fill="none"
-                stroke="#1FA971"
+                stroke="#BF5B3D"
                 strokeOpacity={0.55}
                 strokeWidth={1.5}
                 strokeLinecap="round"
@@ -146,13 +146,13 @@ const AllProjectsBranch = ({
             animate={{ opacity: 1, x: 0, scale: 1 }}
             transition={{ delay: 0.4 + i * 0.055 + 0.12, duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
           >
-            <span className="rounded-full flex-shrink-0" style={{ width: 6, height: 6, background: '#1FA971' }} />
+            <span className="rounded-full flex-shrink-0" style={{ width: 6, height: 6, background: '#BF5B3D' }} />
             <span
               className="text-[0.72rem] font-medium truncate flex-1 min-w-0"
               style={{
                 color: isDark ? '#F0EBE0' : '#1A1208',
-                background: isDark ? 'rgba(31, 169, 113,0.14)' : 'rgba(31, 169, 113,0.1)',
-                border: '1px solid rgba(31, 169, 113,0.4)',
+                background: isDark ? 'rgba(191, 91, 61,0.14)' : 'rgba(191, 91, 61,0.1)',
+                border: '1px solid rgba(191, 91, 61,0.4)',
                 borderRadius: 6,
                 padding: '6px 10px',
                 boxShadow: isDark ? '0 2px 6px rgba(0,0,0,0.35)' : '0 2px 6px rgba(0,0,0,0.08)',
@@ -184,7 +184,7 @@ const AllProjectsBranch = ({
               d={d}
               vectorEffect="non-scaling-stroke"
               fill="none"
-              stroke="#1FA971"
+              stroke="#BF5B3D"
               strokeOpacity={0.55}
               strokeWidth={1.5}
               strokeLinecap="round"
@@ -207,13 +207,13 @@ const AllProjectsBranch = ({
           transition={{ delay: i * 0.055 + 0.28, duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
           whileHover={{ x: 4 }}
         >
-          <span className="rounded-full flex-shrink-0" style={{ width: 6, height: 6, background: '#1FA971' }} />
+          <span className="rounded-full flex-shrink-0" style={{ width: 6, height: 6, background: '#BF5B3D' }} />
           <span
             className="text-xs font-medium whitespace-nowrap"
             style={{
               color: isDark ? '#F0EBE0' : '#1A1208',
-              background: isDark ? 'rgba(31, 169, 113,0.14)' : 'rgba(31, 169, 113,0.1)',
-              border: '1px solid rgba(31, 169, 113,0.4)',
+              background: isDark ? 'rgba(191, 91, 61,0.14)' : 'rgba(191, 91, 61,0.1)',
+              border: '1px solid rgba(191, 91, 61,0.4)',
               borderRadius: 6,
               padding: '6px 10px',
               boxShadow: isDark ? '0 2px 6px rgba(0,0,0,0.35)' : '0 2px 6px rgba(0,0,0,0.08)',
@@ -341,7 +341,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
   const descColor = '#C4B49A'
 
   // Grid line color based on theme (matches the section's own background pattern)
-  const gridColor = isDark ? 'rgba(31, 169, 113, 0.06)' : 'rgba(31, 169, 113, 0.08)'
+  const gridColor = isDark ? 'rgba(191, 91, 61, 0.06)' : 'rgba(191, 91, 61, 0.08)'
 
   return (
     <section className="relative overflow-hidden pt-6 pb-28 md:pt-10 md:pb-44 transition-colors duration-500" style={{ background: isDark ? '#0E0E0B' : '#F5F0E8' }}>
@@ -371,9 +371,9 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
             style={{
               padding: '7px 16px',
               borderRadius: 999,
-              border: `1.5px solid ${allView ? '#1FA971' : 'rgba(31, 169, 113,0.4)'}`,
-              background: allView ? 'rgba(31, 169, 113,0.16)' : 'transparent',
-              color: '#1FA971',
+              border: `1.5px solid ${allView ? '#BF5B3D' : 'rgba(191, 91, 61,0.4)'}`,
+              background: allView ? 'rgba(191, 91, 61,0.16)' : 'transparent',
+              color: '#BF5B3D',
             }}
           >
             {allView ? '✕ Close' : 'All Projects'}
@@ -396,10 +396,10 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                   width: 44,
                   height: 44,
                   borderRadius: '50%',
-                  border: '2px solid rgba(31, 169, 113, 0.4)',
+                  border: '2px solid rgba(191, 91, 61, 0.4)',
                   background: isDark ? 'linear-gradient(145deg, #1A1510, #0E0E0B)' : 'linear-gradient(145deg, #FFFFFF, #F5F0E8)',
                   boxShadow: isDark ? '0 4px 12px rgba(0,0,0,0.5)' : '0 4px 12px rgba(0,0,0,0.1)',
-                  color: '#1FA971',
+                  color: '#BF5B3D',
                   fontSize: 18,
                   fontWeight: 700,
                 }}
@@ -433,7 +433,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
               className="absolute pointer-events-none"
               style={{
                 inset: '-6% -4%',
-                background: 'radial-gradient(ellipse at 50% 40%, rgba(31, 169, 113,0.16), transparent 68%)',
+                background: 'radial-gradient(ellipse at 50% 40%, rgba(191, 91, 61,0.16), transparent 68%)',
                 filter: 'blur(18px)',
                 zIndex: 0,
               }}
@@ -448,7 +448,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                 transform: 'rotateX(2.5deg)',
                 boxShadow: [
                   '0 36px 70px rgba(0,0,0,0.6)',
-                  '0 0 0 1.5px rgba(31, 169, 113,0.4)',
+                  '0 0 0 1.5px rgba(191, 91, 61,0.4)',
                   '0 0 0 6px rgba(0,0,0,0.35)',
                   'inset 0 2px 0 rgba(255,255,255,0.1)',
                   'inset 0 -10px 18px rgba(0,0,0,0.55)',
@@ -495,7 +495,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                   <motion.span
                     aria-hidden="true"
                     className="rounded-full"
-                    style={{ width: 7, height: 7, background: '#1FA971', boxShadow: '0 0 6px rgba(31, 169, 113,0.7)' }}
+                    style={{ width: 7, height: 7, background: '#BF5B3D', boxShadow: '0 0 6px rgba(191, 91, 61,0.7)' }}
                     animate={{ opacity: [1, 0.35, 1] }}
                     transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
                   />
@@ -557,9 +557,9 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                                 key={tag}
                                 className="text-[0.65rem] px-2 py-0.5 font-medium rounded-sm"
                                 style={{
-                                  background: 'rgba(31, 169, 113, 0.18)',
-                                  border: '1px solid rgba(31, 169, 113, 0.35)',
-                                  color: '#1FA971',
+                                  background: 'rgba(191, 91, 61, 0.18)',
+                                  border: '1px solid rgba(191, 91, 61, 0.35)',
+                                  color: '#BF5B3D',
                                 }}
                               >
                                 {tag}
@@ -583,7 +583,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                         )}
                         <span
                           className="text-xs font-mono uppercase tracking-widest font-bold mb-2"
-                          style={{ border: '2px solid rgba(31, 169, 113,0.5)', padding: '3px 9px', background: 'rgba(31, 169, 113,0.12)', color: '#1FA971' }}
+                          style={{ border: '2px solid rgba(191, 91, 61,0.5)', padding: '3px 9px', background: 'rgba(191, 91, 61,0.12)', color: '#BF5B3D' }}
                         >
                           {project.year}
                         </span>
@@ -699,10 +699,10 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                   width: 44,
                   height: 44,
                   borderRadius: '50%',
-                  border: '2px solid rgba(31, 169, 113, 0.4)',
+                  border: '2px solid rgba(191, 91, 61, 0.4)',
                   background: isDark ? 'linear-gradient(145deg, #1A1510, #0E0E0B)' : 'linear-gradient(145deg, #FFFFFF, #F5F0E8)',
                   boxShadow: isDark ? '0 4px 12px rgba(0,0,0,0.5)' : '0 4px 12px rgba(0,0,0,0.1)',
-                  color: '#1FA971',
+                  color: '#BF5B3D',
                   fontSize: 18,
                   fontWeight: 700,
                 }}
@@ -727,7 +727,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                 style={{
                   width: i === index ? 22 : 8,
                   height: 8,
-                  background: i === index ? '#1FA971' : isDark ? 'rgba(212,165,116,0.3)' : 'rgba(212,165,116,0.45)',
+                  background: i === index ? '#BF5B3D' : isDark ? 'rgba(212,165,116,0.3)' : 'rgba(212,165,116,0.45)',
                 }}
               />
             ))}

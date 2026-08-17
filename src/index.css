@@ -10,8 +10,8 @@
     --bg-card: #FEFCF8;
     --bg-glass: rgba(26, 18, 8, 0.05);
 
-    --accent-primary: #1FA971;
-    --accent-glow: #34D399;
+    --accent-primary: #BF5B3D;
+    --accent-glow: #D9825E;
     --accent-gold: #D4A574;
     --accent-cyan: #B8860B;
     --accent-rose: #C85A3A;
@@ -21,21 +21,21 @@
     --text-tertiary: #C4B49A;
 
     --border-subtle: rgba(26, 18, 8, 0.1);
-    --border-glow: rgba(31, 169, 113, 0.3);
+    --border-glow: rgba(191, 91, 61, 0.3);
 
     /* Typography */
-    --font-display: 'Fraunces', serif;
+    --font-display: 'Big Shoulders Display', sans-serif;
     --font-body: 'Inter', system-ui, sans-serif;
-    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+    --font-mono: 'Space Mono', 'Fira Code', monospace;
 
     /* Legacy variables for existing components */
     --heading: var(--font-display);
     --mono: var(--font-mono);
     --text-h: var(--text-primary);
-    --code-bg: rgba(31, 169, 113, 0.15);
+    --code-bg: rgba(191, 91, 61, 0.15);
     --border: var(--border-subtle);
-    --gradient-hero: linear-gradient(135deg, #1FA971 0%, #34D399 50%, #D4A574 100%);
-    --gradient-card: linear-gradient(145deg, rgba(31, 169, 113, 0.1), rgba(212, 165, 116, 0.05));
+    --gradient-hero: linear-gradient(135deg, #BF5B3D 0%, #D9825E 50%, #D4A574 100%);
+    --gradient-card: linear-gradient(145deg, rgba(191, 91, 61, 0.1), rgba(212, 165, 116, 0.05));
   }
 
   .dark {
@@ -49,9 +49,9 @@
     --text-tertiary: #9B8B70;
 
     --border-subtle: rgba(240, 235, 224, 0.1);
-    --border-glow: rgba(31, 169, 113, 0.4);
+    --border-glow: rgba(191, 91, 61, 0.4);
 
-    --code-bg: rgba(31, 169, 113, 0.2);
+    --code-bg: rgba(191, 91, 61, 0.2);
   }
 }
 
@@ -65,7 +65,7 @@ body {
 
 /* Typography */
 .font-display {
-  font-family: 'Fraunces', serif;
+  font-family: 'Big Shoulders Display', sans-serif;
 }
 
 .text-hero {
@@ -122,14 +122,26 @@ body {
 /* Cinematic Typography Classes */
 .font-display {
   font-family: var(--font-display);
-  font-variation-settings: 'opsz' 48, 'wght' 600;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
 }
 
 .text-hero {
   font-size: clamp(3.5rem, 9vw, 8rem);
-  line-height: 0.9;
+  line-height: 0.88;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+/* Small technical spec-label accents (retro-industrial motif) */
+.spec-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.55;
 }
 
 /* Preserve Brutal Button Styles for Project Carousel - Warm Theme */
@@ -138,7 +150,7 @@ body {
   --bb-fg: #1A1208;
   --bb-border: #1A1208;
   --bb-shadow: #1A1208;
-  --bb-arrow: #1FA971;
+  --bb-arrow: #BF5B3D;
   --bb-offset: 8px;
 
   position: relative;
@@ -187,16 +199,16 @@ body {
 }
 
 .brutal-btn:focus-visible {
-  outline: 2px solid #1FA971;
+  outline: 2px solid #BF5B3D;
   outline-offset: 3px;
 }
 
 .brutal-btn--on-dark {
   --bb-bg: #F0EBE0;
-  --bb-fg: #1FA971;
+  --bb-fg: #BF5B3D;
   --bb-border: #F0EBE0;
-  --bb-shadow: #1FA971;
-  --bb-arrow: #1FA971;
+  --bb-shadow: #BF5B3D;
+  --bb-arrow: #BF5B3D;
 }
 
 /* GSAP Animation Base Classes */
@@ -276,7 +288,7 @@ body {
 
 .glow-border {
   border: 1px solid var(--border-glow);
-  box-shadow: 0 0 15px rgba(31, 169, 113, 0.15);
+  box-shadow: 0 0 15px rgba(191, 91, 61, 0.15);
 }
 
 /* Typography styles for legacy components */
@@ -394,7 +406,7 @@ code,
 }
 
 .toggle-input:focus-visible ~ .toggle-base {
-  outline: 2px solid #1fa971;
+  outline: 2px solid #bf5b3d;
   outline-offset: 2px;
 }
 

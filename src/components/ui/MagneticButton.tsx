@@ -20,7 +20,7 @@ export const MagneticButton = ({
     switch (variant) {
       case 'primary':
         return {
-          backgroundColor: '#1FA971',
+          backgroundColor: '#BF5B3D',
           color: '#F5F0E8',
         }
       case 'secondary':
@@ -31,8 +31,8 @@ export const MagneticButton = ({
       case 'ghost':
         return {
           backgroundColor: 'transparent',
-          color: '#1FA971',
-          border: '1px solid #1FA971',
+          color: '#BF5B3D',
+          border: '1px solid #BF5B3D',
         }
     }
   }
@@ -45,7 +45,7 @@ export const MagneticButton = ({
       transition={{ type: 'spring', stiffness: 250, damping: 20 }}
       className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 ${className}`}
       style={getStyles()}
-      whileHover={{ scale: 1.05, boxShadow: '0 10px 30px rgba(31, 169, 113, 0.3)' }}
+      whileHover={{ scale: 1.05, boxShadow: '0 10px 30px rgba(191, 91, 61, 0.3)' }}
       whileTap={{ scale: 0.95 }}
     >
       {children}

@@ -103,14 +103,14 @@ export const AboutSection = () => {
       style={{ backgroundColor: isDark ? '#0E0E0B' : '#F5F0E8' }}
     >
       {/* Decorative */}
-      <div className="absolute top-20 left-10 w-40 h-40 rounded-full opacity-20" style={{ background: 'radial-gradient(circle, #1FA971 0%, transparent 70%)' }} />
+      <div className="absolute top-20 left-10 w-40 h-40 rounded-full opacity-20" style={{ background: 'radial-gradient(circle, #BF5B3D 0%, transparent 70%)' }} />
 
       <div className="max-w-6xl mx-auto relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           {/* Left Column */}
           <div className="about-content">
             {/* Section Tag */}
-            <span className="inline-flex items-center gap-2 text-sm uppercase tracking-[0.2em] font-medium mb-4" style={{ color: '#1FA971' }}>
+            <span className="inline-flex items-center gap-2 text-sm uppercase tracking-[0.2em] font-medium mb-4" style={{ color: '#BF5B3D' }}>
               <User size={16} />
               About Me
             </span>
@@ -119,7 +119,7 @@ export const AboutSection = () => {
             <h2 className="text-4xl md:text-5xl font-display font-bold mb-6 leading-tight transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
               I build systems,
               <br />
-              <span style={{ color: '#1FA971' }}>not just applications.</span>
+              <span style={{ color: '#BF5B3D' }}>not just applications.</span>
             </h2>
 
             {/* Bio */}
@@ -139,7 +139,7 @@ export const AboutSection = () => {
             >
               {stats.map((stat) => (
                 <div key={stat.label} className="stat-item text-center">
-                  <div className="text-3xl font-bold mb-2" style={{ color: '#1FA971' }}>{stat.value}</div>
+                  <div className="text-3xl font-bold mb-2" style={{ color: '#BF5B3D' }}>{stat.value}</div>
                   <div className="text-xs uppercase tracking-widest transition-colors duration-500" style={{ color: isDark ? '#9B8B70' : '#9B8B70' }}>{stat.label}</div>
                 </div>
               ))}
@@ -206,14 +206,14 @@ export const AboutSection = () => {
               />
 
               {/* Inner Circle */}
-              <circle cx="150" cy="150" r="60" fill="none" stroke="#1FA971" strokeWidth="2" opacity="0.7" />
+              <circle cx="150" cy="150" r="60" fill="none" stroke="#BF5B3D" strokeWidth="2" opacity="0.7" />
 
               {/* Center Glow */}
               <motion.circle
                 cx="150"
                 cy="150"
                 r="30"
-                fill="#1FA971"
+                fill="#BF5B3D"
                 opacity="0.15"
                 animate={{ scale: [1, 1.2, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
@@ -221,12 +221,12 @@ export const AboutSection = () => {
 
               <defs>
                 <linearGradient id="gradWarm1" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#1FA971" />
+                  <stop offset="0%" stopColor="#BF5B3D" />
                   <stop offset="100%" stopColor="#D4A574" />
                 </linearGradient>
                 <linearGradient id="gradWarm2" x1="0%" y1="0%" x2="100%" y2="100%">
                   <stop offset="0%" stopColor="#D4A574" />
-                  <stop offset="100%" stopColor="#1FA971" />
+                  <stop offset="100%" stopColor="#BF5B3D" />
                 </linearGradient>
               </defs>
             </svg>
@@ -260,11 +260,11 @@ export const AboutSection = () => {
                   className="absolute inset-0 rounded-r-lg"
                   style={{
                     background: isDark
-                      ? 'linear-gradient(145deg, #1FA971, #15803D)'
-                      : 'linear-gradient(145deg, #1FA971, #34D399)',
+                      ? 'linear-gradient(145deg, #BF5B3D, #9C4530)'
+                      : 'linear-gradient(145deg, #BF5B3D, #D9825E)',
                     boxShadow: isDark
-                      ? '0 20px 40px rgba(0,0,0,0.7), 0 10px 20px rgba(31, 169, 113,0.3)'
-                      : '0 20px 50px rgba(0,0,0,0.25), 0 10px 25px rgba(31, 169, 113,0.4)',
+                      ? '0 20px 40px rgba(0,0,0,0.7), 0 10px 20px rgba(191, 91, 61,0.3)'
+                      : '0 20px 50px rgba(0,0,0,0.25), 0 10px 25px rgba(191, 91, 61,0.4)',
                     transform: 'translateZ(24px)',
                   }}
                 >
@@ -284,7 +284,7 @@ export const AboutSection = () => {
                 <div
                   className="absolute inset-0 rounded-r-lg"
                   style={{
-                    background: isDark ? '#08331D' : '#0F6B3D',
+                    background: isDark ? '#4A2015' : '#7A3524',
                     transform: 'rotateY(180deg) translateZ(24px)',
                   }}
                 />
@@ -296,8 +296,8 @@ export const AboutSection = () => {
                     left: 0, top: 0,
                     width: '24px', height: '280px',
                     background: isDark
-                      ? 'linear-gradient(to right, #052213, #0B4A2B)'
-                      : 'linear-gradient(to right, #0B4A2B, #0F6B3D)',
+                      ? 'linear-gradient(to right, #2E140D, #5E2A1C)'
+                      : 'linear-gradient(to right, #5E2A1C, #7A3524)',
                     transformOrigin: 'left center',
                     transform: 'rotateY(-90deg)',
                     boxShadow: 'inset -3px 0 6px rgba(0,0,0,0.5)',
@@ -354,7 +354,7 @@ export const AboutSection = () => {
                   style={{
                     bottom: 0, left: 0,
                     width: '200px', height: '24px',
-                    background: isDark ? '#0A3A20' : '#0B4A2B',
+                    background: isDark ? '#3D1B12' : '#5E2A1C',
                     transformOrigin: 'center bottom',
                     transform: 'rotateX(-90deg)',
                     boxShadow: '0 4px 12px rgba(0,0,0,0.7)',
