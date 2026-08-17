@@ -153,7 +153,7 @@ function WormholeCardEl({ card, cardRef }: { card: WormholeCard; cardRef: (node:
 // tunnel (Three.js tube geometry + a procedural grid texture) that the
 // camera flies through as the page scrolls, with glass cards positioned
 // along the tube walls and projected onto the 2D screen every frame.
-export const CareerWormhole = ({ cards, scrollLengthVh = 220 }: CareerWormholeProps) => {
+export const CareerWormhole = ({ cards, scrollLengthVh = 340 }: CareerWormholeProps) => {
   const trackRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const cardRefs = useRef<(HTMLDivElement | null)[]>([])
@@ -247,7 +247,7 @@ export const CareerWormhole = ({ cards, scrollLengthVh = 220 }: CareerWormholePr
       // made the pacing feel inconsistent and was part of what broke on
       // phone; a flat, predictable scroll-to-camera mapping is simpler and
       // more robust across devices.
-      scrollPercent += (targetScrollPercent - scrollPercent) * 0.08
+      scrollPercent += (targetScrollPercent - scrollPercent) * 0.06
       const cameraEval = Math.min(Math.max(scrollPercent, 0), 0.99)
       const lookAtEval = Math.min(Math.max(scrollPercent + 0.02, 0), 1)
       const camPos = curve.getPointAt(cameraEval)
