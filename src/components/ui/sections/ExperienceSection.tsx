@@ -50,15 +50,18 @@ const ExperienceCard = ({ exp, isDark }: { exp: Experience; isDark: boolean }) =
         </ul>
       </div>
 
-      {/* Front: peels down + rotates away on reveal. backgroundColor is a
-          plain CSS transition (not the animate prop) since framer-motion
-          can't interpolate between two var(...) color references. */}
+      {/* Front: slides fully clear of the box on reveal (not a partial
+          overlap - the card is wide, so even a small rotation would sweep
+          its corners across the achievements text otherwise).
+          backgroundColor is a plain CSS transition (not the animate prop)
+          since framer-motion can't interpolate between two var(...) color
+          references. */}
       <motion.div
         className="absolute inset-0 p-6 rounded-xl shadow-lg cursor-pointer"
-        animate={{ y: revealed ? '38%' : 0, rotate: revealed ? 6 : 0 }}
+        animate={{ y: revealed ? '108%' : 0, rotate: revealed ? 3 : 0 }}
         transition={{ type: 'spring', stiffness: 260, damping: 26 }}
         style={{
-          transformOrigin: 'top left',
+          transformOrigin: 'center',
           backgroundColor: revealed ? 'var(--accent-primary)' : 'var(--bg-card)',
           transition: 'background-color 0.2s ease, border-color 0.2s ease',
           border: `1px solid ${revealed ? 'transparent' : 'rgba(var(--accent-primary-rgb), 0.25)'}`,
