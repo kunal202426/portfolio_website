@@ -294,7 +294,22 @@ export const CareerWormhole = ({ cards, scrollLengthVh = 220 }: CareerWormholePr
 
     let frameId = 0
     const animate = () => {
-      scrollPercent += (targetScrollPercent - scrollPercent) * 0.08
+      // The eased position mapping above only changes how far the camera
+      // moves per unit of *scroll distance* - a fast/continuous scroll can
+      // still blow through that in a fraction of a second no matter how
+      // compressed the mapping is, since nothing anchors it to real time.
+      // Slowing the catch-up (lerp) rate itself while the eased position is
+      // near a card adds an actual time-based dwell: even if the target
+      // jumps far ahead, the camera creeps toward it slowly right there, so
+      // passing a card takes real seconds instead of a snap-through.
+      const currentEased = applyDwellEasing(scrollPercent, dwellEasing)
+      let nearCard = 0
+      for (const c of cardsData) {
+        const d = (currentEased - c.progress) / 0.05
+        nearCard = Math.max(nearCard, Math.exp(-d * d))
+      }
+      const lerpRate = 0.08 * (1 - 0.88 * nearCard)
+      scrollPercent += (targetScrollPercent - scrollPercent) * lerpRate
       const easedPercent = applyDwellEasing(scrollPercent, dwellEasing)
       const cameraEval = Math.min(Math.max(easedPercent, 0), 0.99)
       const lookAtEval = applyDwellEasing(Math.min(scrollPercent + 0.025, 1), dwellEasing)

@@ -180,8 +180,11 @@ export const HeroSection = () => {
               </p>
             </div>
 
-            <p className="hero-subtitle text-base md:text-lg max-w-2xl mx-auto leading-relaxed" style={{ color: '#FFFFFF' }}>
-              I build scalable backend systems, machine learning pipelines, and real-time applications - with production experience across full-stack development and blockchain engineering.
+            <p
+              className="hero-subtitle text-sm md:text-lg max-w-2xl mx-auto whitespace-normal md:whitespace-nowrap leading-snug"
+              style={{ color: '#FFFFFF', textShadow: '0 2px 14px rgba(0, 0, 0, 0.65), 0 1px 4px rgba(0, 0, 0, 0.85)' }}
+            >
+              Scalable backend systems, ML pipelines, and real-time applications.
             </p>
           </div>
         </motion.div>
