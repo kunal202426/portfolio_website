@@ -59,7 +59,7 @@ export const LoadingScreen = ({ onLoadComplete }: LoadingScreenProps) => {
     >
       {/* HashLoader Spinner */}
       <HashLoader
-        color="#E8570C"
+        color="#1FA971"
         size={50}
         speedMultiplier={1.2}
       />

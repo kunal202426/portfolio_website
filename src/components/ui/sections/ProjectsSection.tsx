@@ -17,7 +17,7 @@ export const ProjectsSection = () => {
       }}
     >
       {/* Decorative glow */}
-      <div className="absolute top-40 left-20 w-96 h-96 rounded-full opacity-15 pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(232,87,12,0.38) 0%, rgba(232,87,12,0) 72%)' }} />
+      <div className="absolute top-40 left-20 w-96 h-96 rounded-full opacity-15 pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(31, 169, 113,0.38) 0%, rgba(31, 169, 113,0) 72%)' }} />
       <div className="absolute bottom-20 right-20 w-72 h-72 rounded-full opacity-15 pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(212,165,116,0.32) 0%, rgba(212,165,116,0) 70%)' }} />
       
       <div className="relative z-10 max-w-7xl mx-auto">

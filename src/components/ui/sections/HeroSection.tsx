@@ -168,7 +168,7 @@ export const HeroSection = () => {
               {resumeData.personal.name.split(' ').map((word, i) => (
                 <div key={i} className="block overflow-hidden">
                   <span className="name-word block">
-                    {i === 1 ? <span style={{ color: '#E8570C' }}>{word}</span> : word}
+                    {i === 1 ? <span style={{ color: '#1FA971' }}>{word}</span> : word}
                   </span>
                 </div>
               ))}
@@ -209,7 +209,7 @@ export const HeroSection = () => {
             <a 
               href="#projects"
               className="px-8 py-3 rounded-full font-medium text-white transition-all duration-300 hover:scale-105 hover:shadow-lg"
-              style={{ backgroundColor: '#E8570C' }}
+              style={{ backgroundColor: '#1FA971' }}
             >
               View Projects
             </a>
@@ -233,7 +233,7 @@ export const HeroSection = () => {
             Scroll
           </span>
           <div className="w-6 h-10 rounded-full border-2 flex justify-center pt-2" style={{ borderColor: '#F0EBE0' }}>
-            <div className="w-1.5 h-3 rounded-full" style={{ backgroundColor: '#E8570C' }} />
+            <div className="w-1.5 h-3 rounded-full" style={{ backgroundColor: '#1FA971' }} />
           </div>
         </div>
       </div>

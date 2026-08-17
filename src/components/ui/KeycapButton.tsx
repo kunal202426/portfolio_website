@@ -81,7 +81,7 @@ export const KeycapButton = ({
   const sharedClassName = [
     'relative inline-flex select-none items-center justify-center align-middle',
     'transition-[transform,filter] duration-100 ease-out',
-    'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-[#E8570C]',
+    'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-[#1FA971]',
     className,
   ]
     .filter(Boolean)

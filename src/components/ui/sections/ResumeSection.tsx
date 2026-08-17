@@ -114,7 +114,7 @@ export const ResumeSection = () => {
                 <motion.div
                   className="absolute inset-0 pointer-events-none"
                   style={{
-                    background: 'radial-gradient(ellipse at 30% 40%, rgba(232,87,12,0.07) 0%, transparent 60%)',
+                    background: 'radial-gradient(ellipse at 30% 40%, rgba(31, 169, 113,0.07) 0%, transparent 60%)',
                     zIndex: 1,
                     borderRadius: '2.5rem',
                   }}
@@ -146,7 +146,7 @@ export const ResumeSection = () => {
                 {/* PDF Preview Placeholder */}
                 <div className="p-2 h-full overflow-hidden flex items-center justify-center" style={{ position: 'relative', zIndex: 3 }}>
                   <div className="w-full h-full rounded-lg shadow-inner flex flex-col items-center justify-center gap-4 p-4 transition-colors duration-500" style={{ backgroundColor: isDark ? '#0E0E0B' : 'white' }}>
-                    <FileText size={48} style={{ color: '#E8570C' }} />
+                    <FileText size={48} style={{ color: '#1FA971' }} />
                     <span className="text-sm font-medium text-center transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
                       Resume
                     </span>

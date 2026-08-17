@@ -149,13 +149,13 @@ export const ContactSection = () => {
       style={{ backgroundColor: isDark ? '#0E0E0B' : '#1A1208' }}
     >
       {/* Decorative Elements */}
-      <div className="absolute top-0 left-0 w-96 h-96 rounded-full opacity-10" style={{ background: 'radial-gradient(circle, #E8570C 0%, transparent 70%)', filter: 'blur(80px)' }} />
+      <div className="absolute top-0 left-0 w-96 h-96 rounded-full opacity-10" style={{ background: 'radial-gradient(circle, #1FA971 0%, transparent 70%)', filter: 'blur(80px)' }} />
       <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full opacity-10" style={{ background: 'radial-gradient(circle, #D4A574 0%, transparent 70%)', filter: 'blur(80px)' }} />
 
       <div className="max-w-6xl mx-auto relative z-10">
         {/* Header */}
         <div className="text-center mb-16 contact-heading">
-          <span className="text-sm uppercase tracking-[0.2em] font-medium mb-4 block" style={{ color: '#E8570C' }}>
+          <span className="text-sm uppercase tracking-[0.2em] font-medium mb-4 block" style={{ color: '#1FA971' }}>
             Let's Connect
           </span>
           <h2 className="font-display text-4xl md:text-6xl font-bold mb-6" style={{ color: '#F5F0E8' }}>
@@ -226,8 +226,8 @@ export const ContactSection = () => {
                 border: `3px solid ${isDark ? 'rgba(60, 50, 40, 0.5)' : 'rgba(60, 50, 40, 0.6)'}`,
                 borderBottom: 'none',
                 boxShadow: isDark 
-                  ? '0 -5px 20px rgba(0, 0, 0, 0.5), inset 0 0 40px rgba(232, 87, 12, 0.05)'
-                  : '0 -5px 30px rgba(0, 0, 0, 0.6), inset 0 0 40px rgba(232, 87, 12, 0.08)',
+                  ? '0 -5px 20px rgba(0, 0, 0, 0.5), inset 0 0 40px rgba(31, 169, 113, 0.05)'
+                  : '0 -5px 30px rgba(0, 0, 0, 0.6), inset 0 0 40px rgba(31, 169, 113, 0.08)',
                 transformStyle: 'preserve-3d',
               }}
             >
@@ -256,7 +256,7 @@ export const ContactSection = () => {
               <motion.div
                 className="absolute inset-0 pointer-events-none"
                 style={{
-                  background: 'radial-gradient(ellipse at 30% 50%, rgba(232,87,12,0.08) 0%, transparent 65%)',
+                  background: 'radial-gradient(ellipse at 30% 50%, rgba(31, 169, 113,0.08) 0%, transparent 65%)',
                   zIndex: 1,
                   borderRadius: '12px',
                 }}
@@ -331,10 +331,10 @@ export const ContactSection = () => {
                     style={{
                       width: `${laptopSize.iconBoxSize * 4}px`,
                       height: `${laptopSize.iconBoxSize * 4}px`,
-                      background: 'linear-gradient(145deg, #E8570C, #C74809)',
+                      background: 'linear-gradient(145deg, #1FA971, #15803D)',
                       boxShadow: isDark
-                        ? '8px 8px 16px rgba(0, 0, 0, 0.6), -4px -4px 12px rgba(232, 87, 12, 0.4), 0 0 30px rgba(232, 87, 12, 0.3)'
-                        : '8px 8px 20px rgba(0, 0, 0, 0.7), -4px -4px 16px rgba(255, 107, 26, 0.5), 0 0 30px rgba(232, 87, 12, 0.4)',
+                        ? '8px 8px 16px rgba(0, 0, 0, 0.6), -4px -4px 12px rgba(31, 169, 113, 0.4), 0 0 30px rgba(31, 169, 113, 0.3)'
+                        : '8px 8px 20px rgba(0, 0, 0, 0.7), -4px -4px 16px rgba(255, 107, 26, 0.5), 0 0 30px rgba(31, 169, 113, 0.4)',
                     }}
                   >
                     <svg width={laptopSize.iconSize * 1.75} height={laptopSize.iconSize * 1.75} viewBox="0 0 24 24" fill="#F5F0E8">
@@ -461,9 +461,9 @@ export const ContactSection = () => {
               href={`mailto:${resumeData.personal.email}`}
               className="flex items-center gap-4 p-4 rounded-xl transition-all group"
               style={{ backgroundColor: 'rgba(245, 240, 232, 0.05)' }}
-              whileHover={{ y: -4, backgroundColor: 'rgba(232, 87, 12, 0.1)' }}
+              whileHover={{ y: -4, backgroundColor: 'rgba(31, 169, 113, 0.1)' }}
             >
-              <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#E8570C' }}>
+              <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#1FA971' }}>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5F0E8" strokeWidth="2">
                   <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
                   <polyline points="22,6 12,13 2,6" />
@@ -479,7 +479,7 @@ export const ContactSection = () => {
               href={`tel:${resumeData.personal.phone}`}
               className="flex items-center gap-4 p-4 rounded-xl transition-all group"
               style={{ backgroundColor: 'rgba(245, 240, 232, 0.05)' }}
-              whileHover={{ y: -4, backgroundColor: 'rgba(232, 87, 12, 0.1)' }}
+              whileHover={{ y: -4, backgroundColor: 'rgba(31, 169, 113, 0.1)' }}
             >
               <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#D4A574' }}>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A1208" strokeWidth="2">

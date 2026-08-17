@@ -42,7 +42,7 @@ export const LimelightNav = memo(function LimelightNav({
       aria-label="Primary navigation"
     >
       <div
-        className="pointer-events-none absolute bottom-0 left-0 z-10 h-[3px] bg-[#E8570C] shadow-[0_10px_20px_rgba(232,87,12,0.45)] transition-transform duration-300 ease-out"
+        className="pointer-events-none absolute bottom-0 left-0 z-10 h-[3px] bg-[#1FA971] shadow-[0_10px_20px_rgba(31, 169, 113,0.45)] transition-transform duration-300 ease-out"
         style={{
           width: `${tabWidthPercent}%`,
           transform: `translateX(${currentIndex * 100}%)`,
@@ -55,7 +55,7 @@ export const LimelightNav = memo(function LimelightNav({
           type="button"
           className="relative z-20 flex-1 h-full min-w-0 flex items-center justify-center px-3 text-xs font-semibold uppercase tracking-[0.14em] transition-colors"
           style={{
-            color: currentIndex === index ? '#E8570C' : isDark ? '#D4C4A8' : '#4A3C2A',
+            color: currentIndex === index ? '#1FA971' : isDark ? '#D4C4A8' : '#4A3C2A',
           }}
           onClick={() => handleItemClick(index, onClick)}
           aria-current={currentIndex === index ? 'page' : undefined}

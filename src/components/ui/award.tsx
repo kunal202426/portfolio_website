@@ -228,14 +228,14 @@ export function Awards({
           "overflow-hidden"
         )}
         style={{
-          borderColor: '#E8570C',
+          borderColor: '#1FA971',
           borderStyle: 'dashed',
         }}
       >
         <div className="z-10 rounded-sm border p-6 px-8 text-center"
         style={{
           backgroundColor: 'rgba(255, 255, 255, 0.98)',
-          borderColor: 'rgba(232, 87, 12, 0.3)',
+          borderColor: 'rgba(31, 169, 113, 0.3)',
           borderWidth: '1px',
         }}>
           <Badge />

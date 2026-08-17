@@ -70,7 +70,7 @@ export const EducationSection = () => {
               {/* Accent Line */}
               <div 
                 className="absolute left-0 top-0 bottom-0 w-1 rounded-l-xl"
-                style={{ backgroundColor: '#E8570C' }}
+                style={{ backgroundColor: '#1FA971' }}
               />
 
               <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 ml-4">
@@ -79,10 +79,10 @@ export const EducationSection = () => {
                   <div className="flex items-start gap-3 mb-3">
                     <motion.div
                       className="p-2 rounded-lg"
-                      style={{ backgroundColor: isDark ? 'rgba(232, 87, 12, 0.15)' : 'rgba(232, 87, 12, 0.1)' }}
+                      style={{ backgroundColor: isDark ? 'rgba(31, 169, 113, 0.15)' : 'rgba(31, 169, 113, 0.1)' }}
                       whileHover={{ scale: 1.1, rotate: 5 }}
                     >
-                      <GraduationCap className="w-5 h-5" style={{ color: '#E8570C' }} />
+                      <GraduationCap className="w-5 h-5" style={{ color: '#1FA971' }} />
                     </motion.div>
                     <div className="flex-1">
                       <h3 className="text-xl font-display font-bold mb-1 transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
@@ -99,7 +99,7 @@ export const EducationSection = () => {
                           edu.school
                         )}
                       </h3>
-                      <p className="text-base font-medium mb-2" style={{ color: '#E8570C' }}>
+                      <p className="text-base font-medium mb-2" style={{ color: '#1FA971' }}>
                         {edu.degree}
                         {edu.specialization && (
                           <span className="transition-colors duration-500" style={{ color: isDark ? '#D4C4A8' : '#4A3C2A' }}> • {edu.specialization}</span>
@@ -125,11 +125,11 @@ export const EducationSection = () => {
                   {edu.cgpa && (
                     <motion.div
                       className="px-4 py-2 rounded-lg transition-colors duration-500"
-                      style={{ backgroundColor: isDark ? 'rgba(232, 87, 12, 0.15)' : 'rgba(232, 87, 12, 0.1)' }}
+                      style={{ backgroundColor: isDark ? 'rgba(31, 169, 113, 0.15)' : 'rgba(31, 169, 113, 0.1)' }}
                       whileHover={{ scale: 1.05 }}
                     >
                       <p className="text-xs font-mono mb-1" style={{ color: '#9B8B70' }}>CGPA</p>
-                      <p className="text-2xl font-display font-bold" style={{ color: '#E8570C' }}>{edu.cgpa}</p>
+                      <p className="text-2xl font-display font-bold" style={{ color: '#1FA971' }}>{edu.cgpa}</p>
                     </motion.div>
                   )}
                 </div>

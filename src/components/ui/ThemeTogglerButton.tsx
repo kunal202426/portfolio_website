@@ -55,7 +55,7 @@ export const ThemeTogglerButton = ({
         }
       default:
         return {
-          backgroundColor: isDark ? '#E8570C' : '#E8570C',
+          backgroundColor: isDark ? '#1FA971' : '#1FA971',
           border: 'none',
           color: '#F5F0E8'
         }

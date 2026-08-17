@@ -169,7 +169,7 @@ export const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
                     ...btnStyle,
                     fontSize: '11px',
                     padding: '4px 8px',
-                    background: fitMode === mode ? '#E8570C' : 'transparent',
+                    background: fitMode === mode ? '#1FA971' : 'transparent',
                     color: fitMode === mode ? '#fff' : textSec,
                   }}
                     onMouseEnter={e => { if (fitMode !== mode) e.currentTarget.style.background = btnHover }}
@@ -189,7 +189,7 @@ export const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
                 <button style={btnStyle} title="Open PDF"
                   onMouseEnter={e => (e.currentTarget.style.background = btnHover)} onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
                   onClick={() => window.open(resumePdfUrl, '_blank')}>
-                  <Download size={16} style={{ color: '#E8570C', display: 'block' }} />
+                  <Download size={16} style={{ color: '#1FA971', display: 'block' }} />
                 </button>
 
                 {/* Close - always visible, orange-accented */}
@@ -199,14 +199,14 @@ export const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
                   style={{
                     ...btnStyle,
                     marginLeft: '4px',
-                    background: 'rgba(232,87,12,0.12)',
-                    border: '1px solid rgba(232,87,12,0.35)',
-                    color: '#E8570C',
+                    background: 'rgba(31, 169, 113,0.12)',
+                    border: '1px solid rgba(31, 169, 113,0.35)',
+                    color: '#1FA971',
                     padding: '6px',
                     borderRadius: '8px',
                   }}
-                  onMouseEnter={e => (e.currentTarget.style.background = 'rgba(232,87,12,0.25)')}
-                  onMouseLeave={e => (e.currentTarget.style.background = 'rgba(232,87,12,0.12)')}
+                  onMouseEnter={e => (e.currentTarget.style.background = 'rgba(31, 169, 113,0.25)')}
+                  onMouseLeave={e => (e.currentTarget.style.background = 'rgba(31, 169, 113,0.12)')}
                 >
                   <X size={16} style={{ display: 'block' }} />
                 </button>
@@ -220,7 +220,7 @@ export const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
                 <div style={{ position: 'relative' }}>
                   {isLoading && (
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '48px' }}>
-                      <Loader2 style={{ width: 32, height: 32, color: '#E8570C', animation: 'spin 1s linear infinite' }} />
+                      <Loader2 style={{ width: 32, height: 32, color: '#1FA971', animation: 'spin 1s linear infinite' }} />
                     </div>
                   )}
                   <Document
@@ -229,7 +229,7 @@ export const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
                     onLoadError={onDocumentLoadError}
                     loading={
                       <div style={{ display: 'flex', alignItems: 'center', padding: '32px', color: textSec }}>
-                        <Loader2 style={{ width: 28, height: 28, color: '#E8570C' }} />
+                        <Loader2 style={{ width: 28, height: 28, color: '#1FA971' }} />
                         <span style={{ marginLeft: '8px' }}>Loading PDF…</span>
                       </div>
                     }
@@ -238,7 +238,7 @@ export const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
                         <p style={{ marginBottom: '8px' }}>Failed to load PDF</p>
                         <button
                           onClick={() => window.open(resumePdfUrl, '_blank')}
-                          style={{ padding: '8px 16px', background: '#E8570C', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer' }}
+                          style={{ padding: '8px 16px', background: '#1FA971', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer' }}
                         >
                           Open in new tab
                         </button>

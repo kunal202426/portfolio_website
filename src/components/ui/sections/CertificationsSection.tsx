@@ -1,9 +1,10 @@
-import { memo, useMemo } from 'react'
-import { motion } from 'framer-motion'
-import { Award, Calendar, ExternalLink } from 'lucide-react'
+import { memo, useMemo, useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Award, Calendar, ExternalLink, Sparkles } from 'lucide-react'
 import { resumeData } from '../../../lib/resume-data'
 import { useTheme } from '../../providers/ThemeProvider'
-import { Awards } from '../award'
+
+type Certification = (typeof resumeData.certifications)[number]
 
 interface AchievementCardData {
   id: string
@@ -16,16 +17,98 @@ interface AchievementCardData {
   logo?: string
 }
 
-const AchievementCard = memo(function AchievementCard({ item, isDark }: { item: AchievementCardData; isDark: boolean }) {
+// One consistent card for all certifications, mobile and desktop alike.
+// Only the essentials (logo/title/issuer/year) sit on the face; the
+// description stays hidden behind a hover/tap reveal instead of being
+// crammed onto the card by default.
+const CertCard = memo(function CertCard({ cert, index, isDark }: { cert: Certification; index: number; isDark: boolean }) {
+  const [hovered, setHovered] = useState(false)
 
   return (
-    <article
-      className="rounded-xl transition-all duration-300"
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.45, delay: index * 0.06, ease: [0.22, 1, 0.36, 1] }}
+      whileHover={{ y: -4 }}
+      className="relative rounded-xl overflow-hidden cursor-pointer"
+      style={{
+        minHeight: 190,
+        backgroundColor: isDark ? 'rgba(26, 21, 16, 0.9)' : '#FFFFFF',
+        border: `1.5px solid ${isDark ? 'rgba(212, 165, 116, 0.25)' : 'rgba(31, 169, 113, 0.3)'}`,
+        boxShadow: isDark ? '0 8px 24px rgba(0,0,0,0.28)' : '0 8px 24px rgba(31,169,113,0.1)',
+      }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onClick={() => setHovered((h) => !h)}
+    >
+      {/* Face */}
+      <div className="p-5 flex flex-col items-center text-center gap-2 h-full">
+        {cert.logo && (
+          <div
+            className="w-12 h-12 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0"
+            style={{ background: '#FFFFFF', border: '1px solid rgba(212,165,116,0.3)' }}
+          >
+            <img src={cert.logo} alt="" className="w-full h-full object-contain p-1.5" />
+          </div>
+        )}
+        <p className="text-sm font-bold leading-snug" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
+          {cert.title}
+        </p>
+        <p className="text-xs font-medium" style={{ color: '#1FA971' }}>{cert.issuer}</p>
+        <span
+          className="text-[10px] font-mono font-bold uppercase tracking-widest px-2 py-0.5 rounded-full"
+          style={{ background: 'rgba(31,169,113,0.12)', color: '#1FA971', border: '1px solid rgba(31,169,113,0.3)' }}
+        >
+          {cert.year}
+        </span>
+        <span
+          className="flex items-center gap-1 text-[10px] font-medium mt-auto pt-2"
+          style={{ color: '#9B8B70', opacity: 0.75 }}
+        >
+          <Sparkles size={10} />
+          Hover for details
+        </span>
+      </div>
+
+      {/* Hover reveal */}
+      <motion.div
+        className="absolute inset-0 flex flex-col items-center justify-center text-center p-5"
+        style={{ backgroundColor: isDark ? 'rgba(20, 16, 11, 0.97)' : 'rgba(255, 255, 255, 0.98)' }}
+        initial={false}
+        animate={{ opacity: hovered ? 1 : 0, y: hovered ? 0 : 10 }}
+        transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: '#1FA971' }}>
+          {cert.issuer}
+        </p>
+        <p className="text-sm leading-relaxed" style={{ color: isDark ? '#D4C4A8' : '#4A3C2A' }}>
+          {cert.description}
+        </p>
+      </motion.div>
+    </motion.div>
+  )
+})
+
+const AchievementCard = memo(function AchievementCard({ item, isDark }: { item: AchievementCardData; isDark: boolean }) {
+  const [hovered, setHovered] = useState(false)
+
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+      whileHover={{ y: -3 }}
+      className="rounded-xl transition-colors duration-300 cursor-pointer"
       style={{
         backgroundColor: isDark ? '#1A1510' : '#FFFFFF',
         border: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.22)' : 'rgba(212, 165, 116, 0.35)'}`,
         boxShadow: isDark ? '0 10px 30px rgba(0, 0, 0, 0.28)' : '0 10px 30px rgba(26, 18, 8, 0.08)',
       }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onClick={() => setHovered((h) => !h)}
     >
       <div className="p-4 md:p-5">
         <div className="flex items-start gap-3 min-w-0">
@@ -59,7 +142,7 @@ const AchievementCard = memo(function AchievementCard({ item, isDark }: { item: 
               </span>
             </div>
 
-            <p className="text-sm font-medium break-words" style={{ color: '#E8570C' }}>
+            <p className="text-sm font-medium break-words" style={{ color: '#1FA971' }}>
               {item.subtitle}
             </p>
           </div>
@@ -81,9 +164,28 @@ const AchievementCard = memo(function AchievementCard({ item, isDark }: { item: 
             ))}
           </div>
 
-          <p className="text-sm leading-relaxed mb-4" style={{ color: isDark ? '#D4C4A8' : '#4A3C2A' }}>
-            {item.description}
-          </p>
+          <AnimatePresence initial={false}>
+            {hovered && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                style={{ overflow: 'hidden' }}
+              >
+                <p className="text-sm leading-relaxed mb-4 pt-1" style={{ color: isDark ? '#D4C4A8' : '#4A3C2A' }}>
+                  {item.description}
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {!hovered && (
+            <p className="flex items-center gap-1.5 text-xs font-medium mb-3" style={{ color: '#9B8B70', opacity: 0.75 }}>
+              <Sparkles size={11} />
+              Hover for the story
+            </p>
+          )}
 
           <div className="flex flex-wrap items-center gap-2 text-xs" style={{ color: '#9B8B70' }}>
             <Calendar className="w-4 h-4" />
@@ -95,8 +197,9 @@ const AchievementCard = memo(function AchievementCard({ item, isDark }: { item: 
               href={item.link}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
               className="inline-flex items-center gap-2 mt-4 text-sm font-medium transition-transform duration-200 hover:translate-x-0.5"
-              style={{ color: '#E8570C' }}
+              style={{ color: '#1FA971' }}
             >
               View Source
               <ExternalLink className="w-4 h-4" />
@@ -104,7 +207,7 @@ const AchievementCard = memo(function AchievementCard({ item, isDark }: { item: 
           )}
         </div>
       </div>
-    </article>
+    </motion.article>
   )
 })
 
@@ -132,12 +235,12 @@ export const CertificationsSection = () => {
       }}
     >
       {/* Decorative */}
-      <div className="absolute bottom-10 left-20 w-48 h-48 rounded-full opacity-15" style={{ background: 'radial-gradient(circle, #E8570C 0%, transparent 70%)' }} />
+      <div className="absolute bottom-10 left-20 w-48 h-48 rounded-full opacity-15" style={{ background: 'radial-gradient(circle, #1FA971 0%, transparent 70%)' }} />
 
       <div className="max-w-6xl mx-auto relative z-10">
         {/* Header */}
         <div className="mb-16 text-center">
-          <span className="inline-flex items-center gap-2 text-sm uppercase tracking-[0.2em] font-medium mb-4" style={{ color: '#E8570C' }}>
+          <span className="inline-flex items-center gap-2 text-sm uppercase tracking-[0.2em] font-medium mb-4" style={{ color: '#1FA971' }}>
             <Award size={16} />
             Certifications
           </span>
@@ -146,96 +249,15 @@ export const CertificationsSection = () => {
           </h2>
         </div>
 
-        {/* Certificates using Awards Component */}
+        {/* Certifications */}
         <div className="mb-20">
           <h3 className="text-2xl font-display font-bold mb-8 text-center transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
             Certifications
           </h3>
 
-          {/* Mobile: compact staggered cards */}
-          <div className="md:hidden grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
             {resumeData.certifications.map((cert, index) => (
-              <motion.div
-                key={`cert-mobile-${index}`}
-                initial={{ opacity: 0, y: 18 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.3, delay: index * 0.07 }}
-                className="rounded-xl p-4 flex flex-col gap-2"
-                style={{
-                  backgroundColor: isDark ? 'rgba(26, 21, 16, 0.9)' : 'rgba(255, 255, 255, 0.95)',
-                  border: `1.5px solid ${isDark ? 'rgba(212, 165, 116, 0.3)' : 'rgba(232, 87, 12, 0.35)'}`,
-                  boxShadow: isDark ? '0 4px 16px rgba(0,0,0,0.3)' : '0 4px 16px rgba(232,87,12,0.1)',
-                }}
-              >
-                <div className="flex items-center justify-between gap-2">
-                  <span
-                    className="text-[10px] font-mono font-bold uppercase tracking-widest px-2 py-0.5 rounded-full w-fit"
-                    style={{
-                      background: 'rgba(232,87,12,0.15)',
-                      color: '#E8570C',
-                      border: '1px solid rgba(232,87,12,0.3)',
-                    }}
-                  >
-                    {cert.year}
-                  </span>
-                  {cert.logo && (
-                    <div
-                      className="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0 overflow-hidden"
-                      style={{ background: '#FFFFFF', border: '1px solid rgba(212, 165, 116, 0.3)' }}
-                    >
-                      <img src={cert.logo} alt="" className="w-full h-full object-contain p-1" />
-                    </div>
-                  )}
-                </div>
-                <p className="text-xs font-bold leading-tight" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
-                  {cert.title}
-                </p>
-                <p className="text-[11px] font-medium" style={{ color: '#9B8B70' }}>
-                  {cert.issuer}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Desktop: full award cards */}
-          <div className="hidden md:grid md:grid-cols-3 gap-8 place-items-center">
-            {resumeData.certifications.map((cert, index) => (
-              <div
-                key={`cert-${index}`}
-                className="relative w-full transition-transform duration-300 hover:-translate-y-1"
-              >
-                {cert.logo && (
-                  <div
-                    className="absolute -top-3 -right-3 z-10 w-10 h-10 rounded-full flex items-center justify-center overflow-hidden"
-                    style={{
-                      background: '#FFFFFF',
-                      border: '1.5px solid rgba(232, 87, 12, 0.4)',
-                      boxShadow: '0 4px 10px rgba(0,0,0,0.15)',
-                    }}
-                  >
-                    <img src={cert.logo} alt="" className="w-full h-full object-contain p-1.5" />
-                  </div>
-                )}
-                <div
-                  className="rounded-xl p-4 transition-all duration-300"
-                  style={{
-                    backgroundColor: isDark ? 'rgba(26, 21, 16, 0.8)' : 'rgba(255, 255, 255, 0.95)',
-                    border: `2px solid ${isDark ? 'rgba(212, 165, 116, 0.4)' : 'rgba(232, 87, 12, 0.5)'}`,
-                    boxShadow: isDark
-                      ? '0 8px 24px rgba(0, 0, 0, 0.3)'
-                      : '0 8px 24px rgba(232, 87, 12, 0.15)',
-                  }}
-                >
-                  <Awards
-                    variant="certificate"
-                    title={cert.title}
-                    subtitle={`${cert.description}`}
-                    recipient={cert.issuer}
-                    date={String(cert.year)}
-                  />
-                </div>
-              </div>
+              <CertCard key={cert.title} cert={cert} index={index} isDark={isDark} />
             ))}
           </div>
         </div>

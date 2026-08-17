@@ -13,7 +13,7 @@ export const ThemeSwitch = ({ className = '' }: ThemeSwitchProps) => {
   const switchStyle = {
     '--toggle-track': isDark ? '#2A221A' : '#E7DDD0',
     '--toggle-track-inset': isDark ? '#1A1510' : '#F8F3EB',
-    '--toggle-knob': isDark ? '#E8570C' : '#D4A574',
+    '--toggle-knob': isDark ? '#1FA971' : '#D4A574',
     '--toggle-border': isDark ? 'rgba(212, 165, 116, 0.4)' : 'rgba(74, 60, 42, 0.24)',
     '--toggle-shadow': isDark ? 'rgba(0, 0, 0, 0.38)' : 'rgba(26, 18, 8, 0.18)',
     '--toggle-bar': isDark ? '#F0EBE0' : '#4A3C2A',

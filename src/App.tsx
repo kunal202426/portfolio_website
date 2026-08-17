@@ -85,7 +85,7 @@ function AppContent() {
             <div
               className="rounded-2xl overflow-hidden border-2"
               style={{
-                borderColor: isDark ? 'rgba(232, 87, 12, 0.48)' : 'rgba(232, 87, 12, 0.55)',
+                borderColor: isDark ? 'rgba(31, 169, 113, 0.48)' : 'rgba(31, 169, 113, 0.55)',
                 boxShadow: isDark ? '0 22px 50px rgba(0, 0, 0, 0.38)' : '0 22px 50px rgba(26, 18, 8, 0.16)',
               }}
             >

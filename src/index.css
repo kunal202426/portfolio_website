@@ -10,8 +10,8 @@
     --bg-card: #FEFCF8;
     --bg-glass: rgba(26, 18, 8, 0.05);
 
-    --accent-primary: #E8570C;
-    --accent-glow: #FF6B1A;
+    --accent-primary: #1FA971;
+    --accent-glow: #34D399;
     --accent-gold: #D4A574;
     --accent-cyan: #B8860B;
     --accent-rose: #C85A3A;
@@ -21,7 +21,7 @@
     --text-tertiary: #C4B49A;
 
     --border-subtle: rgba(26, 18, 8, 0.1);
-    --border-glow: rgba(232, 87, 12, 0.3);
+    --border-glow: rgba(31, 169, 113, 0.3);
 
     /* Typography */
     --font-display: 'Fraunces', serif;
@@ -32,10 +32,10 @@
     --heading: var(--font-display);
     --mono: var(--font-mono);
     --text-h: var(--text-primary);
-    --code-bg: rgba(232, 87, 12, 0.15);
+    --code-bg: rgba(31, 169, 113, 0.15);
     --border: var(--border-subtle);
-    --gradient-hero: linear-gradient(135deg, #E8570C 0%, #FF6B1A 50%, #D4A574 100%);
-    --gradient-card: linear-gradient(145deg, rgba(232, 87, 12, 0.1), rgba(212, 165, 116, 0.05));
+    --gradient-hero: linear-gradient(135deg, #1FA971 0%, #34D399 50%, #D4A574 100%);
+    --gradient-card: linear-gradient(145deg, rgba(31, 169, 113, 0.1), rgba(212, 165, 116, 0.05));
   }
 
   .dark {
@@ -49,9 +49,9 @@
     --text-tertiary: #9B8B70;
 
     --border-subtle: rgba(240, 235, 224, 0.1);
-    --border-glow: rgba(232, 87, 12, 0.4);
+    --border-glow: rgba(31, 169, 113, 0.4);
 
-    --code-bg: rgba(232, 87, 12, 0.2);
+    --code-bg: rgba(31, 169, 113, 0.2);
   }
 }
 
@@ -138,7 +138,7 @@ body {
   --bb-fg: #1A1208;
   --bb-border: #1A1208;
   --bb-shadow: #1A1208;
-  --bb-arrow: #E8570C;
+  --bb-arrow: #1FA971;
   --bb-offset: 8px;
 
   position: relative;
@@ -187,16 +187,16 @@ body {
 }
 
 .brutal-btn:focus-visible {
-  outline: 2px solid #E8570C;
+  outline: 2px solid #1FA971;
   outline-offset: 3px;
 }
 
 .brutal-btn--on-dark {
   --bb-bg: #F0EBE0;
-  --bb-fg: #E8570C;
+  --bb-fg: #1FA971;
   --bb-border: #F0EBE0;
-  --bb-shadow: #E8570C;
-  --bb-arrow: #E8570C;
+  --bb-shadow: #1FA971;
+  --bb-arrow: #1FA971;
 }
 
 /* GSAP Animation Base Classes */
@@ -276,7 +276,7 @@ body {
 
 .glow-border {
   border: 1px solid var(--border-glow);
-  box-shadow: 0 0 15px rgba(232, 87, 12, 0.15);
+  box-shadow: 0 0 15px rgba(31, 169, 113, 0.15);
 }
 
 /* Typography styles for legacy components */
@@ -394,7 +394,7 @@ code,
 }
 
 .toggle-input:focus-visible ~ .toggle-base {
-  outline: 2px solid #e8570c;
+  outline: 2px solid #1fa971;
   outline-offset: 2px;
 }
 
