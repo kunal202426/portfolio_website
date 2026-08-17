@@ -28,7 +28,7 @@ const AchievementCard = memo(function AchievementCard({ item, isDark }: { item: 
       whileHover={{ y: -3 }}
       className="rounded-xl transition-colors duration-300 cursor-pointer"
       style={{
-        backgroundColor: isDark ? '#2A2E1F' : '#FFFFFF',
+        backgroundColor: isDark ? 'var(--bg-card)' : '#FFFFFF',
         border: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.22)' : 'rgba(212, 165, 116, 0.35)'}`,
         boxShadow: isDark ? '0 10px 30px rgba(0, 0, 0, 0.28)' : '0 10px 30px rgba(26, 18, 8, 0.08)',
       }}
@@ -137,7 +137,7 @@ const AchievementCard = memo(function AchievementCard({ item, isDark }: { item: 
 
 export const CertificationsSection = () => {
   const { resolvedTheme } = useTheme()
-  const isDark = resolvedTheme === 'dark'
+  const isDark = resolvedTheme !== 'light'
 
   const achievementItems = useMemo<AchievementCardData[]>(() => resumeData.achievements.map((achievement, index) => ({
     id: `achievement-${index}`,
@@ -162,7 +162,7 @@ export const CertificationsSection = () => {
       id="certifications"
       className="relative w-full py-24 px-6 overflow-hidden transition-colors duration-500"
       style={{
-        backgroundColor: isDark ? '#1C1F15' : '#F5F0E8',
+        backgroundColor: isDark ? 'var(--bg-primary)' : '#F5F0E8',
       }}
     >
       {/* Decorative */}

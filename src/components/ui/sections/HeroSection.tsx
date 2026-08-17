@@ -21,7 +21,7 @@ export const HeroSection = () => {
   const contentRef = useRef<HTMLDivElement>(null)
   const heroScrollRef = useRef<HTMLDivElement>(null)
   const { resolvedTheme } = useTheme()
-  const isDark = resolvedTheme === 'dark'
+  const isDark = resolvedTheme !== 'light'
   
   // Parallax scroll transforms
   const { scrollYProgress } = useScroll({

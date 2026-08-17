@@ -20,7 +20,7 @@ function supportsTouchInput() {
 
 export const TechMarquee = () => {
   const { resolvedTheme } = useTheme()
-  const isDark = resolvedTheme === 'dark'
+  const isDark = resolvedTheme !== 'light'
   const sectionRef = useRef<HTMLElement>(null)
   const [gravityMode, setGravityMode] = useState<GravityRuntimeMode>('off')
   const [shouldLoadPhysics, setShouldLoadPhysics] = useState(false)
@@ -195,7 +195,7 @@ export const TechMarquee = () => {
       ref={sectionRef}
       id="skills" 
       className="py-20 overflow-hidden transition-colors duration-500"
-      style={{ backgroundColor: isDark ? '#2A2E1F' : '#FFFBF5' }}
+      style={{ backgroundColor: isDark ? 'var(--bg-card)' : '#FFFBF5' }}
     >
       <div className="relative">
         {/* Section Label */}
@@ -210,7 +210,7 @@ export const TechMarquee = () => {
           className="relative overflow-hidden rounded-2xl border -mx-2 sm:-mx-3 md:mx-0"
           style={{
             borderColor: isDark ? 'rgba(212, 165, 116, 0.2)' : 'rgba(212, 165, 116, 0.32)',
-            background: isDark ? 'linear-gradient(145deg, #232619, #1C1F15)' : 'linear-gradient(145deg, #FFFEFC, #F5F0E8)',
+            background: isDark ? 'linear-gradient(145deg, var(--bg-secondary), var(--bg-primary))' : 'linear-gradient(145deg, #FFFEFC, #F5F0E8)',
           }}
         >
           <div className="absolute inset-0 z-0">
@@ -281,7 +281,7 @@ export const TechMarquee = () => {
               rotateY={-16}
               rotateX={5}
               perspective={1000}
-              fadeColor={isDark ? '#2A2E1F' : '#FFFBF5'}
+              fadeColor={isDark ? 'var(--bg-card)' : '#FFFBF5'}
               background="transparent"
               color={isDark ? 'rgba(240,235,224,0.78)' : 'rgba(26,18,8,0.72)'}
             />
@@ -296,7 +296,7 @@ export const TechMarquee = () => {
               rotateY={16}
               rotateX={5}
               perspective={1000}
-              fadeColor={isDark ? '#2A2E1F' : '#FFFBF5'}
+              fadeColor={isDark ? 'var(--bg-card)' : '#FFFBF5'}
               background="transparent"
               color={isDark ? 'rgba(240,235,224,0.78)' : 'rgba(26,18,8,0.72)'}
             />

@@ -38,7 +38,7 @@ export const ThemeTogglerButton = ({
   }
 
   const getVariantStyles = () => {
-    const isDark = resolvedTheme === 'dark'
+    const isDark = resolvedTheme !== 'light'
     
     switch (variant) {
       case 'outline':
@@ -66,7 +66,7 @@ export const ThemeTogglerButton = ({
     if (theme === 'system') {
       return <Monitor size={iconSizes[size]} />
     }
-    return resolvedTheme === 'dark' ? (
+    return resolvedTheme !== 'light' ? (
       <Moon size={iconSizes[size]} />
     ) : (
       <Sun size={iconSizes[size]} />

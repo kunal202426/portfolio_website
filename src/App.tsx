@@ -48,13 +48,13 @@ function AppContent() {
     return () => clearTimeout(timer)
   }, [])
 
-  const isDark = resolvedTheme === 'dark'
+  const isDark = resolvedTheme !== 'light'
 
   return (
     <div 
       className="w-full overflow-x-hidden transition-colors duration-500" 
       style={{ 
-        backgroundColor: isDark ? '#1C1F15' : '#F5F0E8', 
+        backgroundColor: isDark ? 'var(--bg-primary)' : '#F5F0E8', 
         color: isDark ? '#F0EBE0' : '#1A1208' 
       }}
     >
@@ -121,7 +121,7 @@ function AppContent() {
 
 function App() {
   return (
-    <ThemeProvider defaultTheme="light">
+    <ThemeProvider defaultTheme="green">
       <LenisProvider>
         <AppContent />
       </LenisProvider>

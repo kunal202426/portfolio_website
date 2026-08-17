@@ -494,7 +494,7 @@ export function CertificationStampCarousel({ stamps, isDark }: { stamps: StampIt
         position: 'relative',
         width: '100%',
         borderRadius: 24,
-        background: isDark ? '#1C1F15' : '#FDF9F2',
+        background: isDark ? 'var(--bg-primary)' : '#FDF9F2',
         border: `1px solid ${isDark ? 'rgba(212,165,116,0.15)' : 'rgba(var(--accent-primary-rgb),0.15)'}`,
         padding: '20px 20px 12px',
       }}
@@ -531,7 +531,7 @@ export function CertificationStampCarousel({ stamps, isDark }: { stamps: StampIt
                   angle={angle}
                   shadow={stampShadow}
                   accent={STAMP_ACCENTS[index % STAMP_ACCENTS.length]}
-                  backdrop={isDark ? '#1C1F15' : '#FDF9F2'}
+                  backdrop={isDark ? 'var(--bg-primary)' : '#FDF9F2'}
                   denomination={stamp.caption.match(/\d+/)?.[0]?.slice(-2).padStart(2, '0') ?? String(index + 1).padStart(2, '0')}
                   onOpen={openStamp}
                   wasDragged={wasDragged}

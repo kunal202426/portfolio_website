@@ -36,7 +36,7 @@ export const ThemeTransition = () => {
     prevThemeRef.current = resolvedTheme
   }, [resolvedTheme])
 
-  const isDark = resolvedTheme === 'dark'
+  const isDark = resolvedTheme !== 'light'
 
   return (
     <AnimatePresence>
@@ -51,7 +51,7 @@ export const ThemeTransition = () => {
             ease: [0.22, 1, 0.36, 1]
           }}
           style={{
-            backgroundColor: isDark ? '#1C1F15' : '#F5F0E8',
+            backgroundColor: isDark ? 'var(--bg-primary)' : '#F5F0E8',
             transformOrigin: 'left center'
           }}
         >

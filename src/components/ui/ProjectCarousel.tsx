@@ -244,7 +244,7 @@ const ScreenshotStack = ({ screenshots, title }: { screenshots: string[]; title:
       {allBroken ? (
         <div
           className="absolute inset-0 flex items-center justify-center"
-          style={{ background: 'linear-gradient(145deg, #2A2E1F, #1C1F15)' }}
+          style={{ background: 'linear-gradient(145deg, var(--bg-card), var(--bg-primary))' }}
         >
           <span className="text-xs uppercase tracking-widest" style={{ color: '#6B5D4A' }}>
             Preview coming soon
@@ -280,7 +280,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
   const [direction, setDirection] = useState(1)
   const [allView, setAllView] = useState(false)
   const { resolvedTheme } = useTheme()
-  const isDark = resolvedTheme === 'dark'
+  const isDark = resolvedTheme !== 'light'
   const screenRef = useRef<HTMLDivElement>(null)
   const [screenWidth, setScreenWidth] = useState(560)
   const wheelCooldownRef = useRef(false)
@@ -344,7 +344,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
   const gridColor = isDark ? 'rgba(var(--accent-primary-rgb), 0.06)' : 'rgba(var(--accent-primary-rgb), 0.08)'
 
   return (
-    <section className="relative overflow-hidden pt-6 pb-28 md:pt-10 md:pb-44 transition-colors duration-500" style={{ background: isDark ? '#1C1F15' : '#F5F0E8' }}>
+    <section className="relative overflow-hidden pt-6 pb-28 md:pt-10 md:pb-44 transition-colors duration-500" style={{ background: isDark ? 'var(--bg-primary)' : '#F5F0E8' }}>
       {/* Static grid background - no animation for performance */}
       <div
         className="absolute inset-0 pointer-events-none"
@@ -397,7 +397,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                   height: 44,
                   borderRadius: '50%',
                   border: '2px solid rgba(var(--accent-primary-rgb), 0.4)',
-                  background: isDark ? 'linear-gradient(145deg, #2A2E1F, #1C1F15)' : 'linear-gradient(145deg, #FFFFFF, #F5F0E8)',
+                  background: isDark ? 'linear-gradient(145deg, var(--bg-card), var(--bg-primary))' : 'linear-gradient(145deg, #FFFFFF, #F5F0E8)',
                   boxShadow: isDark ? '0 4px 12px rgba(0,0,0,0.5)' : '0 4px 12px rgba(0,0,0,0.1)',
                   color: 'var(--accent-primary)',
                   fontSize: 18,
@@ -571,7 +571,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                     ) : (
                       <div
                         className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 py-4"
-                        style={{ background: 'linear-gradient(160deg, #2A2E1F, #1C1F15)' }}
+                        style={{ background: 'linear-gradient(160deg, var(--bg-card), var(--bg-primary))' }}
                       >
                         {project.starred && (
                           <div
@@ -700,7 +700,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                   height: 44,
                   borderRadius: '50%',
                   border: '2px solid rgba(var(--accent-primary-rgb), 0.4)',
-                  background: isDark ? 'linear-gradient(145deg, #2A2E1F, #1C1F15)' : 'linear-gradient(145deg, #FFFFFF, #F5F0E8)',
+                  background: isDark ? 'linear-gradient(145deg, var(--bg-card), var(--bg-primary))' : 'linear-gradient(145deg, #FFFFFF, #F5F0E8)',
                   boxShadow: isDark ? '0 4px 12px rgba(0,0,0,0.5)' : '0 4px 12px rgba(0,0,0,0.1)',
                   color: 'var(--accent-primary)',
                   fontSize: 18,

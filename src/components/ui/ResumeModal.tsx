@@ -17,7 +17,7 @@ interface ResumeModalProps {
 
 export const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
   const { resolvedTheme } = useTheme()
-  const isDark = resolvedTheme === 'dark'
+  const isDark = resolvedTheme !== 'light'
 
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState<number>(0)
@@ -79,8 +79,8 @@ export const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
   }
 
   // Theme colors
-  const bg       = isDark ? '#2A2E1F' : '#FFFBF5'
-  const bgHeader = isDark ? '#1C1F15' : '#F0EBE0'
+  const bg       = isDark ? 'var(--bg-card)' : '#FFFBF5'
+  const bgHeader = isDark ? 'var(--bg-primary)' : '#F0EBE0'
   const bgBody   = isDark ? '#111109' : '#F5F0E8'
   const textPri  = isDark ? '#F0EBE0' : '#1A1208'
   const textSec  = isDark ? '#9B8B70' : '#6B5C44'

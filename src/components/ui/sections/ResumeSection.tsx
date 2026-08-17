@@ -9,7 +9,7 @@ const LazyResumeModal = lazy(() => import('../ResumeModal').then((module) => ({ 
 
 export const ResumeSection = () => {
   const { resolvedTheme } = useTheme()
-  const isDark = resolvedTheme === 'dark'
+  const isDark = resolvedTheme !== 'light'
   const [isModalOpen, setIsModalOpen] = useState(false)
   const tiltX = useMotionValue(0)
   const tiltY = useMotionValue(0)
@@ -41,7 +41,7 @@ export const ResumeSection = () => {
   }
 
   return (
-    <section id="resume" className="pt-0 pb-24 px-6 transition-colors duration-500" style={{ backgroundColor: isDark ? '#2A2E1F' : '#EFEBE3' }}>
+    <section id="resume" className="pt-0 pb-24 px-6 transition-colors duration-500" style={{ backgroundColor: isDark ? 'var(--bg-card)' : '#EFEBE3' }}>
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
         <motion.div 
@@ -78,7 +78,7 @@ export const ResumeSection = () => {
             <motion.div 
               className="relative w-[280px] md:w-[320px] rounded-[3rem] p-3 shadow-2xl transition-transform duration-500 group-hover:scale-105"
               style={{ 
-                backgroundColor: isDark ? '#1C1F15' : '#1A1208',
+                backgroundColor: isDark ? 'var(--bg-primary)' : '#1A1208',
                 boxShadow: isDark ? '0 50px 100px -20px rgba(0, 0, 0, 0.6)' : '0 50px 100px -20px rgba(26, 18, 8, 0.4)',
                 rotateX: smoothTiltX,
                 rotateY: smoothTiltY,
@@ -88,13 +88,13 @@ export const ResumeSection = () => {
               viewport={{ once: true, amount: 0.35 }}
             >
               {/* Notch */}
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-7 rounded-b-2xl" style={{ backgroundColor: isDark ? '#1C1F15' : '#1A1208' }} />
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-7 rounded-b-2xl" style={{ backgroundColor: isDark ? 'var(--bg-primary)' : '#1A1208' }} />
               
               {/* Screen */}
               <div
                 className="relative rounded-[2.5rem] overflow-hidden transition-colors duration-500"
                 style={{
-                  backgroundColor: isDark ? '#2A2E1F' : '#F5F0E8',
+                  backgroundColor: isDark ? 'var(--bg-card)' : '#F5F0E8',
                   aspectRatio: '9/19.5'
                 }}
               >
@@ -145,7 +145,7 @@ export const ResumeSection = () => {
 
                 {/* PDF Preview Placeholder */}
                 <div className="p-2 h-full overflow-hidden flex items-center justify-center" style={{ position: 'relative', zIndex: 3 }}>
-                  <div className="w-full h-full rounded-lg shadow-inner flex flex-col items-center justify-center gap-4 p-4 transition-colors duration-500" style={{ backgroundColor: isDark ? '#1C1F15' : 'white' }}>
+                  <div className="w-full h-full rounded-lg shadow-inner flex flex-col items-center justify-center gap-4 p-4 transition-colors duration-500" style={{ backgroundColor: isDark ? 'var(--bg-primary)' : 'white' }}>
                     <FileText size={48} style={{ color: 'var(--accent-primary)' }} />
                     <span className="text-sm font-medium text-center transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
                       Resume

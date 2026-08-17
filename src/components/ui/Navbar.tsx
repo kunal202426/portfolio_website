@@ -28,7 +28,7 @@ export const Navbar = () => {
   const { resolvedTheme } = useTheme()
   const lenis = useLenis()
 
-  const isDark = resolvedTheme === 'dark'
+  const isDark = resolvedTheme !== 'light'
   const limelightItems = useMemo(
     () =>
       navItems.map((item) => ({
@@ -203,9 +203,9 @@ export const Navbar = () => {
         style={{
           backdropFilter: isScrolled ? 'blur(10px)' : 'blur(6px)',
           WebkitBackdropFilter: isScrolled ? 'blur(10px)' : 'blur(6px)',
-          backgroundColor: isScrolled 
-            ? (isDark ? 'rgba(14, 14, 11, 0.95)' : 'rgba(245, 240, 232, 0.95)')
-            : (isDark ? 'rgba(14, 14, 11, 0.85)' : 'rgba(245, 240, 232, 0.85)'),
+          backgroundColor: isScrolled
+            ? `rgba(var(--bg-primary-rgb), 0.95)`
+            : `rgba(var(--bg-primary-rgb), 0.85)`,
           borderBottom: isScrolled ? '1px solid rgba(var(--accent-primary-rgb), 0.15)' : '1px solid transparent',
           height: isScrolled ? '56px' : '72px',
           willChange: 'transform',
@@ -265,7 +265,7 @@ export const Navbar = () => {
         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
         className="fixed top-16 left-0 right-0 md:hidden z-30 overflow-hidden"
         style={{ 
-          backgroundColor: isDark ? '#1C1F15' : '#F5F0E8',
+          backgroundColor: isDark ? 'var(--bg-primary)' : '#F5F0E8',
           borderBottom: '1px solid rgba(212, 165, 116, 0.3)'
         }}
       >

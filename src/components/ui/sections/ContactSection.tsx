@@ -65,7 +65,7 @@ const getLaptopSize = (width: number) => {
 export const ContactSection = () => {
   const containerRef = useRef<HTMLElement>(null)
   const { resolvedTheme } = useTheme()
-  const isDark = resolvedTheme === 'dark'
+  const isDark = resolvedTheme !== 'light'
   const tiltX = useMotionValue(0)
   const tiltY = useMotionValue(0)
   const smoothTiltX = useSpring(tiltX, { stiffness: 220, damping: 24, mass: 0.4 })
@@ -146,7 +146,7 @@ export const ContactSection = () => {
       ref={containerRef}
       id="contact" 
       className="relative py-24 px-6 overflow-hidden transition-colors duration-500"
-      style={{ backgroundColor: isDark ? '#1C1F15' : '#1A1208' }}
+      style={{ backgroundColor: isDark ? 'var(--bg-primary)' : '#1A1208' }}
     >
       {/* Decorative Elements */}
       <div className="absolute top-0 left-0 w-96 h-96 rounded-full opacity-10" style={{ background: 'radial-gradient(circle, var(--accent-primary) 0%, transparent 70%)', filter: 'blur(80px)' }} />
@@ -178,7 +178,7 @@ export const ContactSection = () => {
                 className="relative h-full min-h-[340px] lg:min-h-[420px] rounded-2xl overflow-hidden border will-change-transform"
                 style={{
                   borderColor: isDark ? 'rgba(212, 165, 116, 0.22)' : 'rgba(212, 165, 116, 0.32)',
-                  background: isDark ? 'linear-gradient(145deg, #232619, #1C1F15)' : 'linear-gradient(145deg, #2A2520, #1A1208)',
+                  background: isDark ? 'linear-gradient(145deg, var(--bg-secondary), var(--bg-primary))' : 'linear-gradient(145deg, #2A2520, #1A1208)',
                 }}
               >
                 <InteractiveRobotSpline scene={ROBOT_SCENE_URL} className="absolute inset-0 z-0 transform-gpu" />
@@ -219,8 +219,8 @@ export const ContactSection = () => {
                 width: `${laptopSize.width}px`,
                 height: `${laptopSize.height}px`,
                 background: isDark 
-                  ? 'linear-gradient(145deg, #2A2E1F, #1C1F15)' 
-                  : 'linear-gradient(145deg, #2A2520, #2A2E1F)',
+                  ? 'linear-gradient(145deg, var(--bg-card), var(--bg-primary))' 
+                  : 'linear-gradient(145deg, #2A2520, var(--bg-card))',
                 borderTopLeftRadius: '16px',
                 borderTopRightRadius: '16px',
                 border: `3px solid ${isDark ? 'rgba(60, 50, 40, 0.5)' : 'rgba(60, 50, 40, 0.6)'}`,
@@ -235,7 +235,7 @@ export const ContactSection = () => {
               <div
                 className="absolute inset-0 pointer-events-none"
                 style={{
-                  border: `12px solid ${isDark ? '#14160E' : '#1C1F15'}`,
+                  border: `12px solid ${isDark ? '#14160E' : 'var(--bg-primary)'}`,
                   borderRadius: '12px',
                 }}
               />
@@ -364,7 +364,7 @@ export const ContactSection = () => {
                 width: `${laptopSize.width}px`,
                 height: `${laptopSize.keyboardHeight}px`,
                 background: isDark 
-                  ? '#2A2E1F' 
+                  ? 'var(--bg-card)' 
                   : '#2A2520',
                 borderBottomLeftRadius: '12px',
                 borderBottomRightRadius: '12px',

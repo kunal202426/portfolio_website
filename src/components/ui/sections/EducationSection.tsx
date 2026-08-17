@@ -11,7 +11,7 @@ gsap.registerPlugin(ScrollTrigger)
 export const EducationSection = () => {
   const containerRef = useRef<HTMLElement>(null)
   const { resolvedTheme } = useTheme()
-  const isDark = resolvedTheme === 'dark'
+  const isDark = resolvedTheme !== 'light'
 
   useEffect(() => {
     if (!containerRef.current) return
@@ -38,7 +38,7 @@ export const EducationSection = () => {
       ref={containerRef}
       id="education" 
       className="relative w-full py-24 px-6 overflow-hidden transition-colors duration-500"
-      style={{ backgroundColor: isDark ? '#1C1F15' : '#FFFBF5' }}
+      style={{ backgroundColor: isDark ? 'var(--bg-primary)' : '#FFFBF5' }}
     >
       {/* Decorative */}
       <div className="absolute top-10 right-20 w-32 h-32 rounded-full opacity-20" style={{ background: 'radial-gradient(circle, #D4A574 0%, transparent 70%)' }} />
@@ -62,7 +62,7 @@ export const EducationSection = () => {
               key={index}
               className="edu-card relative p-6 md:p-8 rounded-xl shadow-lg transition-colors duration-500"
               style={{ 
-                backgroundColor: isDark ? '#2A2E1F' : '#FFFFFF',
+                backgroundColor: isDark ? 'var(--bg-card)' : '#FFFFFF',
                 border: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.2)' : 'rgba(212, 165, 116, 0.3)'}`
               }}
               whileHover={{ scale: 1.02, y: -4, boxShadow: isDark ? '0 20px 40px rgba(0, 0, 0, 0.3)' : '0 20px 40px rgba(26, 18, 8, 0.1)' }}

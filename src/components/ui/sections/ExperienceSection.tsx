@@ -34,7 +34,7 @@ const ExperienceCard = ({ exp, isDark }: { exp: Experience; isDark: boolean }) =
         <div
           className="p-6 rounded-xl shadow-lg transition-colors duration-500"
           style={{
-            backgroundColor: isDark ? '#2A2E1F' : '#FFFBF5',
+            backgroundColor: isDark ? 'var(--bg-card)' : '#FFFBF5',
             border: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.2)' : 'rgba(212, 165, 116, 0.3)'}`,
             backfaceVisibility: 'hidden',
             minHeight: 196,
@@ -87,7 +87,7 @@ const ExperienceCard = ({ exp, isDark }: { exp: Experience; isDark: boolean }) =
         <div
           className="absolute inset-0 p-6 rounded-xl shadow-lg overflow-y-auto"
           style={{
-            backgroundColor: isDark ? '#2A2E1F' : '#FFFBF5',
+            backgroundColor: isDark ? 'var(--bg-card)' : '#FFFBF5',
             border: '1px solid rgba(var(--accent-primary-rgb), 0.45)',
             backfaceVisibility: 'hidden',
             transform: 'rotateY(180deg)',
@@ -121,7 +121,7 @@ export const ExperienceSection = () => {
   const pathRef = useRef<SVGPathElement>(null)
   const experiences = useMemo(() => [...resumeData.experience].sort((a, b) => b.year - a.year), [])
   const { resolvedTheme } = useTheme()
-  const isDark = resolvedTheme === 'dark'
+  const isDark = resolvedTheme !== 'light'
 
   useEffect(() => {
     const section = containerRef.current
@@ -255,7 +255,7 @@ export const ExperienceSection = () => {
       id="experience" 
       className="relative w-full py-24 px-6 overflow-hidden transition-colors duration-500"
       style={{
-        backgroundColor: isDark ? '#1C1F15' : '#F5F0E8',
+        backgroundColor: isDark ? 'var(--bg-primary)' : '#F5F0E8',
       }}
     >
       {/* Decorative Background */}
@@ -319,7 +319,7 @@ export const ExperienceSection = () => {
                 style={{ backgroundColor: 'var(--accent-primary)' }}
                 whileHover={{ scale: 1.2, boxShadow: '0 0 20px rgba(var(--accent-primary-rgb), 0.5)' }}
               >
-                <div className="w-2 h-2 rounded-full" style={{ backgroundColor: isDark ? '#1C1F15' : '#F5F0E8' }} />
+                <div className="w-2 h-2 rounded-full" style={{ backgroundColor: isDark ? 'var(--bg-primary)' : '#F5F0E8' }} />
               </motion.div>
 
               <div className="relative z-10">

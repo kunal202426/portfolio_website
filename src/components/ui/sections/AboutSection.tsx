@@ -12,7 +12,7 @@ gsap.registerPlugin(ScrollTrigger)
 export const AboutSection = () => {
   const containerRef = useRef<HTMLElement>(null)
   const { resolvedTheme } = useTheme()
-  const isDark = resolvedTheme === 'dark'
+  const isDark = resolvedTheme !== 'light'
   const tiltX = useMotionValue(0)
   const tiltY = useMotionValue(0)
   const spinY = useMotionValue(0)
@@ -100,7 +100,7 @@ export const AboutSection = () => {
       ref={containerRef}
       id="about" 
       className="relative w-full py-24 px-6 overflow-hidden transition-colors duration-500"
-      style={{ backgroundColor: isDark ? '#1C1F15' : '#F5F0E8' }}
+      style={{ backgroundColor: isDark ? 'var(--bg-primary)' : '#F5F0E8' }}
     >
       {/* Decorative */}
       <div className="absolute top-20 left-10 w-40 h-40 rounded-full opacity-20" style={{ background: 'radial-gradient(circle, var(--accent-primary) 0%, transparent 70%)' }} />
@@ -171,7 +171,7 @@ export const AboutSection = () => {
           <div 
             className="about-visual h-full min-h-96 rounded-2xl relative overflow-hidden p-8 flex items-center justify-center shadow-xl transition-colors duration-500"
             style={{ 
-              background: isDark ? 'linear-gradient(145deg, #2A2E1F, #1C1F15)' : 'linear-gradient(145deg, #FFFBF5, #F5F0E8)',
+              background: isDark ? 'linear-gradient(145deg, var(--bg-card), var(--bg-primary))' : 'linear-gradient(145deg, #FFFBF5, #F5F0E8)',
               border: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.2)' : 'rgba(212, 165, 116, 0.3)'}`
             }}
             onMouseMove={handleBookMove}

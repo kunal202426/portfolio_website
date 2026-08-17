@@ -4,14 +4,14 @@ import { useTheme } from '../../providers/ThemeProvider'
 
 export const ProjectsSection = () => {
   const { resolvedTheme } = useTheme()
-  const isDark = resolvedTheme === 'dark'
+  const isDark = resolvedTheme !== 'light'
 
   return (
     <section 
       id="projects" 
       className="relative w-full py-6 md:py-10 px-4 md:px-6 overflow-hidden transition-colors duration-500"
       style={{
-        backgroundColor: isDark ? '#1C1F15' : '#F5F0E8',
+        backgroundColor: isDark ? 'var(--bg-primary)' : '#F5F0E8',
         contentVisibility: 'auto',
         containIntrinsicSize: '1200px',
       }}

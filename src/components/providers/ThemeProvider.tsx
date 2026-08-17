@@ -1,11 +1,12 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
 
-type Theme = 'light' | 'dark' | 'system'
+type Theme = 'light' | 'dark' | 'green' | 'system'
+type ResolvedTheme = 'light' | 'dark' | 'green'
 
 interface ThemeContextType {
   theme: Theme
   setTheme: (theme: Theme) => void
-  resolvedTheme: 'light' | 'dark'
+  resolvedTheme: ResolvedTheme
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
@@ -23,16 +24,12 @@ interface ThemeProviderProps {
   defaultTheme?: Theme
 }
 
-// Helper to get initial resolved theme synchronously
-const getInitialResolvedTheme = (theme: Theme): 'light' | 'dark' => {
-  if (typeof window === 'undefined') return 'light'
-  if (theme === 'system') {
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-  }
+const resolveTheme = (theme: Theme, systemPrefersDark: boolean): ResolvedTheme => {
+  if (theme === 'system') return systemPrefersDark ? 'dark' : 'light'
   return theme
 }
 
-export const ThemeProvider = ({ children, defaultTheme = 'light' }: ThemeProviderProps) => {
+export const ThemeProvider = ({ children, defaultTheme = 'green' }: ThemeProviderProps) => {
   const [theme, setTheme] = useState<Theme>(() => {
     if (typeof window !== 'undefined') {
       return (localStorage.getItem('theme') as Theme) || defaultTheme
@@ -40,44 +37,26 @@ export const ThemeProvider = ({ children, defaultTheme = 'light' }: ThemeProvide
     return defaultTheme
   })
 
-  // Compute resolvedTheme based on current theme
-  const resolvedTheme: 'light' | 'dark' = getInitialResolvedTheme(theme)
+  const [systemPrefersDark, setSystemPrefersDark] = useState(() =>
+    typeof window !== 'undefined' ? window.matchMedia('(prefers-color-scheme: dark)').matches : false,
+  )
+
+  const resolvedTheme = resolveTheme(theme, systemPrefersDark)
 
   useEffect(() => {
     const root = window.document.documentElement
-
-    // Remove old theme class
-    root.classList.remove('light', 'dark')
-
-    let resolved: 'light' | 'dark' = 'light'
-
-    if (theme === 'system') {
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-      resolved = systemTheme
-    } else {
-      resolved = theme
-    }
-
-    root.classList.add(resolved)
+    root.classList.remove('light', 'dark', 'green')
+    root.classList.add(resolvedTheme)
     localStorage.setItem('theme', theme)
-  }, [theme])
+  }, [theme, resolvedTheme])
 
-  // Listen for system theme changes
+  // Keep resolvedTheme in sync with the OS setting while theme === 'system'.
   useEffect(() => {
-    if (theme !== 'system') return
-
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-    const handleChange = (e: MediaQueryListEvent) => {
-      const root = window.document.documentElement
-      root.classList.remove('light', 'dark')
-      const newTheme = e.matches ? 'dark' : 'light'
-      root.classList.add(newTheme)
-      setResolvedTheme(newTheme)
-    }
-
+    const handleChange = (e: MediaQueryListEvent) => setSystemPrefersDark(e.matches)
     mediaQuery.addEventListener('change', handleChange)
     return () => mediaQuery.removeEventListener('change', handleChange)
-  }, [theme])
+  }, [])
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme, resolvedTheme }}>
