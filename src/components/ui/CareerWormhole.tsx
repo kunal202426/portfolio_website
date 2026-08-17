@@ -66,15 +66,16 @@ function applyDwellEasing(rawT: number, cumulative: Float32Array) {
 
 // The outer (ref'd) element's transform/opacity/zIndex are driven
 // imperatively by the render loop every frame for the 3D projection, so the
-// hover-reveal has to live on an inner wrapper instead - React/framer-motion
+// click-reveal has to live on an inner wrapper instead - React/framer-motion
 // only ever touch that inner tree, never the outer positioned box.
 //
 // The reveal itself is the original peel-away: the front card (company/
 // title/period) sits over an achievements panel and slides down + rotates
-// clear on hover, like a note peeling off a photo, instead of a plain
+// clear on tap/click, like a note peeling off a photo, instead of a plain
 // accordion - ported over from the old vertical-timeline ExperienceCard.
+// Click-only (not hover) to match the Education/Achievement cards elsewhere.
 function WormholeCardEl({ card, cardRef }: { card: WormholeCard; cardRef: (node: HTMLDivElement | null) => void }) {
-  const [hovered, setHovered] = useState(false)
+  const [open, setOpen] = useState(false)
   const hasDetails = !!card.details?.length
 
   return (
@@ -91,9 +92,7 @@ function WormholeCardEl({ card, cardRef }: { card: WormholeCard; cardRef: (node:
       }}
     >
       <div
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        onClick={() => setHovered((h) => !h)}
+        onClick={() => setOpen((h) => !h)}
         style={{
           position: 'relative',
           height: CARD_HEIGHT,
@@ -141,17 +140,17 @@ function WormholeCardEl({ card, cardRef }: { card: WormholeCard; cardRef: (node:
         {/* Front: slides fully clear on reveal, clipped by the container's
             overflow:hidden so it reads as peeling away rather than overlapping. */}
         <motion.div
-          animate={{ y: hovered ? '108%' : 0, rotate: hovered ? 3 : 0 }}
+          animate={{ y: open ? '108%' : 0, rotate: open ? 3 : 0 }}
           transition={{ type: 'spring', stiffness: 260, damping: 26 }}
           style={{
             position: 'absolute',
             inset: 0,
             padding: 22,
             transformOrigin: 'center',
-            background: hovered ? 'var(--accent-primary)' : 'rgba(255, 255, 255, 0.13)',
+            background: open ? 'var(--accent-primary)' : 'rgba(255, 255, 255, 0.13)',
             backdropFilter: 'blur(18px) saturate(180%)',
             WebkitBackdropFilter: 'blur(18px) saturate(180%)',
-            border: `1px solid ${hovered ? 'transparent' : 'rgba(255, 255, 255, 0.32)'}`,
+            border: `1px solid ${open ? 'transparent' : 'rgba(255, 255, 255, 0.32)'}`,
             transition: 'background-color 0.2s ease, border-color 0.2s ease',
             color: '#fff',
           }}
@@ -165,7 +164,7 @@ function WormholeCardEl({ card, cardRef }: { card: WormholeCard; cardRef: (node:
               fontWeight: 700,
               letterSpacing: '0.12em',
               textTransform: 'uppercase',
-              color: hovered ? 'rgba(255,255,255,0.85)' : 'var(--accent-glow)',
+              color: open ? 'rgba(255,255,255,0.85)' : 'var(--accent-glow)',
             }}
           >
             {card.caption}
@@ -183,12 +182,12 @@ function WormholeCardEl({ card, cardRef }: { card: WormholeCard; cardRef: (node:
                 gap: 6,
                 margin: '14px 0 0',
                 fontSize: 11,
-                color: hovered ? 'rgba(255,255,255,0.85)' : 'var(--accent-glow)',
+                color: open ? 'rgba(255,255,255,0.85)' : 'var(--accent-glow)',
                 opacity: 0.9,
               }}
             >
               <Sparkles size={11} />
-              Hover to see highlights
+              Tap to see highlights
             </p>
           )}
         </motion.div>
