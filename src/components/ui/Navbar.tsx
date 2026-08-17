@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import { HangingThemeSwitch } from './HangingThemeSwitch'
-import { LimelightNav } from './LimelightNav'
+import { GooeyNavbar } from './GooeyNavbar'
 import { useTheme } from '../providers/ThemeProvider'
 import { useLenis } from '../providers/LenisProvider'
 
@@ -225,7 +225,7 @@ export const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center">
-            <LimelightNav
+            <GooeyNavbar
               items={limelightItems}
               activeIndex={activeNavIndex}
               onTabChange={(index) => {

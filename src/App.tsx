@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, useScroll, useSpring, useTransform } from 'motion/react'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { LoadingScreen } from './components/ui/LoadingScreen'
 import { Navbar } from './components/ui/Navbar'
 import { ScrollProgress } from './components/ui/ScrollProgress'
@@ -38,14 +39,17 @@ function AppContent() {
   const section2Scale = useTransform(smoothProgress, [0, 0.12, 0.58, 1], [0.72, 0.72, 1, 1])
   const section2Rotate = useTransform(smoothProgress, [0, 0.12, 0.58, 1], [7, 7, 0, 0])
 
+  // Scroll-triggered animations (e.g. the Career Journey timeline path) get
+  // set up while still hidden behind the loading screen, against layout
+  // that hasn't fully settled yet (fonts/images still loading) - refresh
+  // every ScrollTrigger once the loading screen is actually gone and the
+  // real page is visible, instead of relying on it happening to be correct
+  // by the time a user scrolls past it.
   useEffect(() => {
-    // Simulate loading time - reduced for better UX
-    const timer = setTimeout(() => {
-      setIsLoading(false)
-    }, 1500)
-
-    return () => clearTimeout(timer)
-  }, [])
+    if (isLoading) return
+    const frame = requestAnimationFrame(() => ScrollTrigger.refresh())
+    return () => cancelAnimationFrame(frame)
+  }, [isLoading])
 
   const isDark = resolvedTheme !== 'light'
 
