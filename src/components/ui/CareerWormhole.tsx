@@ -17,6 +17,53 @@ interface CareerWormholeProps {
 
 const CARD_HEIGHT = 220
 
+// Arc-length reparametrization: rather than mapping scroll linearly onto the
+// curve, defines a target speed profile (dt per unit of raw scroll) that
+// dips smoothly - never to a hard stop - near each card's position and
+// recovers between them. Integrating the *cost* (1/speed) over t and then
+// inverting that integral is what actually produces that slowdown: cost is
+// high near a card, so a given stretch of raw scroll only advances t a
+// little there, and the reverse (t advances a lot per scroll) where cost is
+// low, in between cards.
+function buildDwellEasing(cardProgresses: number[], strength = 0.72, width = 0.07) {
+  const STEPS = 400
+  const cost = new Float32Array(STEPS + 1)
+  for (let i = 0; i <= STEPS; i++) {
+    const t = i / STEPS
+    let dip = 0
+    for (const p of cardProgresses) {
+      const d = (t - p) / width
+      dip = Math.max(dip, Math.exp(-d * d))
+    }
+    const speed = 1 - strength * dip
+    cost[i] = 1 / speed
+  }
+  const cumulative = new Float32Array(STEPS + 1)
+  for (let i = 1; i <= STEPS; i++) {
+    cumulative[i] = cumulative[i - 1] + ((cost[i - 1] + cost[i]) / 2) / STEPS
+  }
+  const total = cumulative[STEPS] || 1
+  for (let i = 0; i <= STEPS; i++) cumulative[i] /= total
+  return cumulative
+}
+
+function applyDwellEasing(rawT: number, cumulative: Float32Array) {
+  const steps = cumulative.length - 1
+  const clamped = Math.min(Math.max(rawT, 0), 1)
+  let lo = 0
+  let hi = steps
+  while (lo < hi) {
+    const mid = (lo + hi) >> 1
+    if (cumulative[mid] < clamped) lo = mid + 1
+    else hi = mid
+  }
+  if (lo === 0) return 0
+  const c0 = cumulative[lo - 1]
+  const c1 = cumulative[lo]
+  const frac = c1 > c0 ? (clamped - c0) / (c1 - c0) : 0
+  return ((lo - 1) + frac) / steps
+}
+
 // The outer (ref'd) element's transform/opacity/zIndex are driven
 // imperatively by the render loop every frame for the 3D projection, so the
 // hover-reveal has to live on an inner wrapper instead - React/framer-motion
@@ -227,6 +274,7 @@ export const CareerWormhole = ({ cards, scrollLengthVh = 220 }: CareerWormholePr
       angle: angles[i % angles.length],
       el: cardRefs.current[i] ?? null,
     }))
+    const dwellEasing = buildDwellEasing(cardsData.map((c) => c.progress))
 
     let scrollPercent = 0
     let targetScrollPercent = 0
@@ -244,15 +292,16 @@ export const CareerWormhole = ({ cards, scrollLengthVh = 220 }: CareerWormholePr
     let frameId = 0
     const animate = () => {
       scrollPercent += (targetScrollPercent - scrollPercent) * 0.08
-      const cameraEval = Math.min(Math.max(scrollPercent, 0), 0.99)
-      const lookAtEval = Math.min(Math.max(scrollPercent + 0.04, 0), 1)
+      const easedPercent = applyDwellEasing(scrollPercent, dwellEasing)
+      const cameraEval = Math.min(Math.max(easedPercent, 0), 0.99)
+      const lookAtEval = applyDwellEasing(Math.min(scrollPercent + 0.025, 1), dwellEasing)
       const camPos = curve.getPointAt(cameraEval)
       const lookPos = curve.getPointAt(lookAtEval)
       camera.position.copy(camPos)
       camera.lookAt(lookPos)
 
       texture.offset.x += tunnelSpeed
-      texture.offset.y = scrollPercent * 2
+      texture.offset.y = easedPercent * 2
 
       const maxDistance = 16
       // Narrow (phone) viewports leave little margin around a fixed-width

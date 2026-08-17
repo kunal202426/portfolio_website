@@ -1,6 +1,6 @@
 import { memo, useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Award, Calendar, ExternalLink, Sparkles } from 'lucide-react'
+import { Award, Calendar, ExternalLink, GraduationCap, Sparkles } from 'lucide-react'
 import { resumeData } from '../../../lib/resume-data'
 import { useTheme } from '../../providers/ThemeProvider'
 import { CertificationStampCarousel, type StampItem } from '../CertificationStampCarousel'
@@ -14,10 +14,15 @@ interface AchievementCardData {
   year: string
   link?: string
   logo?: string
+  kind: 'Education' | 'Award'
 }
 
+// Shared by both the Academic Journey and Notable Achievements lists - same
+// card, same click-to-reveal interaction (never hover), just a different
+// icon/label per kind so it's clear which is which.
 const AchievementCard = memo(function AchievementCard({ item, isDark }: { item: AchievementCardData; isDark: boolean }) {
-  const [hovered, setHovered] = useState(false)
+  const [open, setOpen] = useState(false)
+  const FallbackIcon = item.kind === 'Education' ? GraduationCap : Award
 
   return (
     <motion.article
@@ -32,7 +37,7 @@ const AchievementCard = memo(function AchievementCard({ item, isDark }: { item: 
         border: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.22)' : 'rgba(212, 165, 116, 0.35)'}`,
         boxShadow: isDark ? '0 10px 30px rgba(0, 0, 0, 0.28)' : '0 10px 30px rgba(26, 18, 8, 0.08)',
       }}
-      onClick={() => setHovered((h) => !h)}
+      onClick={() => setOpen((h) => !h)}
     >
       <div className="p-4 md:p-5">
         <div className="flex items-start gap-3 min-w-0">
@@ -46,7 +51,7 @@ const AchievementCard = memo(function AchievementCard({ item, isDark }: { item: 
             {item.logo ? (
               <img src={item.logo} alt="" className="w-full h-full object-contain p-1.5" />
             ) : (
-              <Award className="w-5 h-5" />
+              <FallbackIcon className="w-5 h-5" />
             )}
           </div>
 
@@ -62,7 +67,7 @@ const AchievementCard = memo(function AchievementCard({ item, isDark }: { item: 
                   color: '#9B8B70',
                 }}
               >
-                Award
+                {item.kind}
               </span>
             </div>
 
@@ -73,23 +78,25 @@ const AchievementCard = memo(function AchievementCard({ item, isDark }: { item: 
         </div>
 
         <div className="pt-4 mt-4" style={{ borderTop: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.2)' : 'rgba(212, 165, 116, 0.3)'}` }}>
-          <div className="flex flex-wrap gap-2 mb-3">
-            {item.badges.map((badge) => (
-              <span
-                key={`${item.id}-${badge}`}
-                className="px-3 py-1 text-xs rounded-full font-medium"
-                style={{
-                  backgroundColor: isDark ? 'rgba(212, 165, 116, 0.18)' : 'rgba(212, 165, 116, 0.2)',
-                  color: isDark ? '#F0EBE0' : '#4A3C2A',
-                }}
-              >
-                {badge}
-              </span>
-            ))}
-          </div>
+          {item.badges.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-3">
+              {item.badges.map((badge) => (
+                <span
+                  key={`${item.id}-${badge}`}
+                  className="px-3 py-1 text-xs rounded-full font-medium"
+                  style={{
+                    backgroundColor: isDark ? 'rgba(212, 165, 116, 0.18)' : 'rgba(212, 165, 116, 0.2)',
+                    color: isDark ? '#F0EBE0' : '#4A3C2A',
+                  }}
+                >
+                  {badge}
+                </span>
+              ))}
+            </div>
+          )}
 
           <AnimatePresence initial={false}>
-            {hovered && (
+            {open && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
@@ -104,7 +111,7 @@ const AchievementCard = memo(function AchievementCard({ item, isDark }: { item: 
             )}
           </AnimatePresence>
 
-          {!hovered && (
+          {!open && (
             <p className="flex items-center gap-1.5 text-xs font-medium mb-3" style={{ color: '#9B8B70', opacity: 0.75 }}>
               <Sparkles size={11} />
               Tap for the story
@@ -139,6 +146,17 @@ export const CertificationsSection = () => {
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme !== 'light'
 
+  const educationItems = useMemo<AchievementCardData[]>(() => resumeData.education.map((edu, index) => ({
+    id: `education-${index}`,
+    title: edu.school,
+    subtitle: edu.specialization ? `${edu.degree} · ${edu.specialization}` : edu.degree,
+    description: edu.location,
+    badges: [],
+    year: edu.period,
+    link: edu.url,
+    kind: 'Education' as const,
+  })), [])
+
   const achievementItems = useMemo<AchievementCardData[]>(() => resumeData.achievements.map((achievement, index) => ({
     id: `achievement-${index}`,
     title: achievement.title,
@@ -148,6 +166,7 @@ export const CertificationsSection = () => {
     year: String(achievement.year),
     link: achievement.url,
     logo: achievement.logo,
+    kind: 'Award' as const,
   })), [])
 
   const certStamps = useMemo<StampItem[]>(() => resumeData.certifications.map((cert) => ({
@@ -169,18 +188,33 @@ export const CertificationsSection = () => {
       <div className="absolute bottom-10 left-20 w-48 h-48 rounded-full opacity-15" style={{ background: 'radial-gradient(circle, var(--accent-primary) 0%, transparent 70%)' }} />
 
       <div className="max-w-6xl mx-auto relative z-10">
-        {/* Header */}
+        {/* Header - covers Education, Achievements, and Certifications now
+            that they live in one section instead of being split across a
+            scroll-scaled "peel" transition between two separate sections. */}
         <div className="mb-16 text-center">
           <span className="inline-flex items-center gap-2 text-sm uppercase tracking-[0.2em] font-medium mb-4" style={{ color: 'var(--accent-primary)' }}>
             <Award size={16} />
-            Certifications
+            Credentials
           </span>
           <h2 className="font-brush text-4xl md:text-5xl transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
-            Professional Credentials
+            Journey & Credentials
           </h2>
         </div>
 
-        {/* Achievements Section */}
+        {/* Education */}
+        <div id="education" className="mb-20">
+          <h3 className="text-2xl font-display font-bold mb-8 text-center transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
+            Academic Journey
+          </h3>
+
+          <div className="space-y-4">
+            {educationItems.map((item) => (
+              <AchievementCard key={item.id} item={item} isDark={isDark} />
+            ))}
+          </div>
+        </div>
+
+        {/* Achievements */}
         <div className="mb-20">
           <h3 className="text-2xl font-display font-bold mb-8 text-center transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
             Notable Achievements
