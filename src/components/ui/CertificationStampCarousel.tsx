@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState, startTransition, type PointerEvent as ReactPointerEvent } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, startTransition, type CSSProperties, type PointerEvent as ReactPointerEvent } from 'react'
 import { createPortal } from 'react-dom'
 import {
   AnimatePresence,
@@ -18,6 +18,7 @@ export interface StampItem {
 }
 
 const STAMP_ASPECT = 2 / 3
+const STAMP_ACCENTS = ['#BF5B3D', '#2E5E4E', '#8B6F47', '#4A5A8A', '#A05A2C', '#5E6B3D']
 
 // Postcard swipe: the open card slides in from one side and the outgoing
 // card glides off the other, like dealing physical postcards. `dir` is the
@@ -48,6 +49,44 @@ function ruledLines(pitch: number) {
   }
 }
 
+// A row of "bite" circles painted in the surrounding backdrop colour,
+// straddling one edge of the stamp — this punches a perforated/scalloped
+// edge into an otherwise plain rectangle without relying on CSS mask
+// (which fails silently/invisibly if any value is off).
+function perforationStrip(edge: 'top' | 'bottom' | 'left' | 'right', backdrop: string): CSSProperties {
+  const hole = 6
+  const pitch = 15
+  const isHorizontal = edge === 'top' || edge === 'bottom'
+  const gradient = `radial-gradient(circle ${hole}px, ${backdrop} ${hole}px, transparent ${hole + 0.5}px)`
+  const base: CSSProperties = {
+    position: 'absolute',
+    backgroundImage: gradient,
+    pointerEvents: 'none',
+  }
+  if (isHorizontal) {
+    return {
+      ...base,
+      left: 0,
+      right: 0,
+      height: hole * 2,
+      [edge]: -hole,
+      backgroundSize: `${pitch}px ${hole * 2}px`,
+      backgroundPosition: `${pitch / 2}px center`,
+      backgroundRepeat: 'repeat-x',
+    } as CSSProperties
+  }
+  return {
+    ...base,
+    top: 0,
+    bottom: 0,
+    width: hole * 2,
+    [edge]: -hole,
+    backgroundSize: `${hole * 2}px ${pitch}px`,
+    backgroundPosition: `center ${pitch / 2}px`,
+    backgroundRepeat: 'repeat-y',
+  } as CSSProperties
+}
+
 function StampCard({
   stamp,
   index,
@@ -57,6 +96,9 @@ function StampCard({
   height,
   angle,
   shadow,
+  accent,
+  backdrop,
+  denomination,
   onOpen,
   wasDragged,
 }: {
@@ -68,6 +110,9 @@ function StampCard({
   height: number
   angle: ReturnType<typeof useMotionValue<number>>
   shadow: boolean
+  accent: string
+  backdrop: string
+  denomination: string
   onOpen: (index: number) => void
   wasDragged: () => boolean
 }) {
@@ -94,6 +139,7 @@ function StampCard({
         marginTop: -height / 2,
         transform: `rotateY(${facing}deg) translateZ(${radius}px)`,
         transformStyle: 'preserve-3d',
+        backfaceVisibility: 'hidden',
       }}
     >
       <motion.button
@@ -104,30 +150,90 @@ function StampCard({
         }}
         whileHover={{ scale: 1.05, y: -6 }}
         transition={{ type: 'spring', stiffness: 320, damping: 24 }}
-        style={{ width: '100%', height: '100%', padding: 0, margin: 0, border: 'none', background: 'transparent', cursor: 'pointer', display: 'block' }}
+        style={{
+          position: 'relative',
+          width: '100%',
+          height: '100%',
+          padding: 0,
+          boxSizing: 'border-box',
+          borderRadius: 3,
+          border: `2px solid ${accent}`,
+          background: '#F7F0E1',
+          cursor: 'pointer',
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'visible',
+        }}
       >
-        {stamp.image?.src ? (
-          <motion.img
-            src={stamp.image.src}
-            alt={stamp.image.alt ?? stamp.title}
-            draggable={false}
-            style={{ width: '100%', height: '100%', objectFit: 'contain', pointerEvents: 'none', filter: imageFilter }}
-          />
-        ) : (
-          <div
+        {/* Perforated edge */}
+        <div style={perforationStrip('top', backdrop)} />
+        <div style={perforationStrip('bottom', backdrop)} />
+        <div style={perforationStrip('left', backdrop)} />
+        <div style={perforationStrip('right', backdrop)} />
+
+        {/* Inner hairline frame, like a stamp's engraved border */}
+        <div style={{ position: 'absolute', inset: 6, border: `1px solid ${accent}80`, borderRadius: 2, pointerEvents: 'none' }} />
+
+        {/* Denomination badge */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 10,
+            right: 10,
+            padding: '2px 6px',
+            borderRadius: 3,
+            background: accent,
+            color: '#F7F0E1',
+            fontFamily: "'Space Mono', monospace",
+            fontWeight: 700,
+            fontSize: 11,
+            zIndex: 2,
+          }}
+        >
+          {denomination}
+        </div>
+
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20% 16% 10%' }}>
+          {stamp.image?.src ? (
+            <motion.img
+              src={stamp.image.src}
+              alt={stamp.image.alt ?? stamp.title}
+              draggable={false}
+              style={{ width: '100%', height: '100%', objectFit: 'contain', pointerEvents: 'none', filter: imageFilter }}
+            />
+          ) : (
+            <div
+              style={{
+                width: '100%',
+                height: '100%',
+                borderRadius: 6,
+                border: '2px dashed rgba(120, 100, 80, 0.5)',
+              }}
+            />
+          )}
+        </div>
+
+        {/* Caption strip, like an engraved stamp title */}
+        <div
+          style={{
+            borderTop: `1px solid ${accent}55`,
+            padding: '6px 8px 10px',
+            textAlign: 'center',
+          }}
+        >
+          <span
             style={{
-              width: '100%',
-              height: '100%',
-              borderRadius: 6,
-              border: '2px dashed rgba(120, 100, 80, 0.5)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: 12,
-              color: 'rgba(120, 100, 80, 0.8)',
+              fontFamily: "'Space Mono', monospace",
+              fontWeight: 700,
+              fontSize: 10,
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              color: '#4A3C2A',
             }}
-          />
-        )}
+          >
+            {stamp.caption.split('·')[0].trim()}
+          </span>
+        </div>
       </motion.button>
     </div>
   )
@@ -424,6 +530,9 @@ export function CertificationStampCarousel({ stamps, isDark }: { stamps: StampIt
                   height={cardHeight}
                   angle={angle}
                   shadow={stampShadow}
+                  accent={STAMP_ACCENTS[index % STAMP_ACCENTS.length]}
+                  backdrop={isDark ? '#1C1F15' : '#FDF9F2'}
+                  denomination={stamp.caption.match(/\d+/)?.[0]?.slice(-2).padStart(2, '0') ?? String(index + 1).padStart(2, '0')}
                   onOpen={openStamp}
                   wasDragged={wasDragged}
                 />
