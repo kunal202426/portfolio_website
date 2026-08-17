@@ -12,6 +12,8 @@
 
     --accent-primary: #BF5B3D;
     --accent-glow: #D9825E;
+    --accent-primary-rgb: 191, 91, 61;
+    --accent-glow-rgb: 217, 130, 94;
     --accent-gold: #D4A574;
     --accent-cyan: #B8860B;
     --accent-rose: #C85A3A;
@@ -40,19 +42,24 @@
   }
 
   .dark {
-    --bg-primary: #0E0E0B;
-    --bg-secondary: #1A1815;
-    --bg-card: #242218;
+    --bg-primary: #1C1F15;
+    --bg-secondary: #232619;
+    --bg-card: #2A2E1F;
     --bg-glass: rgba(240, 235, 224, 0.05);
+
+    --accent-primary: #E8560C;
+    --accent-glow: #FF7A33;
+    --accent-primary-rgb: 232, 86, 12;
+    --accent-glow-rgb: 255, 122, 51;
 
     --text-primary: #F0EBE0;
     --text-secondary: #D4C4A8;
     --text-tertiary: #9B8B70;
 
     --border-subtle: rgba(240, 235, 224, 0.1);
-    --border-glow: rgba(191, 91, 61, 0.4);
+    --border-glow: rgba(232, 86, 12, 0.4);
 
-    --code-bg: rgba(191, 91, 61, 0.2);
+    --code-bg: rgba(232, 86, 12, 0.2);
   }
 }
 
@@ -159,7 +166,7 @@ body {
   --bb-fg: #1A1208;
   --bb-border: #1A1208;
   --bb-shadow: #1A1208;
-  --bb-arrow: #BF5B3D;
+  --bb-arrow: var(--accent-primary);
   --bb-offset: 8px;
 
   position: relative;
@@ -208,16 +215,16 @@ body {
 }
 
 .brutal-btn:focus-visible {
-  outline: 2px solid #BF5B3D;
+  outline: 2px solid var(--accent-primary);
   outline-offset: 3px;
 }
 
 .brutal-btn--on-dark {
   --bb-bg: #F0EBE0;
-  --bb-fg: #BF5B3D;
+  --bb-fg: var(--accent-primary);
   --bb-border: #F0EBE0;
-  --bb-shadow: #BF5B3D;
-  --bb-arrow: #BF5B3D;
+  --bb-shadow: var(--accent-primary);
+  --bb-arrow: var(--accent-primary);
 }
 
 /* GSAP Animation Base Classes */
@@ -297,7 +304,7 @@ body {
 
 .glow-border {
   border: 1px solid var(--border-glow);
-  box-shadow: 0 0 15px rgba(191, 91, 61, 0.15);
+  box-shadow: 0 0 15px rgba(var(--accent-primary-rgb), 0.15);
 }
 
 /* Typography styles for legacy components */

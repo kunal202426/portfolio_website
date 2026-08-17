@@ -54,7 +54,7 @@ function AppContent() {
     <div 
       className="w-full overflow-x-hidden transition-colors duration-500" 
       style={{ 
-        backgroundColor: isDark ? '#0E0E0B' : '#F5F0E8', 
+        backgroundColor: isDark ? '#1C1F15' : '#F5F0E8', 
         color: isDark ? '#F0EBE0' : '#1A1208' 
       }}
     >
@@ -85,7 +85,7 @@ function AppContent() {
             <div
               className="rounded-2xl overflow-hidden border-2"
               style={{
-                borderColor: isDark ? 'rgba(191, 91, 61, 0.48)' : 'rgba(191, 91, 61, 0.55)',
+                borderColor: isDark ? 'rgba(var(--accent-primary-rgb), 0.48)' : 'rgba(var(--accent-primary-rgb), 0.55)',
                 boxShadow: isDark ? '0 22px 50px rgba(0, 0, 0, 0.38)' : '0 22px 50px rgba(26, 18, 8, 0.16)',
               }}
             >

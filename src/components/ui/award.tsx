@@ -228,14 +228,14 @@ export function Awards({
           "overflow-hidden"
         )}
         style={{
-          borderColor: '#BF5B3D',
+          borderColor: 'var(--accent-primary)',
           borderStyle: 'dashed',
         }}
       >
         <div className="z-10 rounded-sm border p-6 px-8 text-center"
         style={{
           backgroundColor: 'rgba(255, 255, 255, 0.98)',
-          borderColor: 'rgba(191, 91, 61, 0.3)',
+          borderColor: 'rgba(var(--accent-primary-rgb), 0.3)',
           borderWidth: '1px',
         }}>
           <Badge />
@@ -256,7 +256,7 @@ export function Awards({
           </p>
           <h1
             className={cn(
-              "text-[#BF5B3D] mb-2 border-b text-xl font-semibold tracking-tight border-[#BF5B3D]"
+              "text-[var(--accent-primary)] mb-2 border-b text-xl font-semibold tracking-tight border-[var(--accent-primary)]"
             )}
           >
             {recipient}
@@ -264,7 +264,7 @@ export function Awards({
 
           <p className="text-gray-600 mb-1 text-xs">{subtitle}</p>
           <div className="mt-6 flex justify-center">
-            <Award strokeWidth={1} className="h-4 w-4 text-[#BF5B3D]" />
+            <Award strokeWidth={1} className="h-4 w-4 text-[var(--accent-primary)]" />
           </div>
           <div className={cn("mt-2 text-xs text-gray-700")}>Awarded on: {date}</div>
         </div>

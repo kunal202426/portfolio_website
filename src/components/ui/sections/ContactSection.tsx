@@ -146,16 +146,16 @@ export const ContactSection = () => {
       ref={containerRef}
       id="contact" 
       className="relative py-24 px-6 overflow-hidden transition-colors duration-500"
-      style={{ backgroundColor: isDark ? '#0E0E0B' : '#1A1208' }}
+      style={{ backgroundColor: isDark ? '#1C1F15' : '#1A1208' }}
     >
       {/* Decorative Elements */}
-      <div className="absolute top-0 left-0 w-96 h-96 rounded-full opacity-10" style={{ background: 'radial-gradient(circle, #BF5B3D 0%, transparent 70%)', filter: 'blur(80px)' }} />
+      <div className="absolute top-0 left-0 w-96 h-96 rounded-full opacity-10" style={{ background: 'radial-gradient(circle, var(--accent-primary) 0%, transparent 70%)', filter: 'blur(80px)' }} />
       <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full opacity-10" style={{ background: 'radial-gradient(circle, #D4A574 0%, transparent 70%)', filter: 'blur(80px)' }} />
 
       <div className="max-w-6xl mx-auto relative z-10">
         {/* Header */}
         <div className="text-center mb-16 contact-heading">
-          <span className="text-sm uppercase tracking-[0.2em] font-medium mb-4 block" style={{ color: '#BF5B3D' }}>
+          <span className="text-sm uppercase tracking-[0.2em] font-medium mb-4 block" style={{ color: 'var(--accent-primary)' }}>
             Let's Connect
           </span>
           <h2 className="font-brush text-4xl md:text-6xl mb-6" style={{ color: '#F5F0E8' }}>
@@ -178,7 +178,7 @@ export const ContactSection = () => {
                 className="relative h-full min-h-[340px] lg:min-h-[420px] rounded-2xl overflow-hidden border will-change-transform"
                 style={{
                   borderColor: isDark ? 'rgba(212, 165, 116, 0.22)' : 'rgba(212, 165, 116, 0.32)',
-                  background: isDark ? 'linear-gradient(145deg, #19140F, #0E0E0B)' : 'linear-gradient(145deg, #2A2520, #1A1208)',
+                  background: isDark ? 'linear-gradient(145deg, #232619, #1C1F15)' : 'linear-gradient(145deg, #2A2520, #1A1208)',
                 }}
               >
                 <InteractiveRobotSpline scene={ROBOT_SCENE_URL} className="absolute inset-0 z-0 transform-gpu" />
@@ -219,15 +219,15 @@ export const ContactSection = () => {
                 width: `${laptopSize.width}px`,
                 height: `${laptopSize.height}px`,
                 background: isDark 
-                  ? 'linear-gradient(145deg, #1A1510, #0E0E0B)' 
-                  : 'linear-gradient(145deg, #2A2520, #1A1510)',
+                  ? 'linear-gradient(145deg, #2A2E1F, #1C1F15)' 
+                  : 'linear-gradient(145deg, #2A2520, #2A2E1F)',
                 borderTopLeftRadius: '16px',
                 borderTopRightRadius: '16px',
                 border: `3px solid ${isDark ? 'rgba(60, 50, 40, 0.5)' : 'rgba(60, 50, 40, 0.6)'}`,
                 borderBottom: 'none',
                 boxShadow: isDark 
-                  ? '0 -5px 20px rgba(0, 0, 0, 0.5), inset 0 0 40px rgba(191, 91, 61, 0.05)'
-                  : '0 -5px 30px rgba(0, 0, 0, 0.6), inset 0 0 40px rgba(191, 91, 61, 0.08)',
+                  ? '0 -5px 20px rgba(0, 0, 0, 0.5), inset 0 0 40px rgba(var(--accent-primary-rgb), 0.05)'
+                  : '0 -5px 30px rgba(0, 0, 0, 0.6), inset 0 0 40px rgba(var(--accent-primary-rgb), 0.08)',
                 transformStyle: 'preserve-3d',
               }}
             >
@@ -235,7 +235,7 @@ export const ContactSection = () => {
               <div
                 className="absolute inset-0 pointer-events-none"
                 style={{
-                  border: `12px solid ${isDark ? '#0A0A08' : '#0E0E0B'}`,
+                  border: `12px solid ${isDark ? '#14160E' : '#1C1F15'}`,
                   borderRadius: '12px',
                 }}
               />
@@ -256,7 +256,7 @@ export const ContactSection = () => {
               <motion.div
                 className="absolute inset-0 pointer-events-none"
                 style={{
-                  background: 'radial-gradient(ellipse at 30% 50%, rgba(191, 91, 61,0.08) 0%, transparent 65%)',
+                  background: 'radial-gradient(ellipse at 30% 50%, rgba(var(--accent-primary-rgb),0.08) 0%, transparent 65%)',
                   zIndex: 1,
                   borderRadius: '12px',
                 }}
@@ -331,10 +331,10 @@ export const ContactSection = () => {
                     style={{
                       width: `${laptopSize.iconBoxSize * 4}px`,
                       height: `${laptopSize.iconBoxSize * 4}px`,
-                      background: 'linear-gradient(145deg, #BF5B3D, #9C4530)',
+                      background: 'linear-gradient(145deg, var(--accent-primary), #9C4530)',
                       boxShadow: isDark
-                        ? '8px 8px 16px rgba(0, 0, 0, 0.6), -4px -4px 12px rgba(191, 91, 61, 0.4), 0 0 30px rgba(191, 91, 61, 0.3)'
-                        : '8px 8px 20px rgba(0, 0, 0, 0.7), -4px -4px 16px rgba(255, 107, 26, 0.5), 0 0 30px rgba(191, 91, 61, 0.4)',
+                        ? '8px 8px 16px rgba(0, 0, 0, 0.6), -4px -4px 12px rgba(var(--accent-primary-rgb), 0.4), 0 0 30px rgba(var(--accent-primary-rgb), 0.3)'
+                        : '8px 8px 20px rgba(0, 0, 0, 0.7), -4px -4px 16px rgba(255, 107, 26, 0.5), 0 0 30px rgba(var(--accent-primary-rgb), 0.4)',
                     }}
                   >
                     <svg width={laptopSize.iconSize * 1.75} height={laptopSize.iconSize * 1.75} viewBox="0 0 24 24" fill="#F5F0E8">
@@ -364,7 +364,7 @@ export const ContactSection = () => {
                 width: `${laptopSize.width}px`,
                 height: `${laptopSize.keyboardHeight}px`,
                 background: isDark 
-                  ? '#1A1510' 
+                  ? '#2A2E1F' 
                   : '#2A2520',
                 borderBottomLeftRadius: '12px',
                 borderBottomRightRadius: '12px',
@@ -461,9 +461,9 @@ export const ContactSection = () => {
               href={`mailto:${resumeData.personal.email}`}
               className="flex items-center gap-4 p-4 rounded-xl transition-all group"
               style={{ backgroundColor: 'rgba(245, 240, 232, 0.05)' }}
-              whileHover={{ y: -4, backgroundColor: 'rgba(191, 91, 61, 0.1)' }}
+              whileHover={{ y: -4, backgroundColor: 'rgba(var(--accent-primary-rgb), 0.1)' }}
             >
-              <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#BF5B3D' }}>
+              <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--accent-primary)' }}>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5F0E8" strokeWidth="2">
                   <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
                   <polyline points="22,6 12,13 2,6" />
@@ -479,7 +479,7 @@ export const ContactSection = () => {
               href={`tel:${resumeData.personal.phone}`}
               className="flex items-center gap-4 p-4 rounded-xl transition-all group"
               style={{ backgroundColor: 'rgba(245, 240, 232, 0.05)' }}
-              whileHover={{ y: -4, backgroundColor: 'rgba(191, 91, 61, 0.1)' }}
+              whileHover={{ y: -4, backgroundColor: 'rgba(var(--accent-primary-rgb), 0.1)' }}
             >
               <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#D4A574' }}>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A1208" strokeWidth="2">

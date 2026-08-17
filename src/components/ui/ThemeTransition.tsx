@@ -51,7 +51,7 @@ export const ThemeTransition = () => {
             ease: [0.22, 1, 0.36, 1]
           }}
           style={{
-            backgroundColor: isDark ? '#0E0E0B' : '#F5F0E8',
+            backgroundColor: isDark ? '#1C1F15' : '#F5F0E8',
             transformOrigin: 'left center'
           }}
         >
@@ -65,8 +65,8 @@ export const ThemeTransition = () => {
               ease: [0.22, 1, 0.36, 1]
             }}
             style={{
-              backgroundColor: '#BF5B3D',
-              boxShadow: '0 0 20px rgba(191, 91, 61, 0.5)'
+              backgroundColor: 'var(--accent-primary)',
+              boxShadow: '0 0 20px rgba(var(--accent-primary-rgb), 0.5)'
             }}
           />
         </motion.div>

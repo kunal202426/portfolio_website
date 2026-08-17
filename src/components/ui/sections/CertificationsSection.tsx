@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Award, Calendar, ExternalLink, Sparkles } from 'lucide-react'
 import { resumeData } from '../../../lib/resume-data'
 import { useTheme } from '../../providers/ThemeProvider'
-import { CertificationCarousel3D } from '../CertificationCarousel3D'
+import { CertificationStampCarousel, type StampItem } from '../CertificationStampCarousel'
 
 interface AchievementCardData {
   id: string
@@ -28,7 +28,7 @@ const AchievementCard = memo(function AchievementCard({ item, isDark }: { item: 
       whileHover={{ y: -3 }}
       className="rounded-xl transition-colors duration-300 cursor-pointer"
       style={{
-        backgroundColor: isDark ? '#1A1510' : '#FFFFFF',
+        backgroundColor: isDark ? '#2A2E1F' : '#FFFFFF',
         border: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.22)' : 'rgba(212, 165, 116, 0.35)'}`,
         boxShadow: isDark ? '0 10px 30px rgba(0, 0, 0, 0.28)' : '0 10px 30px rgba(26, 18, 8, 0.08)',
       }}
@@ -66,7 +66,7 @@ const AchievementCard = memo(function AchievementCard({ item, isDark }: { item: 
               </span>
             </div>
 
-            <p className="text-sm font-medium break-words" style={{ color: '#BF5B3D' }}>
+            <p className="text-sm font-medium break-words" style={{ color: 'var(--accent-primary)' }}>
               {item.subtitle}
             </p>
           </div>
@@ -123,7 +123,7 @@ const AchievementCard = memo(function AchievementCard({ item, isDark }: { item: 
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
               className="inline-flex items-center gap-2 mt-4 text-sm font-medium transition-transform duration-200 hover:translate-x-0.5"
-              style={{ color: '#BF5B3D' }}
+              style={{ color: 'var(--accent-primary)' }}
             >
               View Source
               <ExternalLink className="w-4 h-4" />
@@ -150,21 +150,28 @@ export const CertificationsSection = () => {
     logo: achievement.logo,
   })), [])
 
+  const certStamps = useMemo<StampItem[]>(() => resumeData.certifications.map((cert) => ({
+    image: { src: cert.logo, alt: `${cert.title} logo` },
+    title: cert.title,
+    caption: `${cert.issuer} · ${cert.year}`,
+    description: cert.description,
+  })), [])
+
   return (
     <section
       id="certifications"
       className="relative w-full py-24 px-6 overflow-hidden transition-colors duration-500"
       style={{
-        backgroundColor: isDark ? '#0E0E0B' : '#F5F0E8',
+        backgroundColor: isDark ? '#1C1F15' : '#F5F0E8',
       }}
     >
       {/* Decorative */}
-      <div className="absolute bottom-10 left-20 w-48 h-48 rounded-full opacity-15" style={{ background: 'radial-gradient(circle, #BF5B3D 0%, transparent 70%)' }} />
+      <div className="absolute bottom-10 left-20 w-48 h-48 rounded-full opacity-15" style={{ background: 'radial-gradient(circle, var(--accent-primary) 0%, transparent 70%)' }} />
 
       <div className="max-w-6xl mx-auto relative z-10">
         {/* Header */}
         <div className="mb-16 text-center">
-          <span className="inline-flex items-center gap-2 text-sm uppercase tracking-[0.2em] font-medium mb-4" style={{ color: '#BF5B3D' }}>
+          <span className="inline-flex items-center gap-2 text-sm uppercase tracking-[0.2em] font-medium mb-4" style={{ color: 'var(--accent-primary)' }}>
             <Award size={16} />
             Certifications
           </span>
@@ -192,7 +199,7 @@ export const CertificationsSection = () => {
             Certifications
           </h3>
 
-          <CertificationCarousel3D certifications={resumeData.certifications} isDark={isDark} />
+          <CertificationStampCarousel stamps={certStamps} isDark={isDark} />
         </div>
       </div>
     </section>

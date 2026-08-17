@@ -12,8 +12,8 @@ export const ThemeSwitch = ({ className = '' }: ThemeSwitchProps) => {
 
   const switchStyle = {
     '--toggle-track': isDark ? '#2A221A' : '#E7DDD0',
-    '--toggle-track-inset': isDark ? '#1A1510' : '#F8F3EB',
-    '--toggle-knob': isDark ? '#BF5B3D' : '#D4A574',
+    '--toggle-track-inset': isDark ? '#2A2E1F' : '#F8F3EB',
+    '--toggle-knob': isDark ? 'var(--accent-primary)' : '#D4A574',
     '--toggle-border': isDark ? 'rgba(212, 165, 116, 0.4)' : 'rgba(74, 60, 42, 0.24)',
     '--toggle-shadow': isDark ? 'rgba(0, 0, 0, 0.38)' : 'rgba(26, 18, 8, 0.18)',
     '--toggle-bar': isDark ? '#F0EBE0' : '#4A3C2A',

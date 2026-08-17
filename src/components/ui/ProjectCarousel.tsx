@@ -108,7 +108,7 @@ const AllProjectsBranch = ({
             d={`M 6 0 L 6 ${n}`}
             vectorEffect="non-scaling-stroke"
             fill="none"
-            stroke="#BF5B3D"
+            stroke="var(--accent-primary)"
             strokeOpacity={0.35}
             strokeWidth={1.2}
             initial={{ pathLength: 0 }}
@@ -124,7 +124,7 @@ const AllProjectsBranch = ({
                 d={d}
                 vectorEffect="non-scaling-stroke"
                 fill="none"
-                stroke="#BF5B3D"
+                stroke="var(--accent-primary)"
                 strokeOpacity={0.55}
                 strokeWidth={1.5}
                 strokeLinecap="round"
@@ -146,13 +146,13 @@ const AllProjectsBranch = ({
             animate={{ opacity: 1, x: 0, scale: 1 }}
             transition={{ delay: 0.4 + i * 0.055 + 0.12, duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
           >
-            <span className="rounded-full flex-shrink-0" style={{ width: 6, height: 6, background: '#BF5B3D' }} />
+            <span className="rounded-full flex-shrink-0" style={{ width: 6, height: 6, background: 'var(--accent-primary)' }} />
             <span
               className="text-[0.72rem] font-medium truncate flex-1 min-w-0"
               style={{
                 color: isDark ? '#F0EBE0' : '#1A1208',
-                background: isDark ? 'rgba(191, 91, 61,0.14)' : 'rgba(191, 91, 61,0.1)',
-                border: '1px solid rgba(191, 91, 61,0.4)',
+                background: isDark ? 'rgba(var(--accent-primary-rgb),0.14)' : 'rgba(var(--accent-primary-rgb),0.1)',
+                border: '1px solid rgba(var(--accent-primary-rgb),0.4)',
                 borderRadius: 6,
                 padding: '6px 10px',
                 boxShadow: isDark ? '0 2px 6px rgba(0,0,0,0.35)' : '0 2px 6px rgba(0,0,0,0.08)',
@@ -184,7 +184,7 @@ const AllProjectsBranch = ({
               d={d}
               vectorEffect="non-scaling-stroke"
               fill="none"
-              stroke="#BF5B3D"
+              stroke="var(--accent-primary)"
               strokeOpacity={0.55}
               strokeWidth={1.5}
               strokeLinecap="round"
@@ -207,13 +207,13 @@ const AllProjectsBranch = ({
           transition={{ delay: i * 0.055 + 0.28, duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
           whileHover={{ x: 4 }}
         >
-          <span className="rounded-full flex-shrink-0" style={{ width: 6, height: 6, background: '#BF5B3D' }} />
+          <span className="rounded-full flex-shrink-0" style={{ width: 6, height: 6, background: 'var(--accent-primary)' }} />
           <span
             className="text-xs font-medium whitespace-nowrap"
             style={{
               color: isDark ? '#F0EBE0' : '#1A1208',
-              background: isDark ? 'rgba(191, 91, 61,0.14)' : 'rgba(191, 91, 61,0.1)',
-              border: '1px solid rgba(191, 91, 61,0.4)',
+              background: isDark ? 'rgba(var(--accent-primary-rgb),0.14)' : 'rgba(var(--accent-primary-rgb),0.1)',
+              border: '1px solid rgba(var(--accent-primary-rgb),0.4)',
               borderRadius: 6,
               padding: '6px 10px',
               boxShadow: isDark ? '0 2px 6px rgba(0,0,0,0.35)' : '0 2px 6px rgba(0,0,0,0.08)',
@@ -244,7 +244,7 @@ const ScreenshotStack = ({ screenshots, title }: { screenshots: string[]; title:
       {allBroken ? (
         <div
           className="absolute inset-0 flex items-center justify-center"
-          style={{ background: 'linear-gradient(145deg, #1A1510, #0E0E0B)' }}
+          style={{ background: 'linear-gradient(145deg, #2A2E1F, #1C1F15)' }}
         >
           <span className="text-xs uppercase tracking-widest" style={{ color: '#6B5D4A' }}>
             Preview coming soon
@@ -341,10 +341,10 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
   const descColor = '#C4B49A'
 
   // Grid line color based on theme (matches the section's own background pattern)
-  const gridColor = isDark ? 'rgba(191, 91, 61, 0.06)' : 'rgba(191, 91, 61, 0.08)'
+  const gridColor = isDark ? 'rgba(var(--accent-primary-rgb), 0.06)' : 'rgba(var(--accent-primary-rgb), 0.08)'
 
   return (
-    <section className="relative overflow-hidden pt-6 pb-28 md:pt-10 md:pb-44 transition-colors duration-500" style={{ background: isDark ? '#0E0E0B' : '#F5F0E8' }}>
+    <section className="relative overflow-hidden pt-6 pb-28 md:pt-10 md:pb-44 transition-colors duration-500" style={{ background: isDark ? '#1C1F15' : '#F5F0E8' }}>
       {/* Static grid background - no animation for performance */}
       <div
         className="absolute inset-0 pointer-events-none"
@@ -371,9 +371,9 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
             style={{
               padding: '7px 16px',
               borderRadius: 999,
-              border: `1.5px solid ${allView ? '#BF5B3D' : 'rgba(191, 91, 61,0.4)'}`,
-              background: allView ? 'rgba(191, 91, 61,0.16)' : 'transparent',
-              color: '#BF5B3D',
+              border: `1.5px solid ${allView ? 'var(--accent-primary)' : 'rgba(var(--accent-primary-rgb),0.4)'}`,
+              background: allView ? 'rgba(var(--accent-primary-rgb),0.16)' : 'transparent',
+              color: 'var(--accent-primary)',
             }}
           >
             {allView ? '✕ Close' : 'All Projects'}
@@ -396,10 +396,10 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                   width: 44,
                   height: 44,
                   borderRadius: '50%',
-                  border: '2px solid rgba(191, 91, 61, 0.4)',
-                  background: isDark ? 'linear-gradient(145deg, #1A1510, #0E0E0B)' : 'linear-gradient(145deg, #FFFFFF, #F5F0E8)',
+                  border: '2px solid rgba(var(--accent-primary-rgb), 0.4)',
+                  background: isDark ? 'linear-gradient(145deg, #2A2E1F, #1C1F15)' : 'linear-gradient(145deg, #FFFFFF, #F5F0E8)',
                   boxShadow: isDark ? '0 4px 12px rgba(0,0,0,0.5)' : '0 4px 12px rgba(0,0,0,0.1)',
-                  color: '#BF5B3D',
+                  color: 'var(--accent-primary)',
                   fontSize: 18,
                   fontWeight: 700,
                 }}
@@ -433,7 +433,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
               className="absolute pointer-events-none"
               style={{
                 inset: '-6% -4%',
-                background: 'radial-gradient(ellipse at 50% 40%, rgba(191, 91, 61,0.16), transparent 68%)',
+                background: 'radial-gradient(ellipse at 50% 40%, rgba(var(--accent-primary-rgb),0.16), transparent 68%)',
                 filter: 'blur(18px)',
                 zIndex: 0,
               }}
@@ -448,7 +448,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                 transform: 'rotateX(2.5deg)',
                 boxShadow: [
                   '0 36px 70px rgba(0,0,0,0.6)',
-                  '0 0 0 1.5px rgba(191, 91, 61,0.4)',
+                  '0 0 0 1.5px rgba(var(--accent-primary-rgb),0.4)',
                   '0 0 0 6px rgba(0,0,0,0.35)',
                   'inset 0 2px 0 rgba(255,255,255,0.1)',
                   'inset 0 -10px 18px rgba(0,0,0,0.55)',
@@ -495,7 +495,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                   <motion.span
                     aria-hidden="true"
                     className="rounded-full"
-                    style={{ width: 7, height: 7, background: '#BF5B3D', boxShadow: '0 0 6px rgba(191, 91, 61,0.7)' }}
+                    style={{ width: 7, height: 7, background: 'var(--accent-primary)', boxShadow: '0 0 6px rgba(var(--accent-primary-rgb),0.7)' }}
                     animate={{ opacity: [1, 0.35, 1] }}
                     transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
                   />
@@ -557,9 +557,9 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                                 key={tag}
                                 className="text-[0.65rem] px-2 py-0.5 font-medium rounded-sm"
                                 style={{
-                                  background: 'rgba(191, 91, 61, 0.18)',
-                                  border: '1px solid rgba(191, 91, 61, 0.35)',
-                                  color: '#BF5B3D',
+                                  background: 'rgba(var(--accent-primary-rgb), 0.18)',
+                                  border: '1px solid rgba(var(--accent-primary-rgb), 0.35)',
+                                  color: 'var(--accent-primary)',
                                 }}
                               >
                                 {tag}
@@ -571,7 +571,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                     ) : (
                       <div
                         className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 py-4"
-                        style={{ background: 'linear-gradient(160deg, #1A1510, #0E0E0B)' }}
+                        style={{ background: 'linear-gradient(160deg, #2A2E1F, #1C1F15)' }}
                       >
                         {project.starred && (
                           <div
@@ -583,7 +583,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                         )}
                         <span
                           className="text-xs font-mono uppercase tracking-widest font-bold mb-2"
-                          style={{ border: '2px solid rgba(191, 91, 61,0.5)', padding: '3px 9px', background: 'rgba(191, 91, 61,0.12)', color: '#BF5B3D' }}
+                          style={{ border: '2px solid rgba(var(--accent-primary-rgb),0.5)', padding: '3px 9px', background: 'rgba(var(--accent-primary-rgb),0.12)', color: 'var(--accent-primary)' }}
                         >
                           {project.year}
                         </span>
@@ -699,10 +699,10 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                   width: 44,
                   height: 44,
                   borderRadius: '50%',
-                  border: '2px solid rgba(191, 91, 61, 0.4)',
-                  background: isDark ? 'linear-gradient(145deg, #1A1510, #0E0E0B)' : 'linear-gradient(145deg, #FFFFFF, #F5F0E8)',
+                  border: '2px solid rgba(var(--accent-primary-rgb), 0.4)',
+                  background: isDark ? 'linear-gradient(145deg, #2A2E1F, #1C1F15)' : 'linear-gradient(145deg, #FFFFFF, #F5F0E8)',
                   boxShadow: isDark ? '0 4px 12px rgba(0,0,0,0.5)' : '0 4px 12px rgba(0,0,0,0.1)',
-                  color: '#BF5B3D',
+                  color: 'var(--accent-primary)',
                   fontSize: 18,
                   fontWeight: 700,
                 }}
@@ -727,7 +727,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                 style={{
                   width: i === index ? 22 : 8,
                   height: 8,
-                  background: i === index ? '#BF5B3D' : isDark ? 'rgba(212,165,116,0.3)' : 'rgba(212,165,116,0.45)',
+                  background: i === index ? 'var(--accent-primary)' : isDark ? 'rgba(212,165,116,0.3)' : 'rgba(212,165,116,0.45)',
                 }}
               />
             ))}

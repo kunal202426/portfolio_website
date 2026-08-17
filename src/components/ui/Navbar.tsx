@@ -206,7 +206,7 @@ export const Navbar = () => {
           backgroundColor: isScrolled 
             ? (isDark ? 'rgba(14, 14, 11, 0.95)' : 'rgba(245, 240, 232, 0.95)')
             : (isDark ? 'rgba(14, 14, 11, 0.85)' : 'rgba(245, 240, 232, 0.85)'),
-          borderBottom: isScrolled ? '1px solid rgba(191, 91, 61, 0.15)' : '1px solid transparent',
+          borderBottom: isScrolled ? '1px solid rgba(var(--accent-primary-rgb), 0.15)' : '1px solid transparent',
           height: isScrolled ? '56px' : '72px',
           willChange: 'transform',
         }}
@@ -216,7 +216,7 @@ export const Navbar = () => {
           <motion.button
             onClick={() => handleNavClick('#home')}
             className="text-2xl font-display font-bold"
-            style={{ color: '#BF5B3D' }}
+            style={{ color: 'var(--accent-primary)' }}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -265,7 +265,7 @@ export const Navbar = () => {
         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
         className="fixed top-16 left-0 right-0 md:hidden z-30 overflow-hidden"
         style={{ 
-          backgroundColor: isDark ? '#0E0E0B' : '#F5F0E8',
+          backgroundColor: isDark ? '#1C1F15' : '#F5F0E8',
           borderBottom: '1px solid rgba(212, 165, 116, 0.3)'
         }}
       >
@@ -284,7 +284,7 @@ export const Navbar = () => {
                 backgroundColor: 'transparent',
                 touchAction: 'manipulation' // Prevents double-tap zoom on mobile
               }}
-              whileTap={{ scale: 0.95, backgroundColor: 'rgba(191, 91, 61, 0.1)' }}
+              whileTap={{ scale: 0.95, backgroundColor: 'rgba(var(--accent-primary-rgb), 0.1)' }}
             >
               {item.label}
             </motion.button>

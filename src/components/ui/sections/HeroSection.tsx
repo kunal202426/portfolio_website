@@ -168,7 +168,7 @@ export const HeroSection = () => {
               {resumeData.personal.name.split(' ').map((word, i) => (
                 <div key={i} className="block overflow-hidden">
                   <span className="name-word block">
-                    {i === 1 ? <span style={{ color: '#BF5B3D' }}>{word}</span> : word}
+                    {i === 1 ? <span style={{ color: 'var(--accent-primary)' }}>{word}</span> : word}
                   </span>
                 </div>
               ))}
@@ -209,7 +209,7 @@ export const HeroSection = () => {
             <a 
               href="#projects"
               className="px-8 py-3 rounded-full font-medium text-white transition-all duration-300 hover:scale-105 hover:shadow-lg"
-              style={{ backgroundColor: '#BF5B3D' }}
+              style={{ backgroundColor: 'var(--accent-primary)' }}
             >
               View Projects
             </a>
@@ -226,7 +226,7 @@ export const HeroSection = () => {
         {/* Layer 1.5: Technical spec-label accents (retro-industrial motif) */}
         <div className="absolute top-6 left-6 md:top-10 md:left-10 flex items-center gap-2" style={{ zIndex: 8 }}>
           <span className="relative flex items-center justify-center w-6 h-6 rounded-full flex-shrink-0" style={{ border: `1px dotted ${isDark ? 'rgba(240,235,224,0.5)' : 'rgba(255,255,255,0.6)'}` }}>
-            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#BF5B3D' }} />
+            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--accent-primary)' }} />
           </span>
           <span className="spec-label" style={{ color: isDark ? '#F0EBE0' : '#FFFFFF', opacity: 0.55 }}>
             Engineer&nbsp;— No.&nbsp;01
@@ -269,7 +269,7 @@ export const HeroSection = () => {
             Scroll
           </span>
           <div className="w-6 h-10 rounded-full border-2 flex justify-center pt-2" style={{ borderColor: '#F0EBE0' }}>
-            <div className="w-1.5 h-3 rounded-full" style={{ backgroundColor: '#BF5B3D' }} />
+            <div className="w-1.5 h-3 rounded-full" style={{ backgroundColor: 'var(--accent-primary)' }} />
           </div>
         </div>
       </div>

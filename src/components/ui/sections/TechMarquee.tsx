@@ -60,7 +60,7 @@ export const TechMarquee = () => {
   }, [])
 
   const gravityPalette = [
-    '#BF5B3D',
+    'var(--accent-primary)',
     '#D4A574',
     '#2F6B9A',
     '#0F766E',
@@ -195,7 +195,7 @@ export const TechMarquee = () => {
       ref={sectionRef}
       id="skills" 
       className="py-20 overflow-hidden transition-colors duration-500"
-      style={{ backgroundColor: isDark ? '#1A1510' : '#FFFBF5' }}
+      style={{ backgroundColor: isDark ? '#2A2E1F' : '#FFFBF5' }}
     >
       <div className="relative">
         {/* Section Label */}
@@ -203,14 +203,14 @@ export const TechMarquee = () => {
           <h2 className="font-brush text-3xl mb-2 transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
             Technologies & Tools
           </h2>
-          <div className="w-16 h-px mx-auto" style={{ backgroundColor: '#BF5B3D' }} />
+          <div className="w-16 h-px mx-auto" style={{ backgroundColor: 'var(--accent-primary)' }} />
         </div>
 
         <div
           className="relative overflow-hidden rounded-2xl border -mx-2 sm:-mx-3 md:mx-0"
           style={{
             borderColor: isDark ? 'rgba(212, 165, 116, 0.2)' : 'rgba(212, 165, 116, 0.32)',
-            background: isDark ? 'linear-gradient(145deg, #17130F, #0E0E0B)' : 'linear-gradient(145deg, #FFFEFC, #F5F0E8)',
+            background: isDark ? 'linear-gradient(145deg, #232619, #1C1F15)' : 'linear-gradient(145deg, #FFFEFC, #F5F0E8)',
           }}
         >
           <div className="absolute inset-0 z-0">
@@ -281,7 +281,7 @@ export const TechMarquee = () => {
               rotateY={-16}
               rotateX={5}
               perspective={1000}
-              fadeColor={isDark ? '#1A1510' : '#FFFBF5'}
+              fadeColor={isDark ? '#2A2E1F' : '#FFFBF5'}
               background="transparent"
               color={isDark ? 'rgba(240,235,224,0.78)' : 'rgba(26,18,8,0.72)'}
             />
@@ -296,7 +296,7 @@ export const TechMarquee = () => {
               rotateY={16}
               rotateX={5}
               perspective={1000}
-              fadeColor={isDark ? '#1A1510' : '#FFFBF5'}
+              fadeColor={isDark ? '#2A2E1F' : '#FFFBF5'}
               background="transparent"
               color={isDark ? 'rgba(240,235,224,0.78)' : 'rgba(26,18,8,0.72)'}
             />

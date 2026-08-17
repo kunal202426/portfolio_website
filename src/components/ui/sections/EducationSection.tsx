@@ -38,7 +38,7 @@ export const EducationSection = () => {
       ref={containerRef}
       id="education" 
       className="relative w-full py-24 px-6 overflow-hidden transition-colors duration-500"
-      style={{ backgroundColor: isDark ? '#0E0E0B' : '#FFFBF5' }}
+      style={{ backgroundColor: isDark ? '#1C1F15' : '#FFFBF5' }}
     >
       {/* Decorative */}
       <div className="absolute top-10 right-20 w-32 h-32 rounded-full opacity-20" style={{ background: 'radial-gradient(circle, #D4A574 0%, transparent 70%)' }} />
@@ -62,7 +62,7 @@ export const EducationSection = () => {
               key={index}
               className="edu-card relative p-6 md:p-8 rounded-xl shadow-lg transition-colors duration-500"
               style={{ 
-                backgroundColor: isDark ? '#1A1510' : '#FFFFFF',
+                backgroundColor: isDark ? '#2A2E1F' : '#FFFFFF',
                 border: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.2)' : 'rgba(212, 165, 116, 0.3)'}`
               }}
               whileHover={{ scale: 1.02, y: -4, boxShadow: isDark ? '0 20px 40px rgba(0, 0, 0, 0.3)' : '0 20px 40px rgba(26, 18, 8, 0.1)' }}
@@ -70,7 +70,7 @@ export const EducationSection = () => {
               {/* Accent Line */}
               <div 
                 className="absolute left-0 top-0 bottom-0 w-1 rounded-l-xl"
-                style={{ backgroundColor: '#BF5B3D' }}
+                style={{ backgroundColor: 'var(--accent-primary)' }}
               />
 
               <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 ml-4">
@@ -79,10 +79,10 @@ export const EducationSection = () => {
                   <div className="flex items-start gap-3 mb-3">
                     <motion.div
                       className="p-2 rounded-lg"
-                      style={{ backgroundColor: isDark ? 'rgba(191, 91, 61, 0.15)' : 'rgba(191, 91, 61, 0.1)' }}
+                      style={{ backgroundColor: isDark ? 'rgba(var(--accent-primary-rgb), 0.15)' : 'rgba(var(--accent-primary-rgb), 0.1)' }}
                       whileHover={{ scale: 1.1, rotate: 5 }}
                     >
-                      <GraduationCap className="w-5 h-5" style={{ color: '#BF5B3D' }} />
+                      <GraduationCap className="w-5 h-5" style={{ color: 'var(--accent-primary)' }} />
                     </motion.div>
                     <div className="flex-1">
                       <h3 className="text-xl font-display font-bold mb-1 transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
@@ -99,7 +99,7 @@ export const EducationSection = () => {
                           edu.school
                         )}
                       </h3>
-                      <p className="text-base font-medium mb-2" style={{ color: '#BF5B3D' }}>
+                      <p className="text-base font-medium mb-2" style={{ color: 'var(--accent-primary)' }}>
                         {edu.degree}
                         {edu.specialization && (
                           <span className="transition-colors duration-500" style={{ color: isDark ? '#D4C4A8' : '#4A3C2A' }}> • {edu.specialization}</span>
@@ -125,11 +125,11 @@ export const EducationSection = () => {
                   {edu.cgpa && (
                     <motion.div
                       className="px-4 py-2 rounded-lg transition-colors duration-500"
-                      style={{ backgroundColor: isDark ? 'rgba(191, 91, 61, 0.15)' : 'rgba(191, 91, 61, 0.1)' }}
+                      style={{ backgroundColor: isDark ? 'rgba(var(--accent-primary-rgb), 0.15)' : 'rgba(var(--accent-primary-rgb), 0.1)' }}
                       whileHover={{ scale: 1.05 }}
                     >
                       <p className="text-xs font-mono mb-1" style={{ color: '#9B8B70' }}>CGPA</p>
-                      <p className="text-2xl font-display font-bold" style={{ color: '#BF5B3D' }}>{edu.cgpa}</p>
+                      <p className="text-2xl font-display font-bold" style={{ color: 'var(--accent-primary)' }}>{edu.cgpa}</p>
                     </motion.div>
                   )}
                 </div>

@@ -100,17 +100,17 @@ export const AboutSection = () => {
       ref={containerRef}
       id="about" 
       className="relative w-full py-24 px-6 overflow-hidden transition-colors duration-500"
-      style={{ backgroundColor: isDark ? '#0E0E0B' : '#F5F0E8' }}
+      style={{ backgroundColor: isDark ? '#1C1F15' : '#F5F0E8' }}
     >
       {/* Decorative */}
-      <div className="absolute top-20 left-10 w-40 h-40 rounded-full opacity-20" style={{ background: 'radial-gradient(circle, #BF5B3D 0%, transparent 70%)' }} />
+      <div className="absolute top-20 left-10 w-40 h-40 rounded-full opacity-20" style={{ background: 'radial-gradient(circle, var(--accent-primary) 0%, transparent 70%)' }} />
 
       <div className="max-w-6xl mx-auto relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           {/* Left Column */}
           <div className="about-content">
             {/* Section Tag */}
-            <span className="inline-flex items-center gap-2 text-sm uppercase tracking-[0.2em] font-medium mb-4" style={{ color: '#BF5B3D' }}>
+            <span className="inline-flex items-center gap-2 text-sm uppercase tracking-[0.2em] font-medium mb-4" style={{ color: 'var(--accent-primary)' }}>
               <User size={16} />
               About Me
             </span>
@@ -119,7 +119,7 @@ export const AboutSection = () => {
             <h2 className="text-4xl md:text-5xl font-display font-bold mb-6 leading-tight transition-colors duration-500" style={{ color: isDark ? '#F0EBE0' : '#1A1208' }}>
               I build systems,
               <br />
-              <span style={{ color: '#BF5B3D' }}>not just applications.</span>
+              <span style={{ color: 'var(--accent-primary)' }}>not just applications.</span>
             </h2>
 
             {/* Bio */}
@@ -139,7 +139,7 @@ export const AboutSection = () => {
             >
               {stats.map((stat) => (
                 <div key={stat.label} className="stat-item text-center">
-                  <div className="text-3xl font-bold mb-2" style={{ color: '#BF5B3D' }}>{stat.value}</div>
+                  <div className="text-3xl font-bold mb-2" style={{ color: 'var(--accent-primary)' }}>{stat.value}</div>
                   <div className="text-xs uppercase tracking-widest transition-colors duration-500" style={{ color: isDark ? '#9B8B70' : '#9B8B70' }}>{stat.label}</div>
                 </div>
               ))}
@@ -171,7 +171,7 @@ export const AboutSection = () => {
           <div 
             className="about-visual h-full min-h-96 rounded-2xl relative overflow-hidden p-8 flex items-center justify-center shadow-xl transition-colors duration-500"
             style={{ 
-              background: isDark ? 'linear-gradient(145deg, #1A1510, #0E0E0B)' : 'linear-gradient(145deg, #FFFBF5, #F5F0E8)',
+              background: isDark ? 'linear-gradient(145deg, #2A2E1F, #1C1F15)' : 'linear-gradient(145deg, #FFFBF5, #F5F0E8)',
               border: `1px solid ${isDark ? 'rgba(212, 165, 116, 0.2)' : 'rgba(212, 165, 116, 0.3)'}`
             }}
             onMouseMove={handleBookMove}
@@ -206,14 +206,14 @@ export const AboutSection = () => {
               />
 
               {/* Inner Circle */}
-              <circle cx="150" cy="150" r="60" fill="none" stroke="#BF5B3D" strokeWidth="2" opacity="0.7" />
+              <circle cx="150" cy="150" r="60" fill="none" stroke="var(--accent-primary)" strokeWidth="2" opacity="0.7" />
 
               {/* Center Glow */}
               <motion.circle
                 cx="150"
                 cy="150"
                 r="30"
-                fill="#BF5B3D"
+                fill="var(--accent-primary)"
                 opacity="0.15"
                 animate={{ scale: [1, 1.2, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
@@ -221,12 +221,12 @@ export const AboutSection = () => {
 
               <defs>
                 <linearGradient id="gradWarm1" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#BF5B3D" />
+                  <stop offset="0%" stopColor="var(--accent-primary)" />
                   <stop offset="100%" stopColor="#D4A574" />
                 </linearGradient>
                 <linearGradient id="gradWarm2" x1="0%" y1="0%" x2="100%" y2="100%">
                   <stop offset="0%" stopColor="#D4A574" />
-                  <stop offset="100%" stopColor="#BF5B3D" />
+                  <stop offset="100%" stopColor="var(--accent-primary)" />
                 </linearGradient>
               </defs>
             </svg>
@@ -260,11 +260,11 @@ export const AboutSection = () => {
                   className="absolute inset-0 rounded-r-lg"
                   style={{
                     background: isDark
-                      ? 'linear-gradient(145deg, #BF5B3D, #9C4530)'
-                      : 'linear-gradient(145deg, #BF5B3D, #D9825E)',
+                      ? 'linear-gradient(145deg, var(--accent-primary), #9C4530)'
+                      : 'linear-gradient(145deg, var(--accent-primary), var(--accent-glow))',
                     boxShadow: isDark
-                      ? '0 20px 40px rgba(0,0,0,0.7), 0 10px 20px rgba(191, 91, 61,0.3)'
-                      : '0 20px 50px rgba(0,0,0,0.25), 0 10px 25px rgba(191, 91, 61,0.4)',
+                      ? '0 20px 40px rgba(0,0,0,0.7), 0 10px 20px rgba(var(--accent-primary-rgb),0.3)'
+                      : '0 20px 50px rgba(0,0,0,0.25), 0 10px 25px rgba(var(--accent-primary-rgb),0.4)',
                     transform: 'translateZ(24px)',
                   }}
                 >

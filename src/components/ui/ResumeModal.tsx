@@ -79,8 +79,8 @@ export const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
   }
 
   // Theme colors
-  const bg       = isDark ? '#1A1510' : '#FFFBF5'
-  const bgHeader = isDark ? '#0E0E0B' : '#F0EBE0'
+  const bg       = isDark ? '#2A2E1F' : '#FFFBF5'
+  const bgHeader = isDark ? '#1C1F15' : '#F0EBE0'
   const bgBody   = isDark ? '#111109' : '#F5F0E8'
   const textPri  = isDark ? '#F0EBE0' : '#1A1208'
   const textSec  = isDark ? '#9B8B70' : '#6B5C44'
@@ -169,7 +169,7 @@ export const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
                     ...btnStyle,
                     fontSize: '11px',
                     padding: '4px 8px',
-                    background: fitMode === mode ? '#BF5B3D' : 'transparent',
+                    background: fitMode === mode ? 'var(--accent-primary)' : 'transparent',
                     color: fitMode === mode ? '#fff' : textSec,
                   }}
                     onMouseEnter={e => { if (fitMode !== mode) e.currentTarget.style.background = btnHover }}
@@ -189,7 +189,7 @@ export const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
                 <button style={btnStyle} title="Open PDF"
                   onMouseEnter={e => (e.currentTarget.style.background = btnHover)} onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
                   onClick={() => window.open(resumePdfUrl, '_blank')}>
-                  <Download size={16} style={{ color: '#BF5B3D', display: 'block' }} />
+                  <Download size={16} style={{ color: 'var(--accent-primary)', display: 'block' }} />
                 </button>
 
                 {/* Close - always visible, orange-accented */}
@@ -199,14 +199,14 @@ export const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
                   style={{
                     ...btnStyle,
                     marginLeft: '4px',
-                    background: 'rgba(191, 91, 61,0.12)',
-                    border: '1px solid rgba(191, 91, 61,0.35)',
-                    color: '#BF5B3D',
+                    background: 'rgba(var(--accent-primary-rgb),0.12)',
+                    border: '1px solid rgba(var(--accent-primary-rgb),0.35)',
+                    color: 'var(--accent-primary)',
                     padding: '6px',
                     borderRadius: '8px',
                   }}
-                  onMouseEnter={e => (e.currentTarget.style.background = 'rgba(191, 91, 61,0.25)')}
-                  onMouseLeave={e => (e.currentTarget.style.background = 'rgba(191, 91, 61,0.12)')}
+                  onMouseEnter={e => (e.currentTarget.style.background = 'rgba(var(--accent-primary-rgb),0.25)')}
+                  onMouseLeave={e => (e.currentTarget.style.background = 'rgba(var(--accent-primary-rgb),0.12)')}
                 >
                   <X size={16} style={{ display: 'block' }} />
                 </button>
@@ -220,7 +220,7 @@ export const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
                 <div style={{ position: 'relative' }}>
                   {isLoading && (
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '48px' }}>
-                      <Loader2 style={{ width: 32, height: 32, color: '#BF5B3D', animation: 'spin 1s linear infinite' }} />
+                      <Loader2 style={{ width: 32, height: 32, color: 'var(--accent-primary)', animation: 'spin 1s linear infinite' }} />
                     </div>
                   )}
                   <Document
@@ -229,7 +229,7 @@ export const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
                     onLoadError={onDocumentLoadError}
                     loading={
                       <div style={{ display: 'flex', alignItems: 'center', padding: '32px', color: textSec }}>
-                        <Loader2 style={{ width: 28, height: 28, color: '#BF5B3D' }} />
+                        <Loader2 style={{ width: 28, height: 28, color: 'var(--accent-primary)' }} />
                         <span style={{ marginLeft: '8px' }}>Loading PDF…</span>
                       </div>
                     }
@@ -238,7 +238,7 @@ export const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
                         <p style={{ marginBottom: '8px' }}>Failed to load PDF</p>
                         <button
                           onClick={() => window.open(resumePdfUrl, '_blank')}
-                          style={{ padding: '8px 16px', background: '#BF5B3D', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer' }}
+                          style={{ padding: '8px 16px', background: 'var(--accent-primary)', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer' }}
                         >
                           Open in new tab
                         </button>
