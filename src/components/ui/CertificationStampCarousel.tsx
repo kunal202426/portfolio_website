@@ -120,11 +120,14 @@ function StampCard({
   const facing = index * step
 
   // Depth cue: dim cards as they travel around the back of the ring.
+  // (Just brightness - a per-frame drop-shadow filter on every card was the
+  // main source of the carousel's jank, so the shadow is a static box-shadow
+  // on the card itself instead of part of this animated value.)
   const imageFilter = useTransform(angle, (value) => {
     const relative = (((facing + value) % 360) + 540) % 360 - 180
     const t = Math.abs(relative) / 180
     const brightness = 1 - 0.5 * Math.pow(t, 1.6)
-    return `brightness(${brightness.toFixed(3)})${shadow ? ' drop-shadow(0 16px 24px rgba(4, 9, 22, 0.4))' : ''}`
+    return `brightness(${brightness.toFixed(3)})`
   })
 
   return (
@@ -139,7 +142,6 @@ function StampCard({
         marginTop: -height / 2,
         transform: `rotateY(${facing}deg) translateZ(${radius}px)`,
         transformStyle: 'preserve-3d',
-        backfaceVisibility: 'hidden',
       }}
     >
       <motion.button
@@ -163,6 +165,7 @@ function StampCard({
           display: 'flex',
           flexDirection: 'column',
           overflow: 'visible',
+          boxShadow: shadow ? '0 16px 24px rgba(4, 9, 22, 0.4)' : undefined,
         }}
       >
         {/* Perforated edge */}
@@ -342,8 +345,31 @@ export function CertificationStampCarousel({ stamps, isDark }: { stamps: StampIt
   const pointerNormXRef = useRef(0)
   const tiltTargetRef = useRef(0)
   const hoverRef = useRef(false)
+  const wheelIdleTimeout = useRef<number>()
 
   useEffect(() => setMounted(true), [])
+
+  // Trackpad two-finger swipe: a horizontal wheel gesture spins the ring
+  // directly, same as a pointer drag. data-lenis-prevent keeps Lenis (the
+  // sitewide smooth-scroll lib) from swallowing the event before it gets
+  // here; the horizontal/vertical check below still lets a vertical swipe
+  // scroll the page normally.
+  useEffect(() => {
+    const el = rootRef.current
+    if (!el) return
+    const handleWheel = (event: WheelEvent) => {
+      if (Math.abs(event.deltaX) <= Math.abs(event.deltaY)) return
+      event.preventDefault()
+      draggingRef.current = true
+      angle.set(angle.get() - event.deltaX * 0.35)
+      if (wheelIdleTimeout.current) window.clearTimeout(wheelIdleTimeout.current)
+      wheelIdleTimeout.current = window.setTimeout(() => {
+        draggingRef.current = false
+      }, 150)
+    }
+    el.addEventListener('wheel', handleWheel, { passive: false })
+    return () => el.removeEventListener('wheel', handleWheel)
+  }, [angle])
 
   useEffect(() => {
     const node = rootRef.current
@@ -503,6 +529,7 @@ export function CertificationStampCarousel({ stamps, isDark }: { stamps: StampIt
         ref={rootRef}
         role="group"
         aria-roledescription="3D stamp carousel"
+        data-lenis-prevent
         style={{ position: 'relative', overflow: 'hidden', userSelect: 'none', touchAction: 'pan-y', height: 440 }}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}

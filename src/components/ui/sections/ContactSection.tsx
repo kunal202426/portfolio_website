@@ -4,11 +4,8 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { resumeData } from '../../../lib/resume-data'
 import { useTheme } from '../../providers/ThemeProvider'
-import { InteractiveRobotSpline } from '../interactive-3d-robot'
 
 gsap.registerPlugin(ScrollTrigger)
-
-const ROBOT_SCENE_URL = 'https://prod.spline.design/PyzDhpQ9E5f1E3MT/scene.splinecode'
 
 const getLaptopSize = (width: number) => {
   if (width >= 1024) {
@@ -74,7 +71,6 @@ export const ContactSection = () => {
   const smoothHoverGlareOpacity = useSpring(hoverGlareOpacity, { stiffness: 180, damping: 22 })
   const hoverGlareX = useTransform(smoothTiltY, [-5, 5], ['-45%', '45%'])
   const hoverGlareY = useTransform(smoothTiltX, [-4, 4], ['12%', '-12%'])
-  const [showRobotPanel, setShowRobotPanel] = useState(() => (typeof window !== 'undefined' ? window.innerWidth >= 768 : true))
 
   // Responsive laptop dimensions
   const [laptopSize, setLaptopSize] = useState(() => getLaptopSize(typeof window !== 'undefined' ? window.innerWidth : 1024))
@@ -82,10 +78,8 @@ export const ContactSection = () => {
   useEffect(() => {
     const updateLaptopSize = () => {
       const width = window.innerWidth
-      const nextShowRobotPanel = width >= 768
       const nextLaptopSize = getLaptopSize(width)
 
-      setShowRobotPanel((prev) => (prev === nextShowRobotPanel ? prev : nextShowRobotPanel))
       setLaptopSize((prev) => (prev.width === nextLaptopSize.width ? prev : nextLaptopSize))
     }
 
@@ -170,29 +164,10 @@ export const ContactSection = () => {
           </div>
         </div>
 
-        {/* Laptop Row with left-side animation slot */}
-        <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center mb-12 md:mb-14">
-          {showRobotPanel && (
-            <div className="min-h-[340px] lg:min-h-[420px]">
-              <div
-                className="relative h-full min-h-[340px] lg:min-h-[420px] rounded-2xl overflow-hidden border will-change-transform"
-                style={{
-                  borderColor: isDark ? 'rgba(212, 165, 116, 0.22)' : 'rgba(212, 165, 116, 0.32)',
-                  background: isDark ? 'linear-gradient(145deg, var(--bg-secondary), var(--bg-primary))' : 'linear-gradient(145deg, #2A2520, #1A1208)',
-                }}
-              >
-                <InteractiveRobotSpline scene={ROBOT_SCENE_URL} className="absolute inset-0 z-0 transform-gpu" />
-                <div
-                  className="absolute inset-0 z-10 pointer-events-none"
-                  style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.28) 100%)' }}
-                />
-              </div>
-            </div>
-          )}
-
-          {/* 3D Laptop - Right Side */}
+        {/* Laptop */}
+        <div className="flex justify-center items-center mb-12 md:mb-14">
           <motion.div
-            className="laptop-container flex justify-center md:justify-end items-center"
+            className="laptop-container flex justify-center items-center"
             style={{ perspective: '2000px', perspectiveOrigin: '50% 50%', rotateX: smoothTiltX, rotateY: smoothTiltY }}
             onMouseMove={handleLaptopMove}
             onMouseLeave={resetLaptopTilt}
@@ -218,9 +193,9 @@ export const ContactSection = () => {
               style={{
                 width: `${laptopSize.width}px`,
                 height: `${laptopSize.height}px`,
-                background: isDark 
-                  ? 'linear-gradient(145deg, var(--bg-card), var(--bg-primary))' 
-                  : 'linear-gradient(145deg, #2A2520, var(--bg-card))',
+                background: isDark
+                  ? 'linear-gradient(145deg, var(--bg-card), var(--bg-primary))'
+                  : 'linear-gradient(145deg, #2A2520, #1A1208)',
                 borderTopLeftRadius: '16px',
                 borderTopRightRadius: '16px',
                 border: `3px solid ${isDark ? 'rgba(60, 50, 40, 0.5)' : 'rgba(60, 50, 40, 0.6)'}`,
@@ -235,7 +210,7 @@ export const ContactSection = () => {
               <div
                 className="absolute inset-0 pointer-events-none"
                 style={{
-                  border: `12px solid ${isDark ? '#14160E' : 'var(--bg-primary)'}`,
+                  border: `12px solid ${isDark ? '#14160E' : '#0E0E0B'}`,
                   borderRadius: '12px',
                 }}
               />
