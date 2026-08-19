@@ -357,12 +357,12 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
       />
 
       <div className="relative z-10 w-full px-3 md:px-6">
-        <p
-          className="text-xs uppercase tracking-[0.15em] mb-3 font-bold text-center"
+        <h2
+          className="text-xs uppercase tracking-[0.15em] mt-0 mb-3 font-bold text-center"
           style={{ color: isDark ? '#9B8B70' : '#6B5D4A' }}
         >
-          FEATURED PROJECTS
-        </p>
+          Featured Projects
+        </h2>
 
         <div className="flex justify-center mb-4 md:mb-6">
           <button

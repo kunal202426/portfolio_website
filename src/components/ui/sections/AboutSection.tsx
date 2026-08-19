@@ -65,10 +65,10 @@ export const AboutSection = () => {
       <div className="max-w-5xl mx-auto relative z-10">
         {/* Section Tag */}
         <div className="about-content text-center mb-14">
-          <span className="inline-flex items-center gap-2 text-sm uppercase tracking-[0.2em] font-medium" style={{ color: 'var(--accent-primary)' }}>
+          <h2 className="inline-flex items-center gap-2 m-0 text-sm uppercase tracking-[0.2em] font-medium" style={{ color: 'var(--accent-primary)' }}>
             <User size={16} />
             About Me
-          </span>
+          </h2>
         </div>
 
         {/* Three books - hover/tap each to open it */}

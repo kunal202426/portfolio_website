@@ -210,13 +210,18 @@ export const HeroSection = () => {
           }}
         >
           <div className="text-center max-w-5xl mx-auto">
-            <h1 className="font-brush mb-8 leading-[0.95] invisible" style={{ fontSize: 'clamp(2.5rem, 10vw, 7.5rem)', fontWeight: 400 }} aria-hidden="true">
+            {/* Not a heading tag - this is a layout spacer only (to keep the
+                real subtitle below pixel-aligned with where it'd sit inside
+                the actual h1's block), and a duplicate hidden <h1> would
+                still be visible to crawlers reading the DOM even though
+                CSS hides it from the screen. */}
+            <div className="font-brush mb-8 leading-[0.95] invisible" style={{ fontSize: 'clamp(2.5rem, 10vw, 7.5rem)', fontWeight: 400 }} aria-hidden="true">
               {resumeData.personal.name.split(' ').map((word, i) => (
                 <div key={i} className="block">
                   {word}
                 </div>
               ))}
-            </h1>
+            </div>
             <div className="overflow-hidden mb-6">
               <p className="text-xl md:text-2xl lg:text-3xl font-light invisible" aria-hidden="true">
                 Software Engineer & ML Engineer
