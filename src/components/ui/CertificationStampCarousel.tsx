@@ -458,6 +458,15 @@ export function CertificationStampCarousel({ stamps, isDark }: { stamps: StampIt
     [count],
   )
 
+  // Left/right arrows for the closed ring - rather than a separate tween,
+  // this just sets the same fling velocity a drag-release would produce, so
+  // it decays through the existing per-frame physics (see the
+  // useAnimationFrame loop above) instead of fighting it with a second
+  // animation system.
+  const rotateRing = useCallback((dir: 1 | -1) => {
+    flingRef.current = dir * 220
+  }, [])
+
   // While a stamp is open: keyboard controls + lock body/Lenis scroll (the
   // modal is a full-viewport portal, so background scroll would be
   // disorienting and Lenis would otherwise keep scrolling underneath it).
@@ -571,6 +580,65 @@ export function CertificationStampCarousel({ stamps, isDark }: { stamps: StampIt
             </motion.div>
           </motion.div>
         </div>
+
+        {openIndex === null && (
+          <>
+            <button
+              type="button"
+              aria-label="Rotate carousel left"
+              onClick={() => rotateRing(-1)}
+              style={{
+                position: 'absolute',
+                left: 8,
+                top: '50%',
+                transform: 'translateY(-50%)',
+                zIndex: 5,
+                width: 40,
+                height: 40,
+                borderRadius: '50%',
+                border: `1px solid ${isDark ? 'rgba(212,165,116,0.25)' : 'rgba(var(--accent-primary-rgb),0.25)'}`,
+                background: isDark ? 'rgba(14,14,11,0.55)' : 'rgba(255,255,255,0.7)',
+                color: 'var(--accent-primary)',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backdropFilter: 'blur(4px)',
+              }}
+            >
+              <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              aria-label="Rotate carousel right"
+              onClick={() => rotateRing(1)}
+              style={{
+                position: 'absolute',
+                right: 8,
+                top: '50%',
+                transform: 'translateY(-50%)',
+                zIndex: 5,
+                width: 40,
+                height: 40,
+                borderRadius: '50%',
+                border: `1px solid ${isDark ? 'rgba(212,165,116,0.25)' : 'rgba(var(--accent-primary-rgb),0.25)'}`,
+                background: isDark ? 'rgba(14,14,11,0.55)' : 'rgba(255,255,255,0.7)',
+                color: 'var(--accent-primary)',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backdropFilter: 'blur(4px)',
+              }}
+            >
+              <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          </>
+        )}
 
         {mounted &&
           createPortal(
