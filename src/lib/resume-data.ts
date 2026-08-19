@@ -359,7 +359,7 @@ export const resumeData = {
     },
     {
       title: 'Blockchain Developer Certification',
-      issuer: 'IBM Career Education',
+      issuer: 'IBM',
       year: 2025,
       description:
         'Blockchain fundamentals, smart contract development, Hyperledger Fabric, and DApp architecture.',
