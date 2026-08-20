@@ -279,6 +279,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
   const [index, setIndex] = useState(0)
   const [direction, setDirection] = useState(1)
   const [allView, setAllView] = useState(false)
+  const [flipped, setFlipped] = useState(false)
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme !== 'light'
   const screenRef = useRef<HTMLDivElement>(null)
@@ -289,6 +290,13 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
     if (projects.length === 0) return
     setIndex((prev) => (prev >= projects.length ? projects.length - 1 : prev))
   }, [projects.length])
+
+  // Switching projects (swipe, dots, arrows) always lands back on the
+  // picture side - a flipped-to-description card shouldn't carry over to
+  // whatever's shown next.
+  useEffect(() => {
+    setFlipped(false)
+  }, [index])
 
   useEffect(() => {
     const el = screenRef.current
@@ -337,8 +345,14 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
   const hasShots = !!project.screenshots?.length
   const isCompact = screenWidth <= 340
 
+  // Front-face overlay always sits on a dark screenshot/TV background regardless
+  // of site theme, so it keeps fixed light text. The back face and no-screenshot
+  // fallback sit on the theme-aware --bg-card/--bg-primary gradient instead, so
+  // their text needs to flip with the theme or it goes illegible in light mode.
   const titleColor = '#F5F0E8'
   const descColor = '#C4B49A'
+  const cardTitleColor = isDark ? '#F5F0E8' : '#1A1208'
+  const cardDescColor = isDark ? '#C4B49A' : '#4A3C2A'
 
   // Grid line color based on theme (matches the section's own background pattern)
   const gridColor = isDark ? 'rgba(var(--accent-primary-rgb), 0.06)' : 'rgba(var(--accent-primary-rgb), 0.08)'
@@ -532,42 +546,104 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                     dragElastic={0.3}
                     dragMomentum={false}
                     onDragEnd={handleDragEnd}
+                    onTap={() => {
+                      if (hasShots) setFlipped((f) => !f)
+                    }}
                     className="absolute inset-0 z-10 cursor-grab active:cursor-grabbing touch-pan-y"
                     style={{ willChange: 'transform' }}
                   >
                     {hasShots ? (
-                      <>
-                        <ScreenshotStack screenshots={project.screenshots!} title={project.title} />
-                        {/* Bottom info overlay */}
-                        <div
-                          className="absolute inset-x-0 bottom-0 flex flex-col items-center text-center gap-2 px-3 pb-3 pt-10 pointer-events-none"
-                          style={{
-                            background: 'linear-gradient(to top, rgba(10,8,6,0.92) 10%, rgba(10,8,6,0.55) 55%, transparent 100%)',
-                          }}
+                      <div className="absolute inset-0" style={{ perspective: 1400 }}>
+                        <motion.div
+                          className="relative w-full h-full"
+                          style={{ transformStyle: 'preserve-3d' }}
+                          animate={{ rotateY: flipped ? 180 : 0 }}
+                          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
                         >
-                          <h3
-                            className="font-display font-bold leading-tight px-2 pointer-events-none"
-                            style={{ fontSize: isCompact ? '1rem' : '1.3rem', color: titleColor }}
-                          >
-                            {project.title}
-                          </h3>
-                          <div className="flex flex-wrap gap-1.5 justify-center px-2 pointer-events-none">
-                            {project.tags.slice(0, isCompact ? 3 : 4).map((tag) => (
-                              <span
-                                key={tag}
-                                className="text-[0.65rem] px-2 py-0.5 font-medium rounded-sm"
-                                style={{
-                                  background: 'rgba(var(--accent-primary-rgb), 0.18)',
-                                  border: '1px solid rgba(var(--accent-primary-rgb), 0.35)',
-                                  color: 'var(--accent-primary)',
-                                }}
+                          {/* Front: picture */}
+                          <div className="absolute inset-0" style={{ backfaceVisibility: 'hidden' }}>
+                            <ScreenshotStack screenshots={project.screenshots!} title={project.title} />
+                            {/* Bottom info overlay */}
+                            <div
+                              className="absolute inset-x-0 bottom-0 flex flex-col items-center text-center gap-2 px-3 pb-3 pt-10 pointer-events-none"
+                              style={{
+                                background: 'linear-gradient(to top, rgba(10,8,6,0.92) 10%, rgba(10,8,6,0.55) 55%, transparent 100%)',
+                              }}
+                            >
+                              <h3
+                                className="font-display font-bold leading-tight px-2 pointer-events-none"
+                                style={{ fontSize: isCompact ? '1rem' : '1.3rem', color: titleColor }}
                               >
-                                {tag}
+                                {project.title}
+                              </h3>
+                              <div className="flex flex-wrap gap-1.5 justify-center px-2 pointer-events-none">
+                                {project.tags.slice(0, isCompact ? 3 : 4).map((tag) => (
+                                  <span
+                                    key={tag}
+                                    className="text-[0.65rem] px-2 py-0.5 font-medium rounded-sm"
+                                    style={{
+                                      background: 'rgba(var(--accent-primary-rgb), 0.18)',
+                                      border: '1px solid rgba(var(--accent-primary-rgb), 0.35)',
+                                      color: 'var(--accent-primary)',
+                                    }}
+                                  >
+                                    {tag}
+                                  </span>
+                                ))}
+                              </div>
+                              <span
+                                className="text-[0.6rem] uppercase tracking-wider font-medium pointer-events-none"
+                                style={{ color: 'rgba(212,165,116,0.75)' }}
+                              >
+                                Tap to read more
                               </span>
-                            ))}
+                            </div>
                           </div>
-                        </div>
-                      </>
+
+                          {/* Back: description */}
+                          <div
+                            className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 py-4"
+                            style={{
+                              backfaceVisibility: 'hidden',
+                              transform: 'rotateY(180deg)',
+                              background: 'linear-gradient(160deg, var(--bg-card), var(--bg-primary))',
+                            }}
+                          >
+                            <span
+                              className="text-[0.65rem] px-2.5 py-1 font-bold uppercase tracking-wider mb-2"
+                              style={{ background: 'rgba(212,165,116,0.12)', color: '#D4A574', border: '1px solid rgba(212,165,116,0.25)' }}
+                            >
+                              {project.subtitle}
+                            </span>
+                            <h3
+                              className="font-display font-bold leading-tight px-2 mb-2"
+                              style={{ fontSize: isCompact ? '1.05rem' : '1.35rem', color: cardTitleColor }}
+                            >
+                              {project.title}
+                            </h3>
+                            <p
+                              className="leading-snug px-2 mb-2"
+                              style={{ fontSize: isCompact ? '0.72rem' : '0.8rem', color: cardDescColor, maxWidth: 420 }}
+                            >
+                              {project.description}
+                            </p>
+                            <div className="flex flex-wrap gap-1.5 justify-center px-2 mb-2">
+                              {project.tags.slice(0, isCompact ? 3 : 4).map((tag) => (
+                                <span
+                                  key={tag}
+                                  className="text-[0.65rem] px-2 py-0.5 font-medium rounded-sm"
+                                  style={{ background: 'rgba(212,165,116,0.1)', border: '1px solid rgba(212,165,116,0.2)', color: '#D4A574' }}
+                                >
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                            <span className="text-[0.6rem] uppercase tracking-wider font-medium" style={{ color: 'rgba(212,165,116,0.75)' }}>
+                              Tap to flip back
+                            </span>
+                          </div>
+                        </motion.div>
+                      </div>
                     ) : (
                       <div
                         className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 py-4"
@@ -595,13 +671,13 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                         </span>
                         <h3
                           className="font-display font-bold leading-tight px-2 mb-2"
-                          style={{ fontSize: isCompact ? '1.05rem' : '1.35rem', color: titleColor }}
+                          style={{ fontSize: isCompact ? '1.05rem' : '1.35rem', color: cardTitleColor }}
                         >
                           {project.title}
                         </h3>
                         <p
                           className="leading-snug px-2 mb-2"
-                          style={{ fontSize: isCompact ? '0.72rem' : '0.8rem', color: descColor, maxWidth: 420 }}
+                          style={{ fontSize: isCompact ? '0.72rem' : '0.8rem', color: cardDescColor, maxWidth: 420 }}
                         >
                           {project.description}
                         </p>
