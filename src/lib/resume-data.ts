@@ -180,7 +180,7 @@ export const resumeData = {
       category: 'dev',
       liveUrl: 'https://levitate-eight.vercel.app/',
       githubUrl: 'https://github.com/kunal202426/Levitate-Hyperloop-Dashboard',
-      screenshots: ['/projects/levitate-hyperloop-dashboard/1.jpg', '/projects/levitate-hyperloop-dashboard/2.jpg'],
+      screenshots: ['/projects/levitate-hyperloop-dashboard/1.png', '/projects/levitate-hyperloop-dashboard/2.png'],
       achievements: [
         'Built a genuine simulation engine - pods cycle through a real state machine (depart, transit, hold, dock, redeploy) with live speed, pressure, and ETA.',
         'Designed a fully configurable control layer: station list, fleet roster, speed limits, pressure thresholds, and weather bounds all drive the live dashboard in real time.',
