@@ -12,7 +12,7 @@ gsap.registerPlugin(ScrollTrigger)
 
 const stats = [
   { label: 'Years Coding', value: '2+' },
-  { label: 'Projects Built', value: '30+' },
+  { label: 'Projects Built', value: '35+' },
   { label: 'Teams Led', value: '3' },
 ]
 
