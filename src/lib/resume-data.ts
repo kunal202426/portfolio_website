@@ -50,6 +50,7 @@ export const resumeData = {
       period: 'Sep 2026 - Present',
       location: 'Bengaluru, India (On-site)',
       year: 2026,
+      logo: '/astra-logo.png',
       url: 'https://useastra.in/',
       achievements: [
         'Building an end-to-end hiring ecosystem connecting candidates and employers through quality openings, proof of work, and skill-based matching.',

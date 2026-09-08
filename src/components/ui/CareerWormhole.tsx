@@ -263,10 +263,8 @@ export const CareerWormhole = ({ cards, scrollLengthVh = 460 }: CareerWormholePr
     })
     scene.add(new THREE.Mesh(tubeGeo, tubeMat))
 
-    const angles = [0.5, 2.6, 4.5, 1.2, 3.6, 5.4]
     const cardsData = cards.map((card, i) => ({
       progress: (i + 1) / (cards.length + 1),
-      angle: angles[i % angles.length],
       el: cardRefs.current[i] ?? null,
     }))
 
@@ -302,17 +300,12 @@ export const CareerWormhole = ({ cards, scrollLengthVh = 460 }: CareerWormholePr
       texture.offset.y = scrollPercent * 2
 
       const maxDistance = 16
-      // Narrow (phone) viewports leave little margin around a fixed-width
-      // card, so the same world-space wall offset that reads fine on
-      // desktop pushes the card visibly off-center there - pull cards in
-      // closer to the tube's centerline on narrow screens instead.
-      const isNarrowViewport = container.offsetWidth < 640
+      // Cards sit right on the tube's own centerline (the camera's flight
+      // path) instead of pinned to a wall at some angle, so every card is
+      // dead-center in the tunnel as the camera flies up to it.
       cardsData.forEach((card) => {
         if (!card.el) return
         const cardPos3D = curve.getPointAt(card.progress)
-        const wallDistance = isNarrowViewport ? 0.45 : 1.05
-        cardPos3D.x += Math.cos(card.angle) * wallDistance
-        cardPos3D.y += Math.sin(card.angle) * wallDistance
         const wp = cardPos3D.clone()
         wp.project(camera)
         const distance = camera.position.distanceTo(cardPos3D)
