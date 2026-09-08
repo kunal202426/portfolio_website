@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Sparkles } from 'lucide-react'
+import { ExternalLink, Sparkles } from 'lucide-react'
 import * as THREE from 'three'
 
 export interface WormholeCard {
@@ -9,6 +9,7 @@ export interface WormholeCard {
   description: string
   details?: string[]
   logo?: string
+  url?: string
 }
 
 interface CareerWormholeProps {
@@ -89,6 +90,27 @@ function WormholeCardEl({ card, cardRef }: { card: WormholeCard; cardRef: (node:
               </li>
             ))}
           </ul>
+
+          {card.url && (
+            <a
+              href={card.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+                marginTop: 14,
+                fontSize: 12,
+                fontWeight: 600,
+                color: 'var(--accent-glow)',
+              }}
+            >
+              Visit site
+              <ExternalLink size={12} />
+            </a>
+          )}
         </div>
 
         {/* Front: slides fully clear on reveal, clipped by the container's

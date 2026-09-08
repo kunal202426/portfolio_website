@@ -13,7 +13,7 @@ export const resumeData = {
       school: 'Vellore Institute of Technology',
       degree: 'B.Tech in Computer Science & Engineering',
       specialization: 'Blockchain',
-      period: '2022 - Present',
+      period: '2022 - 2026',
       location: 'Vellore, Tamil Nadu',
       url: 'https://vit.ac.in/',
     },
@@ -35,13 +35,24 @@ export const resumeData = {
     {
       company: 'YES Securities (YES Bank)',
       title: 'Full Stack Developer Intern',
-      period: 'Jan 2026 - Jun 2026',
+      period: 'Jan 2026 - Aug 2026',
       location: 'Bengaluru, India',
       year: 2026,
       logo: '/yes-securities.png',
       achievements: [
-        'Building production-grade features for OMNI trading platform using React, Node.js, and RESTful APIs in Agile sprints.',
+        'Built production-grade features for OMNI trading platform using React, Node.js, and RESTful APIs in Agile sprints.',
         'Optimized backend microservices and PostgreSQL schema for improved reliability and reduced latency.',
+      ],
+    },
+    {
+      company: 'Astra',
+      title: 'Product Engineer',
+      period: 'Sep 2026 - Present',
+      location: 'Bengaluru, India (On-site)',
+      year: 2026,
+      url: 'https://useastra.in/',
+      achievements: [
+        'Building an end-to-end hiring ecosystem connecting candidates and employers through quality openings, proof of work, and skill-based matching.',
       ],
     },
     {

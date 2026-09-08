@@ -86,7 +86,11 @@ export const AboutSection = () => {
               <span style={{ color: '#BF5B3D' }}>not just applications.</span>
             </h4>
             <p style={{ fontSize: 12, lineHeight: 1.55, color: '#4A3C2A', margin: 0 }}>
-              Currently building production features at YES Securities (YES Bank) as a Full Stack Developer Intern, while completing my B.Tech in Computer Science &amp; Engineering at VIT.
+              Currently a Product Engineer at{' '}
+              <a href="https://useastra.in/" target="_blank" rel="noopener noreferrer" style={{ color: '#BF5B3D', textDecoration: 'underline' }}>
+                Astra
+              </a>{' '}
+              in Bengaluru, after a Full Stack Developer internship at YES Securities (YES Bank). B.Tech in Computer Science &amp; Engineering, VIT Vellore — Class of 2026.
             </p>
           </AboutBook>
 

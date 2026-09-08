@@ -18,6 +18,7 @@ export const ExperienceSection = () => {
         description: `${exp.period} · ${exp.location}`,
         details: exp.achievements,
         logo: exp.logo,
+        url: exp.url,
       })),
     [experiences],
   )
