@@ -42,7 +42,7 @@ function WormholeCardEl({ card, cardRef }: { card: WormholeCard; cardRef: (node:
         top: 0,
         width: 280,
         opacity: 0,
-        pointerEvents: 'auto',
+        pointerEvents: 'none',
         willChange: 'transform, opacity',
       }}
     >
@@ -323,8 +323,14 @@ export const CareerWormhole = ({ cards, scrollLengthVh = 460 }: CareerWormholePr
           card.el.style.opacity = String(Math.min(proximity * 1.8, 1))
           card.el.style.transform = `translate3d(-50%, -50%, 0px) translate3d(${x}px, ${y}px, 0px) scale(${scale})`
           card.el.style.zIndex = String(Math.round((1 - wp.z) * 100))
+          // Cards now all sit on the same centerline, so a card's screen
+          // position while hidden can coincide with whichever one is
+          // actually in front - re-enable clicks only once a card is
+          // genuinely the one on screen.
+          card.el.style.pointerEvents = 'auto'
         } else {
           card.el.style.opacity = '0'
+          card.el.style.pointerEvents = 'none'
         }
       })
 
