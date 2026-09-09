@@ -1,8 +1,9 @@
-import { Suspense, lazy, useState, type MouseEvent } from 'react'
+import { Suspense, lazy, useEffect, useState, type MouseEvent } from 'react'
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { Eye, Download, FileText, ExternalLink } from 'lucide-react'
 import { useTheme } from '../../providers/ThemeProvider'
 import { KeycapButton } from '../KeycapButton'
+import { resumeVariants, type ResumeVariantId } from '../../../lib/resume-data'
 
 const RESUME_PATH = '/Resume_general.pdf'
 const LazyResumeModal = lazy(() => import('../ResumeModal').then((module) => ({ default: module.ResumeModal })))
@@ -11,6 +12,7 @@ export const ResumeSection = () => {
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme !== 'light'
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [deepLinkVariant, setDeepLinkVariant] = useState<ResumeVariantId>('general')
   const tiltX = useMotionValue(0)
   const tiltY = useMotionValue(0)
   const smoothTiltX = useSpring(tiltX, { stiffness: 220, damping: 24, mass: 0.45 })
@@ -24,6 +26,22 @@ export const ResumeSection = () => {
   const openResume = () => {
     setIsModalOpen(true)
   }
+
+  // A bare `?resume` on the site's own URL opens straight into the modal on
+  // load - a stable, always-current link to hand recruiters instead of a
+  // Drive/Dropbox copy that goes stale the moment the real resume changes.
+  // `?resume=ai` (etc.) opens directly on that role-targeted variant.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    if (!params.has('resume')) return
+    const requested = params.get('resume')
+    const matched = resumeVariants.find((v) => v.id === requested)
+    setDeepLinkVariant(matched ? matched.id : 'general')
+    setIsModalOpen(true)
+    params.delete('resume')
+    const rest = params.toString()
+    window.history.replaceState(null, '', window.location.pathname + (rest ? `?${rest}` : '') + window.location.hash)
+  }, [])
 
   const handlePhoneMove = (event: MouseEvent<HTMLDivElement>) => {
     const rect = event.currentTarget.getBoundingClientRect()
@@ -214,7 +232,7 @@ export const ResumeSection = () => {
       {/* Resume Modal */}
       {isModalOpen ? (
         <Suspense fallback={null}>
-          <LazyResumeModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+          <LazyResumeModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} initialVariantId={deepLinkVariant} />
         </Suspense>
       ) : null}
     </section>

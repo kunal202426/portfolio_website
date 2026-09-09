@@ -1,30 +1,92 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, ChevronLeft, ChevronRight, Download, Loader2 } from 'lucide-react'
+import { X, ChevronLeft, ChevronRight, Download, Loader2, Link2, Check } from 'lucide-react'
 import { Document, Page, pdfjs } from 'react-pdf'
 import 'react-pdf/dist/Page/AnnotationLayer.css'
 import 'react-pdf/dist/Page/TextLayer.css'
 import { useTheme } from '../providers/ThemeProvider'
-
-import resumePdfUrl from '/Resume_general.pdf?url'
+import { resumeVariants, type ResumeVariantId } from '../../lib/resume-data'
+import { ResumeWritingSkeleton } from './ResumeWritingSkeleton'
 
 pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`
+
+// How long the "being written" skeleton stays up at minimum, so switching
+// between variants always reads as a deliberate transition even when the
+// next PDF happens to load near-instantly from cache.
+const MIN_SKELETON_MS = 900
 
 interface ResumeModalProps {
   isOpen: boolean
   onClose: () => void
+  initialVariantId?: ResumeVariantId
 }
 
-export const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
+export const ResumeModal = ({ isOpen, onClose, initialVariantId = 'general' }: ResumeModalProps) => {
   const { resolvedTheme } = useTheme()
   const isDark = resolvedTheme !== 'light'
+
+  const [activeVariantId, setActiveVariantId] = useState<ResumeVariantId>(initialVariantId)
+  const activeVariant = resumeVariants.find((v) => v.id === activeVariantId) ?? resumeVariants[0]
 
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState<number>(0)
   const [zoom, setZoom] = useState(100)
   const [isLoading, setIsLoading] = useState(true)
-  const [pdfFile, setPdfFile] = useState<string | Blob>(resumePdfUrl)
+  const [pdfFile, setPdfFile] = useState<string | Blob>(activeVariant.file)
   const [fitMode, setFitMode] = useState<'width' | 'height' | 'custom'>('width')
+
+  // The skeleton stays up until BOTH the minimum beat has played AND the new
+  // document has actually finished loading - whichever takes longer.
+  const [isSwitching, setIsSwitching] = useState(false)
+  const [minSkeletonDone, setMinSkeletonDone] = useState(true)
+  const skeletonTimerRef = useRef<number | null>(null)
+
+  useEffect(() => {
+    if (isSwitching && minSkeletonDone && !isLoading) setIsSwitching(false)
+  }, [isSwitching, minSkeletonDone, isLoading])
+
+  useEffect(() => () => { if (skeletonTimerRef.current) window.clearTimeout(skeletonTimerRef.current) }, [])
+
+  const handleVariantChange = (id: ResumeVariantId) => {
+    if (id === activeVariantId) return
+    const variant = resumeVariants.find((v) => v.id === id)
+    if (!variant) return
+    setIsSwitching(true)
+    setMinSkeletonDone(false)
+    setIsLoading(true)
+    setCurrentPage(1)
+    setTotalPages(0)
+    setActiveVariantId(id)
+    setPdfFile(variant.file)
+    if (skeletonTimerRef.current) window.clearTimeout(skeletonTimerRef.current)
+    skeletonTimerRef.current = window.setTimeout(() => setMinSkeletonDone(true), MIN_SKELETON_MS)
+  }
+
+  const [linkCopied, setLinkCopied] = useState(false)
+  const copyLinkTimerRef = useRef<number | null>(null)
+
+  const copyShareLink = async () => {
+    const url = `${window.location.origin}${window.location.pathname}?resume=${activeVariantId}`
+    try {
+      await navigator.clipboard.writeText(url)
+    } catch {
+      // Clipboard API can be denied/unavailable (older browsers, insecure
+      // context) - fall back to a manual-select textarea so it still works.
+      const textarea = document.createElement('textarea')
+      textarea.value = url
+      textarea.style.position = 'fixed'
+      textarea.style.opacity = '0'
+      document.body.appendChild(textarea)
+      textarea.select()
+      document.execCommand('copy')
+      document.body.removeChild(textarea)
+    }
+    setLinkCopied(true)
+    if (copyLinkTimerRef.current) window.clearTimeout(copyLinkTimerRef.current)
+    copyLinkTimerRef.current = window.setTimeout(() => setLinkCopied(false), 1800)
+  }
+
+  useEffect(() => () => { if (copyLinkTimerRef.current) window.clearTimeout(copyLinkTimerRef.current) }, [])
 
   // Lock all scrolling while modal is open (body + Lenis)
   useEffect(() => {
@@ -57,7 +119,7 @@ export const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
   const onDocumentLoadError = () => {
     setIsLoading(false)
     if (typeof pdfFile === 'string') {
-      fetch(resumePdfUrl)
+      fetch(activeVariant.file)
         .then((r) => { if (!r.ok) throw new Error(); return r.blob() })
         .then((blob) => { setPdfFile(blob); setIsLoading(true) })
         .catch(() => {})
@@ -144,10 +206,10 @@ export const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
             }}>
               <div style={{ minWidth: 0 }}>
                 <p style={{ fontFamily: 'monospace', fontSize: '13px', color: textPri, fontWeight: 600 }}>
-                  Resume_general.pdf
+                  {activeVariant.file.slice(1)}
                 </p>
                 <p style={{ fontSize: '11px', color: textSec, marginTop: '2px' }}>
-                  {totalPages > 0 ? `Page ${currentPage} / ${totalPages}` : 'Loading…'}
+                  {isSwitching ? 'Writing…' : totalPages > 0 ? `Page ${currentPage} / ${totalPages}` : 'Loading…'}
                   {fitMode === 'custom' ? ` • ${zoom}%` : ` • Fit ${fitMode}`}
                 </p>
               </div>
@@ -185,10 +247,23 @@ export const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
 
                 <div style={{ width: '1px', height: '16px', background: border, margin: '0 4px' }} />
 
+                {/* Copy share link - deep-links back to this exact variant */}
+                <button
+                  style={{ ...btnStyle, color: linkCopied ? '#4ADE80' : textSec }}
+                  title={linkCopied ? 'Link copied!' : 'Copy share link'}
+                  onMouseEnter={e => { if (!linkCopied) e.currentTarget.style.background = btnHover }}
+                  onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                  onClick={copyShareLink}
+                >
+                  {linkCopied ? <Check size={16} style={{ display: 'block' }} /> : <Link2 size={16} style={{ display: 'block' }} />}
+                </button>
+
+                <div style={{ width: '1px', height: '16px', background: border, margin: '0 4px' }} />
+
                 {/* Download */}
                 <button style={btnStyle} title="Open PDF"
                   onMouseEnter={e => (e.currentTarget.style.background = btnHover)} onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
-                  onClick={() => window.open(resumePdfUrl, '_blank')}>
+                  onClick={() => window.open(activeVariant.file, '_blank')}>
                   <Download size={16} style={{ color: 'var(--accent-primary)', display: 'block' }} />
                 </button>
 
@@ -213,46 +288,98 @@ export const ResumeModal = ({ isOpen, onClose }: ResumeModalProps) => {
               </div>
             </div>
 
+            {/* Variant toggle - same person, different emphasis per domain */}
+            <div
+              data-lenis-prevent
+              style={{
+                display: 'flex',
+                gap: '6px',
+                padding: '10px 14px',
+                borderBottom: `1px solid ${border}`,
+                background: bgHeader,
+                flexShrink: 0,
+                overflowX: 'auto',
+              }}
+            >
+              {resumeVariants.map((variant) => {
+                const active = variant.id === activeVariantId
+                return (
+                  <button
+                    key={variant.id}
+                    onClick={() => handleVariantChange(variant.id)}
+                    disabled={isSwitching}
+                    style={{
+                      flexShrink: 0,
+                      padding: '6px 14px',
+                      borderRadius: '999px',
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      whiteSpace: 'nowrap',
+                      cursor: isSwitching ? 'default' : 'pointer',
+                      border: `1.5px solid ${active ? 'var(--accent-primary)' : border}`,
+                      background: active ? 'var(--accent-primary)' : 'transparent',
+                      color: active ? '#fff' : textSec,
+                      opacity: isSwitching && !active ? 0.5 : 1,
+                      transition: 'background 150ms, opacity 150ms',
+                    }}
+                  >
+                    {variant.label}
+                  </button>
+                )
+              })}
+            </div>
+
             {/* Body - scrollable PDF */}
             {/* data-lenis-prevent tells Lenis to skip wheel events inside this element */}
             <div data-lenis-prevent style={{ flex: 1, overflowY: 'auto', overflowX: 'auto', minHeight: 0, background: bgBody, overscrollBehavior: 'contain' }}>
-              <div style={{ display: 'flex', justifyContent: 'center', padding: '20px 16px 32px' }}>
-                <div style={{ position: 'relative' }}>
-                  {isLoading && (
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '48px' }}>
-                      <Loader2 style={{ width: 32, height: 32, color: 'var(--accent-primary)', animation: 'spin 1s linear infinite' }} />
+              <div style={{ display: 'flex', justifyContent: 'center', padding: '20px 16px 32px', width: '100%' }}>
+                <div style={{ position: 'relative', width: isSwitching ? '100%' : undefined, maxWidth: isSwitching ? 720 : undefined }}>
+                  {/* The real Document stays mounted (just visually hidden) while
+                      switching, so it actually finishes loading in the background -
+                      an unmounted Document never fires onLoadSuccess, which would
+                      leave the skeleton spinning forever. */}
+                  {isSwitching && (
+                    <div style={{ position: 'absolute', inset: 0, zIndex: 5 }}>
+                      <ResumeWritingSkeleton isDark={isDark} />
                     </div>
                   )}
-                  <Document
-                    file={pdfFile}
-                    onLoadSuccess={onDocumentLoadSuccess}
-                    onLoadError={onDocumentLoadError}
-                    loading={
-                      <div style={{ display: 'flex', alignItems: 'center', padding: '32px', color: textSec }}>
-                        <Loader2 style={{ width: 28, height: 28, color: 'var(--accent-primary)' }} />
-                        <span style={{ marginLeft: '8px' }}>Loading PDF…</span>
+                  <div style={{ visibility: isSwitching ? 'hidden' : 'visible' }}>
+                    {isLoading && !isSwitching && (
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '48px' }}>
+                        <Loader2 style={{ width: 32, height: 32, color: 'var(--accent-primary)', animation: 'spin 1s linear infinite' }} />
                       </div>
-                    }
-                    error={
-                      <div style={{ textAlign: 'center', padding: '32px', color: textSec }}>
-                        <p style={{ marginBottom: '8px' }}>Failed to load PDF</p>
-                        <button
-                          onClick={() => window.open(resumePdfUrl, '_blank')}
-                          style={{ padding: '8px 16px', background: 'var(--accent-primary)', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer' }}
-                        >
-                          Open in new tab
-                        </button>
-                      </div>
-                    }
-                  >
-                    <Page
-                      pageNumber={currentPage}
-                      width={getPageWidth()}
-                      renderTextLayer={true}
-                      renderAnnotationLayer={true}
-                      className="shadow-2xl"
-                    />
-                  </Document>
+                    )}
+                    <Document
+                      file={pdfFile}
+                      onLoadSuccess={onDocumentLoadSuccess}
+                      onLoadError={onDocumentLoadError}
+                      loading={
+                        <div style={{ display: 'flex', alignItems: 'center', padding: '32px', color: textSec }}>
+                          <Loader2 style={{ width: 28, height: 28, color: 'var(--accent-primary)' }} />
+                          <span style={{ marginLeft: '8px' }}>Loading PDF…</span>
+                        </div>
+                      }
+                      error={
+                        <div style={{ textAlign: 'center', padding: '32px', color: textSec }}>
+                          <p style={{ marginBottom: '8px' }}>Failed to load PDF</p>
+                          <button
+                            onClick={() => window.open(activeVariant.file, '_blank')}
+                            style={{ padding: '8px 16px', background: 'var(--accent-primary)', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer' }}
+                          >
+                            Open in new tab
+                          </button>
+                        </div>
+                      }
+                    >
+                      <Page
+                        pageNumber={currentPage}
+                        width={getPageWidth()}
+                        renderTextLayer={true}
+                        renderAnnotationLayer={true}
+                        className="shadow-2xl"
+                      />
+                    </Document>
+                  </div>
                 </div>
               </div>
             </div>

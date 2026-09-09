@@ -1,3 +1,17 @@
+// Role-targeted resume variants shown as a toggle in the resume viewer -
+// same person, same facts, different emphasis per domain. `id` doubles as
+// the `?resume=` deep-link value and the query key used to request a
+// specific variant on load.
+export const resumeVariants = [
+  { id: 'general', label: 'General', file: '/Resume_general.pdf' },
+  { id: 'ai', label: 'AI / ML', file: '/Resume_AI.pdf' },
+  { id: 'backend', label: 'Backend', file: '/Resume_Backend.pdf' },
+  { id: 'data', label: 'Data Analyst', file: '/Resume_DataAnalyst.pdf' },
+  { id: 'consulting', label: 'Tech Consulting', file: '/Resume_TechConsulting.pdf' },
+] as const
+
+export type ResumeVariantId = (typeof resumeVariants)[number]['id']
+
 export const resumeData = {
   personal: {
     name: 'Kunal Mathur',
