@@ -46,7 +46,7 @@ export const resumeData = {
     },
     {
       company: 'Astra',
-      title: 'Product Engineer',
+      title: 'Founding Engineer',
       period: 'Sep 2026 - Present',
       location: 'Bengaluru, India (On-site)',
       year: 2026,
