@@ -6,9 +6,9 @@ import { resumeData } from '../../../lib/resume-data'
 import { useTheme } from '../../providers/ThemeProvider'
 
 // Import parallax mountain layers
-import mountainFront from '../../../assets/gemini.png'
-import mountainMiddle from '../../../assets/gemini1.png'
-import mountainBack from '../../../assets/gemini2.png'
+import mountainFront from '../../../assets/gemini.webp'
+import mountainMiddle from '../../../assets/gemini1.webp'
+import mountainBack from '../../../assets/gemini2.webp'
 
 gsap.registerPlugin(ScrollTrigger)
 
