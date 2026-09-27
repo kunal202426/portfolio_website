@@ -18,23 +18,24 @@ export const useLenis = () => {
 }
 
 export const LenisProvider = ({ children }: { children: ReactNode }) => {
-  const lenisRef = useRef<Lenis | null>(null)
   const rafIdRef = useRef<number | null>(null)
   const scrollTriggerRafRef = useRef<number | null>(null)
-  const [lenisInstance, setLenisInstance] = useState<Lenis | null>(null)
+  // Lazy initializer: creates the instance once, synchronously, instead of via
+  // an effect + setState, so there's no extra render after mount.
+  const [lenisInstance] = useState(
+    () =>
+      new Lenis({
+        duration: 1.05,
+        easing: (t) => 1 - Math.pow(1 - t, 3.5),
+        smoothWheel: true,
+        smoothTouch: false,
+        wheelMultiplier: 0.85,
+        touchMultiplier: 1.2,
+      })
+  )
 
   useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.05,
-      easing: (t) => 1 - Math.pow(1 - t, 3.5),
-      smoothWheel: true,
-      smoothTouch: false,
-      wheelMultiplier: 0.85,
-      touchMultiplier: 1.2,
-    })
-    lenisRef.current = lenis
-    setLenisInstance(lenis)
-
+    const lenis = lenisInstance
     window.lenis = lenis
 
     const onLenisScroll = () => {
@@ -63,11 +64,9 @@ export const LenisProvider = ({ children }: { children: ReactNode }) => {
         cancelAnimationFrame(rafIdRef.current)
       }
       lenis.destroy()
-      lenisRef.current = null
-      setLenisInstance(null)
       window.lenis = null
     }
-  }, [])
+  }, [lenisInstance])
 
   return (
     <LenisContext.Provider value={lenisInstance}>

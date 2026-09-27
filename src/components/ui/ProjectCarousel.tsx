@@ -22,13 +22,13 @@ interface ProjectCarouselProps {
   projects: Project[]
 }
 
-// Kept low so a light, natural swipe registers — not a hard, deliberate drag.
+// Kept low so a light, natural swipe registers, not a hard, deliberate drag.
 const SWIPE_DISTANCE_THRESHOLD = 40
 const SWIPE_VELOCITY_THRESHOLD = 280
 const SCREENSHOT_CYCLE_MS = 3800
 
 // Old channel recedes back and slides off, new one enters small from the
-// opposite side and grows to fill the screen — the "TV channel change" beat.
+// opposite side and grows to fill the screen: the "TV channel change" beat.
 // Durations kept short so the gesture feels immediate rather than laggy.
 const screenVariants: Variants = {
   enter: (direction: number) => ({
@@ -68,7 +68,7 @@ const useIsNarrow = () => {
 }
 
 // Bezier branch lines fan out from the TV toward a stacked list of project
-// nodes — same "draw the path in" beat as the Experience section's timeline.
+// nodes, same "draw the path in" beat as the Experience section's timeline.
 // On laptop/desktop they fan sideways from the TV; on phones there's no room
 // for that, so a single vertical trunk runs downward instead (matching the
 // Experience section's own serpentine timeline) with short branches ticking
@@ -87,7 +87,7 @@ const AllProjectsBranch = ({
   const narrow = useIsNarrow()
 
   if (narrow) {
-    // Single column, fixed-left trunk — the same pattern the Experience
+    // Single column, fixed-left trunk: the same pattern the Experience
     // section's own mobile timeline uses (left-4, cards in one column to
     // the right) rather than alternating sides. The earlier zigzag design
     // anchored left-side boxes with only a `maxWidth` guess, which broke
@@ -286,17 +286,16 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
   const [screenWidth, setScreenWidth] = useState(560)
   const wheelCooldownRef = useRef(false)
 
-  useEffect(() => {
-    if (projects.length === 0) return
-    setIndex((prev) => (prev >= projects.length ? projects.length - 1 : prev))
-  }, [projects.length])
-
   // Switching projects (swipe, dots, arrows) always lands back on the
   // picture side - a flipped-to-description card shouldn't carry over to
-  // whatever's shown next.
-  useEffect(() => {
+  // whatever's shown next. Reset during render (React's documented pattern
+  // for this) instead of an effect, so there's no extra render/flash of the
+  // previous card's flipped state.
+  const [prevIndex, setPrevIndex] = useState(index)
+  if (index !== prevIndex) {
+    setPrevIndex(index)
     setFlipped(false)
-  }, [index])
+  }
 
   useEffect(() => {
     const el = screenRef.current
@@ -326,7 +325,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
   }
 
   // Two-finger trackpad swipe (fires as horizontal wheel deltas, not a
-  // pointer drag) — cooldown stops one continuous gesture from paging
+  // pointer drag): cooldown stops one continuous gesture from paging
   // through several projects at once. Only the rightward direction is
   // handled: the leftward one doubles as Windows' browser back/reload
   // gesture, so we leave it alone entirely and let the OS handle it.
@@ -395,7 +394,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
         </div>
 
         <div className="flex flex-col items-center w-full">
-          {/* Arrow row — arrows only show on laptop/desktop (md+) and only in
+          {/* Arrow row: arrows only show on laptop/desktop (md+) and only in
               single-project mode; phones use drag/swipe on the screen itself,
               and in All Projects mode navigation is by clicking a branch node. */}
           <div
@@ -422,7 +421,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
               </button>
             )}
 
-            {/* TV set — actual width (not just a visual scale) shrinks when All
+            {/* TV set: actual width (not just a visual scale) shrinks when All
                 Projects mode opens, so the flex row genuinely reflows and makes
                 room for the branch view beside it rather than leaving a gap. */}
             <motion.div
@@ -431,7 +430,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
               transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
               style={{ maxWidth: 620, perspective: 1400 }}
             >
-            {/* Tumbleweed rolls just behind/beneath the set — subtle background
+            {/* Tumbleweed rolls just behind/beneath the set: subtle background
                 texture, not a separate standalone element. Untouched component,
                 only its mount point and opacity changed. */}
             <div className="absolute inset-0 pointer-events-none" style={{ opacity: 0.65, zIndex: 0 }}>
@@ -440,7 +439,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
               </div>
             </div>
 
-            {/* Ambient rim glow — keeps the set separated from the page background
+            {/* Ambient rim glow: keeps the set separated from the page background
                 at any brightness/theme, not just relying on the bezel's own contrast */}
             <div
               aria-hidden="true"
@@ -704,7 +703,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
                 />
               </div>
 
-              {/* Action button — lives in the bezel/frame below the screen, not
+              {/* Action button: lives in the bezel/frame below the screen, not
                   inside it. It was still getting swallowed there because that
                   whole area has a wheel handler and hosts the drag-gesture
                   surface; moving it to the frame puts it in a completely
@@ -790,7 +789,7 @@ export const ProjectCarousel = memo(function ProjectCarousel({ projects }: Proje
 
           {!allView && (
           <>
-          {/* Dot indicators — click to jump, or use the arrows/swipe */}
+          {/* Dot indicators: click to jump, or use the arrows/swipe */}
           <div className="flex items-center gap-2 mt-6" role="tablist" aria-label="Select project">
             {projects.map((p, i) => (
               <button
