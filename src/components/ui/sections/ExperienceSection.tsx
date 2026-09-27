@@ -1,8 +1,15 @@
-import { useMemo } from 'react'
+import { lazy, Suspense, useMemo } from 'react'
 import { resumeData } from '../../../lib/resume-data'
 import { Briefcase } from 'lucide-react'
 import { useTheme } from '../../providers/ThemeProvider'
-import { CareerWormhole } from '../CareerWormhole'
+
+// Pulls in three.js (unused by the rest of the app), so it's kept out of the
+// initial bundle. Fallback matches the real component's height (460vh) and
+// background exactly - see CareerWormhole.tsx - so there's no layout shift
+// while the chunk loads.
+const CareerWormhole = lazy(() =>
+  import('../CareerWormhole').then((module) => ({ default: module.CareerWormhole }))
+)
 
 export const ExperienceSection = () => {
   // Oldest first, so flying through the tunnel reads as a career progression.
@@ -45,7 +52,9 @@ export const ExperienceSection = () => {
       </div>
 
       {/* Scroll-driven 3D tunnel - scroll through it to fly past each role */}
-      <CareerWormhole cards={wormholeCards} />
+      <Suspense fallback={<div style={{ width: '100%', height: '460vh', background: '#050508' }} />}>
+        <CareerWormhole cards={wormholeCards} />
+      </Suspense>
     </section>
   )
 }
