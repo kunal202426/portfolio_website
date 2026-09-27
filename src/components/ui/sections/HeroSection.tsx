@@ -160,6 +160,7 @@ export const HeroSection = () => {
             transform: 'translateZ(0)',
             backfaceVisibility: 'hidden',
             zIndex: 3,
+            paddingTop: '10rem',
             paddingBottom: '12rem'
           }}
         >
@@ -206,6 +207,7 @@ export const HeroSection = () => {
             transform: 'translateZ(0)',
             backfaceVisibility: 'hidden',
             zIndex: 5,
+            paddingTop: '10rem',
             paddingBottom: '12rem',
           }}
         >
@@ -279,7 +281,7 @@ export const HeroSection = () => {
             <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--accent-primary)' }} />
           </span>
           <span className="spec-label" style={{ color: isDark ? '#F0EBE0' : '#FFFFFF', opacity: 0.55 }}>
-            Engineer&nbsp;— No.&nbsp;01
+            Engineer, No.&nbsp;01
           </span>
         </div>
 
