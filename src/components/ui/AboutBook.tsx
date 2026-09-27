@@ -84,6 +84,8 @@ export const AboutBook = ({ image, imageAlt, coverLabel, coverTitle, coverSubtit
             textAlign: 'center',
             padding: image ? 0 : '10%',
             overflow: 'hidden',
+            backfaceVisibility: 'hidden',
+            WebkitBackfaceVisibility: 'hidden',
           }}
           animate={{ rotateY: open ? -100 : 0 }}
           transition={{ type: 'spring', bounce: 0, duration: 0.6 }}
