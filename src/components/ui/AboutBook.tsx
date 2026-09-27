@@ -67,70 +67,81 @@ export const AboutBook = ({ image, imageAlt, coverLabel, coverTitle, coverSubtit
           {children}
         </div>
 
-        {/* Cover - swings open on its left edge */}
+        {/* Cover - swings open on its left edge. Rounded corners + overflow
+            clipping live on a plain inner div, not on this rotating element -
+            border-radius + overflow:hidden + a 3D transform on the SAME
+            element is a known Chrome compositing bug (a hard visible seam,
+            both faces' content bleeding through mid-rotation). */}
         <motion.div
           style={{
             position: 'absolute',
             inset: 0,
             transformOrigin: 'left center',
             transformStyle: 'preserve-3d',
-            borderRadius: 10,
-            background: image ? '#1A1510' : 'linear-gradient(150deg, var(--accent-primary), #7A3524)',
-            boxShadow: '0 25px 50px rgba(0,0,0,0.4)',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: image ? 'flex-end' : 'center',
-            textAlign: 'center',
-            padding: image ? 0 : '10%',
-            overflow: 'hidden',
             backfaceVisibility: 'hidden',
             WebkitBackfaceVisibility: 'hidden',
           }}
           animate={{ rotateY: open ? -100 : 0 }}
           transition={{ type: 'spring', bounce: 0, duration: 0.6 }}
         >
-          {image ? (
-            <>
-              <img
-                src={image}
-                alt={imageAlt ?? ''}
-                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 18%' }}
-              />
-              <div
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  background: 'linear-gradient(to top, rgba(10,8,6,0.85) 0%, rgba(10,8,6,0.1) 45%, transparent 70%)',
-                }}
-              />
-              <div style={{ position: 'relative', padding: '10% 8%', width: '100%' }}>
-                <p className="spec-label" style={{ color: 'rgba(245,240,232,0.7)', marginBottom: 4, opacity: 1 }}>
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              borderRadius: 10,
+              overflow: 'hidden',
+              background: image ? '#1A1510' : 'linear-gradient(150deg, var(--accent-primary), #7A3524)',
+              boxShadow: '0 25px 50px rgba(0,0,0,0.4)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: image ? 'flex-end' : 'center',
+              textAlign: 'center',
+              padding: image ? 0 : '10%',
+            }}
+          >
+            {image ? (
+              <>
+                <img
+                  src={image}
+                  alt={imageAlt ?? ''}
+                  style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 18%' }}
+                />
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'linear-gradient(to top, rgba(10,8,6,0.85) 0%, rgba(10,8,6,0.1) 45%, transparent 70%)',
+                  }}
+                />
+                <div style={{ position: 'relative', padding: '10% 8%', width: '100%' }}>
+                  <p className="spec-label" style={{ color: 'rgba(245,240,232,0.7)', marginBottom: 4, opacity: 1 }}>
+                    {coverLabel}
+                  </p>
+                  <h3 className="font-display" style={{ fontSize: 'clamp(18px, 4vw, 22px)', color: '#F5F0E8', margin: 0, lineHeight: 1.05 }}>
+                    {coverTitle}
+                  </h3>
+                </div>
+              </>
+            ) : (
+              <>
+                <span className="spec-label" style={{ color: 'rgba(245,240,232,0.7)', marginBottom: 12, opacity: 1 }}>
                   {coverLabel}
-                </p>
-                <h3 className="font-display" style={{ fontSize: 'clamp(18px, 4vw, 22px)', color: '#F5F0E8', margin: 0, lineHeight: 1.05 }}>
+                </span>
+                <h3 className="font-display" style={{ fontSize: 'clamp(20px, 4vw, 26px)', color: '#F5F0E8', margin: 0, lineHeight: 1.1 }}>
                   {coverTitle}
                 </h3>
-              </div>
-            </>
-          ) : (
-            <>
-              <span className="spec-label" style={{ color: 'rgba(245,240,232,0.7)', marginBottom: 12, opacity: 1 }}>
-                {coverLabel}
-              </span>
-              <h3 className="font-display" style={{ fontSize: 'clamp(20px, 4vw, 26px)', color: '#F5F0E8', margin: 0, lineHeight: 1.1 }}>
-                {coverTitle}
-              </h3>
-              {coverSubtitle && (
-                <>
-                  <div style={{ width: 32, height: 2, background: 'rgba(245,240,232,0.5)', margin: '14px 0' }} />
-                  <span className="spec-label" style={{ color: 'rgba(245,240,232,0.5)', opacity: 1 }}>
-                    {coverSubtitle}
-                  </span>
-                </>
-              )}
-            </>
-          )}
+                {coverSubtitle && (
+                  <>
+                    <div style={{ width: 32, height: 2, background: 'rgba(245,240,232,0.5)', margin: '14px 0' }} />
+                    <span className="spec-label" style={{ color: 'rgba(245,240,232,0.5)', opacity: 1 }}>
+                      {coverSubtitle}
+                    </span>
+                  </>
+                )}
+              </>
+            )}
+          </div>
         </motion.div>
       </div>
     </div>
