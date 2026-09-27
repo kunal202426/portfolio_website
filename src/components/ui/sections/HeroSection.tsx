@@ -160,7 +160,7 @@ export const HeroSection = () => {
             transform: 'translateZ(0)',
             backfaceVisibility: 'hidden',
             zIndex: 3,
-            paddingTop: '10rem',
+            paddingTop: '6rem',
             paddingBottom: '12rem'
           }}
         >
@@ -207,7 +207,7 @@ export const HeroSection = () => {
             transform: 'translateZ(0)',
             backfaceVisibility: 'hidden',
             zIndex: 5,
-            paddingTop: '10rem',
+            paddingTop: '6rem',
             paddingBottom: '12rem',
           }}
         >
@@ -255,8 +255,12 @@ export const HeroSection = () => {
           }}
         />
 
-        {/* Layer 1: Buttons - Stay visible on top, above everything */}
-        <div className="absolute bottom-32 left-0 right-0 flex justify-center px-6" style={{ zIndex: 10 }}>
+        {/* Layer 1: Buttons - Stay visible on top, above everything.
+            bottom offset is clamped to viewport height, not just a flat
+            8rem, so it only shrinks on short windows instead of colliding
+            with the subtitle text above it (stays exactly 8rem, unchanged,
+            whenever 15vh is already bigger than that). */}
+        <div className="absolute left-0 right-0 flex justify-center px-6" style={{ zIndex: 10, bottom: 'clamp(2rem, 15vh, 8rem)' }}>
           <div className="hero-subtitle flex flex-wrap gap-4 justify-center">
             <a 
               href="#projects"
