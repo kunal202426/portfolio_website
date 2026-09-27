@@ -281,8 +281,24 @@ export const CareerWormhole = ({ cards, scrollLengthVh = 460 }: CareerWormholePr
 
     window.addEventListener('scroll', handleScroll, { passive: true })
 
+    // The tunnel is 460vh tall, so it stays mounted (and, without this,
+    // rendering every frame) for most of the time someone is on the page,
+    // not just while it's actually on screen.
+    const isVisibleRef = { current: false }
+    const visibilityObserver = new IntersectionObserver(
+      ([entry]) => {
+        isVisibleRef.current = entry.isIntersecting
+      },
+      { rootMargin: '200px 0px' }
+    )
+    visibilityObserver.observe(track)
+
     let frameId = 0
     const animate = () => {
+      if (!isVisibleRef.current) {
+        frameId = requestAnimationFrame(animate)
+        return
+      }
       // Plain constant-rate smoothing, same speed the whole way through -
       // no per-card slowdown. That dwell mechanic (several iterations of it)
       // made the pacing feel inconsistent and was part of what broke on
@@ -351,6 +367,7 @@ export const CareerWormhole = ({ cards, scrollLengthVh = 460 }: CareerWormholePr
 
     return () => {
       cancelAnimationFrame(frameId)
+      visibilityObserver.disconnect()
       window.removeEventListener('scroll', handleScroll)
       window.removeEventListener('resize', handleResize)
       renderer.dispose()
