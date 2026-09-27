@@ -103,3 +103,6 @@ coverage/
 *.temp
 
 .vercel
+
+# Playwright MCP browser-testing snapshots
+.playwright-mcp/
