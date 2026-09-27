@@ -80,9 +80,22 @@ export const AboutBook = ({ image, imageAlt, coverLabel, coverTitle, coverSubtit
             transformStyle: 'preserve-3d',
             backfaceVisibility: 'hidden',
             WebkitBackfaceVisibility: 'hidden',
+            willChange: 'transform',
           }}
-          animate={{ rotateY: open ? -100 : 0 }}
-          transition={{ type: 'spring', bounce: 0, duration: 0.6 }}
+          animate={{ rotateY: open ? -100 : 0, opacity: open ? 0 : 1 }}
+          transition={{
+            rotateY: { type: 'spring', bounce: 0, duration: 0.6 },
+            // Explicit fade instead of relying on the GPU to composite
+            // backface-visibility correctly mid-rotation - that compositing
+            // step is what was glitching (a hard seam, both faces' content
+            // visible at once) on some GPUs/drivers. When opening, the cover
+            // stays visible until rotation is almost done, then fades out
+            // just before crossing ~90 degrees. When closing, it starts
+            // already past that crossing (at -100deg) - the delay keeps it
+            // hidden until rotation has swung back through that same zone,
+            // instead of fading back in immediately and re-exposing the glitch.
+            opacity: { duration: 0.15, delay: open ? 0.35 : 0.12 },
+          }}
         >
           <div
             style={{
