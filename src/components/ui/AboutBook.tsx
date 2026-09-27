@@ -1,5 +1,5 @@
-import { useState, type ReactNode } from 'react'
-import { motion } from 'framer-motion'
+import { useEffect, useState, type ReactNode } from 'react'
+import { motion, useMotionValue, useTransform, animate } from 'framer-motion'
 
 interface AboutBookProps {
   /** Cover art: a photo instead of the plain title cover. */
@@ -17,6 +17,17 @@ interface AboutBookProps {
 // each of ours holds a different piece of the "about me" content.
 export const AboutBook = ({ image, imageAlt, coverLabel, coverTitle, coverSubtitle, pageLabel, children }: AboutBookProps) => {
   const [open, setOpen] = useState(false)
+  const rotateY = useMotionValue(0)
+  // Derived straight from the live rotateY value (not a guessed time delay)
+  // so the cover is invisible exactly when it's past the ~90 degree crossing,
+  // no matter how the spring's real-time curve actually moves - a fixed-time
+  // fade can't track that, which is why the seam glitch survived the last fix.
+  const opacity = useTransform(rotateY, [0, -84, -90, -100], [1, 1, 0, 0])
+
+  useEffect(() => {
+    const controls = animate(rotateY, open ? -100 : 0, { type: 'spring', bounce: 0, duration: 0.6 })
+    return () => controls.stop()
+  }, [open, rotateY])
 
   return (
     <div
@@ -81,20 +92,8 @@ export const AboutBook = ({ image, imageAlt, coverLabel, coverTitle, coverSubtit
             backfaceVisibility: 'hidden',
             WebkitBackfaceVisibility: 'hidden',
             willChange: 'transform',
-          }}
-          animate={{ rotateY: open ? -100 : 0, opacity: open ? 0 : 1 }}
-          transition={{
-            rotateY: { type: 'spring', bounce: 0, duration: 0.6 },
-            // Explicit fade instead of relying on the GPU to composite
-            // backface-visibility correctly mid-rotation - that compositing
-            // step is what was glitching (a hard seam, both faces' content
-            // visible at once) on some GPUs/drivers. When opening, the cover
-            // stays visible until rotation is almost done, then fades out
-            // just before crossing ~90 degrees. When closing, it starts
-            // already past that crossing (at -100deg) - the delay keeps it
-            // hidden until rotation has swung back through that same zone,
-            // instead of fading back in immediately and re-exposing the glitch.
-            opacity: { duration: 0.15, delay: open ? 0.35 : 0.12 },
+            rotateY,
+            opacity,
           }}
         >
           <div
