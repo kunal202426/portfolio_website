@@ -175,16 +175,16 @@ export const HeroSection = () => {
               ))}
             </h1>
 
+            {/* Tagline and subtitle text removed (kept invisible, same markup) -
+                they kept colliding with the mountain silhouette and the
+                button row on shorter viewports. Left as invisible spacers
+                so the block's height/structure is unchanged. */}
             <div className="overflow-hidden mb-6">
-              <p className="hero-word text-xl md:text-2xl lg:text-3xl font-light" style={{ color: '#D4C4A8' }}>
+              <p className="hero-word text-xl md:text-2xl lg:text-3xl font-light invisible" style={{ color: '#D4C4A8' }} aria-hidden="true">
                 Software Engineer & ML Engineer
               </p>
             </div>
 
-            {/* Real subtitle is invisible here - painted instead in the
-                duplicate layer below, in front of the mountain. This one
-                only exists so the flex-centered block above it keeps the
-                same height/spacing (h1 + tagline still render for real). */}
             <p className="hero-subtitle text-sm md:text-lg max-w-2xl mx-auto whitespace-normal md:whitespace-nowrap leading-snug" style={{ opacity: 0 }} aria-hidden="true">
               Scalable backend systems, ML pipelines, and real-time applications.
             </p>
@@ -230,8 +230,9 @@ export const HeroSection = () => {
               </p>
             </div>
             <p
-              className="text-sm md:text-lg max-w-2xl mx-auto whitespace-normal md:whitespace-nowrap leading-snug"
+              className="text-sm md:text-lg max-w-2xl mx-auto whitespace-normal md:whitespace-nowrap leading-snug invisible"
               style={{ color: '#FFFFFF', textShadow: '0 2px 14px rgba(0, 0, 0, 0.65), 0 1px 4px rgba(0, 0, 0, 0.85)' }}
+              aria-hidden="true"
             >
               Scalable backend systems, ML pipelines, and real-time applications.
             </p>
