@@ -21,7 +21,7 @@ export const resumeData = {
     github: 'https://github.com/kunal202426',
   },
   summary:
-    'Full Stack Developer with production experience in scalable web apps, distributed systems, ML pipelines, and blockchain platforms. Proficient in React, Node.js, FastAPI, Python, and PostgreSQL.',
+    'Software engineer (B.Tech CSE, VIT) and founding engineer at Astra, building full-stack product features on Next.js 16, React 19 and Supabase/PostgreSQL. Former intern on the OMNI trading platform at YES Bank. IIT Madras Global Hyperloop DesignX winner and Flipkart GRiD 7.0 national semifinalist.',
   education: [
     {
       school: 'Vellore Institute of Technology',
@@ -49,13 +49,13 @@ export const resumeData = {
     {
       company: 'YES Securities (YES Bank)',
       title: 'Full Stack Developer Intern',
-      period: 'Jan 2026 - Aug 2026',
+      period: 'Jan 2026 - Sep 2026',
       location: 'Bengaluru, India',
       year: 2026,
       logo: '/yes-securities.png',
       achievements: [
-        'Built production-grade features for OMNI trading platform using React, Node.js, and RESTful APIs in Agile sprints.',
-        'Optimized backend microservices and PostgreSQL schema for improved reliability and reduced latency.',
+        'Shipped 5+ production features on the OMNI trading platform serving 20,000+ daily trades.',
+        'Cut API latency ~25% and query time ~35% through microservice and schema work.',
       ],
     },
     {
@@ -67,7 +67,7 @@ export const resumeData = {
       logo: '/astra-logo.png',
       url: 'https://useastra.in/',
       achievements: [
-        'Building an end-to-end hiring ecosystem connecting candidates and employers through quality openings, proof of work, and skill-based matching.',
+        'Built full-stack features and the Talent workspace on Next.js 16 and Supabase, plus the Astra Agent autofill extension and a WhatsApp jobs bot.',
       ],
     },
     {
